@@ -1,2 +1,2 @@
 # synbe.github.io
-synbe/synbe.github.io
+# synbe.github.io

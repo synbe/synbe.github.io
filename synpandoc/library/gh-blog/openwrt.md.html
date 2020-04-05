@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>OpenWrt完美教程</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"id="viewport"name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../../src/jquery/jquery-2.1.4.min.js"></script>
+  <script src="../../src/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../../src/highlight/highlight.min.js"></script>
+  <script >hljs.initHighlightingOnLoad();</script>  
+  <script type="text/javascript" src="../../src/jspdf/html2canvas.js"></script>
+  <script type="text/javascript" src="../../src/jspdf/jsPdf.debug.js"></script>
+  <link href="../../src/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/docs.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/style_index.css" rel="stylesheet" media="screen">
+  <link href="../../src/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../../src/highlight/styles/monokai-sublime.css" rel="stylesheet">
+  <div class="row-fluid  hidden-phone">
+  <div class="span2"></div>
+  <div class="span8 bg001">
+  <br>
+  <p class="milky"> 
+        <!--<i class="fa fa-spinner fa-pulse"></i>_____此为fontsome图标___________-->
+        &nbsp;synBE
+   </p>
+  </div>
+  <div class="span2"></div>
+  </div>
+
+  <div class="row-fluid main"><!--_____main___________-->
+  <div class="sidebar span2 hidden-phone bg002  milky">
+  <!--__synBE__ -->
+  </div>
+  <div class="content span8"><!--__maincontent2_____ -->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">OpenWrt完美教程</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#从零开始学习openwrt完美教程">从零开始学习OpenWrt完美教程</a></li>
+</ul>
+</nav>
+<h3 id="从零开始学习openwrt完美教程">从零开始学习OpenWrt完美教程</h3>
+<p>从零开始学习OpenWrt完美教程</p>
+<p>现在有越来越多的Maker开始折腾OpenWrt，但作为一个Maker新手来讲，在网上还是很难找到一份系统的入门级资料。查找资料很辛苦，而且OpenWrt的门槛相对较高，希望这篇文章所提供的从零开始学OpenWrt编译</p>
+<p>OpenWRT</p>
+<p>Cisco/Linksys在2003年发布了WRT54G这款无线路由器，同年有人发现它的IOS是基于Linux的，然而Linux是基于GPL许可证发布的，按照该许可证Cisco应该把WRT54G 的IOS的源代码公开。2003年3月， Cisco迫于公众压力公开了WRT54G的源代码。此后就有了一些基于Cisco源码的第三方路由器固件，OpenWrt就是其中的一个。</p>
+<p>OpenWrt的特点：</p>
+<pre><code>可扩展性好，可以在线安装您所需要的功能，目前有1000多个功能包可选；
+是一台完整的Linux工作站，文件系统可读可写，便于开发者学习和实践；</code></pre>
+<p>现在有越来越多的Maker开始折腾OpenWrt，但作为一个Maker新手来讲，在网上还是很难找到一份系统的入门级资料。查找资料很辛苦，而且OpenWrt的门槛相对较高，希望这篇文章所提供的从零开始学OpenWrt编译 + 刷机 + 使用教程能降低新手们的入门难度，当然，编译过程非必须，一般的路由都可找到可用的稳定固件直接刷机。</p>
+<h4 id="第一部分搭建编译环境">第一部分：搭建编译环境</h4>
+<p>1、安装Ubuntu（编译需要Linux环境），到其官网下载，版本根据自己所需选择即可。可以选择安装到虚拟机或者物理机，图形化安装而且是中文版，连安装都搞不定的，可以关闭本页面了；</p>
+<p>2、切记不要改动软件源，同时按住Ctrl + Alt + T，调出终端；</p>
+<p>3、逐条输入下列命令（及时验证是否安装成功）：</p>
+<pre><code>sudo apt-get install g++
+sudo apt-get install libncurses5-dev
+sudo apt-get install zlib1g-dev
+sudo apt-get install bison
+sudo apt-get install flex
+sudo apt-get install unzip
+sudo apt-get install autoconf
+sudo apt-get install gawk
+sudo apt-get install make
+sudo apt-get install gettext
+sudo apt-get install gcc
+sudo apt-get install binutils
+sudo apt-get install patch
+sudo apt-get install bzip2
+sudo apt-get install libz-dev
+sudo apt-get install asciidoc
+sudo apt-get install subversion
+sudo apt-get install sphinxsearch
+sudo apt-get install libtool
+sudo apt-get install sphinx-common</code></pre>
+<p>至此编译环境搭建完成。</p>
+<h4 id="第二部分下载openwrt源码并编译">第二部分：下载OpenWrt源码并编译</h4>
+<p>OpenWrt源码分两种，一种是最新但不是最稳定的Trunk开发版，一种是最稳定的Backfire版，建议下载官方源码。下载前先在本地创建文件夹：</p>
+<pre><code>mkdir openwrt
+sudo chmod 777 openwrt
+cd openwrt</code></pre>
+<p>选择你想要的版本然后执行下载命令，下载结束会显示版本号：</p>
+<p>Trunk版下载命令：</p>
+<pre><code>svn co svn://svn.openwrt.org/openwrt/trunk/</code></pre>
+<p>Backfire版下载命令：</p>
+<pre><code>svn co svn://svn.openwrt.org/openwrt/branches/backfire/</code></pre>
+<p>添加软件扩展包，将feeds.conf.default修改为feeds.conf：</p>
+<pre><code>cp feeds.conf.default feeds.conf</code></pre>
+<p>更新扩展，安装扩展：</p>
+<pre><code>./scripts/feeds update -a
+./scripts/feeds install -a</code></pre>
+<p>注：如果不是刚下载的源码，为保持代码为最新状态，应定期运行svn update命令更新源码。</p>
+<p>测试编译环境：</p>
+<pre><code>make defconfig</code></pre>
+<p>到这里就可以开始编译自己的固件了。进入定制界面：</p>
+<pre><code>make menuconfig</code></pre>
+<p>如果一切正常，会出现一个配置菜单，可以选择要编译的固件平台（芯片类型）、型号，还能选择固件中要添加的功能和组件，配置好后保存并退出菜单即可。</p>
+<pre><code>openwrt-make</code></pre>
+<p>如果你想修改源码，应该在此步进行，如支持大容量Flash之类的修改，自己上网查到修改什么文件什么地方后，就在ubuntu图形界面上进去找到文件，双击打开文本编辑器修改保存。</p>
+<p>开始编译：</p>
+<pre><code>make</code></pre>
+<p>或者</p>
+<pre><code>make  V=99</code></pre>
+<p>或者</p>
+<p>make -j V=99</p>
+<pre><code>make是编译命令，V=99表示输出debug信息，V一定要大写，如果要让CPU全速编译，就加上 -j 参数，第一次编译最好不带-j参数。</code></pre>
+<p>编译过程保持联网（会从网上下载一些源码包），所以断网可能造成编译中断，编译所需时间与电脑CPU及网络环境有很大关系，第一次编译时间较久，快则半小时长则2、3个小时，之后的编译所需时间较短。编译完成后会在源码文件目录出现bin文件夹（如trunk/bin/XXXX），如果你手里的路由是原版固件需要刷OpenWrt需要选用XXX-factory.bin固件，如果路由已经刷了OpenWrt，选用升级固件XXXX-sysupgrade.bin升级用的，在升级界面升级即可。进到文件夹找到你需要的固件传出（通过邮箱、网盘、U盘等），开始刷机吧。</p>
+<h4 id="第三部分将openwrt刷入路由器">第三部分：将OpenWrt刷入路由器</h4>
+<p>要在路由器上使用OpenWrt，首先要将路由器固件刷新为OpenWrt，即相当于OpenWrt 系统的安装，不同型号的路由器的安装方法可能也会不一样，但一般常用的有三种方法：</p>
+<pre><code>Web上传固件更新
+PFTP上传固件更新
+编程器写入固件</code></pre>
+<p>具体型号的路由器适用于哪种或哪几种方法，需自行尝试。</p>
+<h4 id="第四部分开始使用openwrt">第四部分：开始使用OpenWrt</h4>
+<p>要对OpenWrt进行配置，一般有两条途径：</p>
+<pre><code>SSH登录通过命令行控制
+Web登录通过Web界面设置</code></pre>
+<p>首次安装OpenWrt后，需要设置密码才可以使用SSH登录，方法是使用telnet登录或者Web登录设置密码。在Windows下面telnet和SSH登录可以使用Putty，在Linux或Mac下可分别使用如下命令：</p>
+<pre><code>ssh –l root 192.168.1.1 //Linux
+ssh root@192.168.1.1 //Mac
+openwrt-ssh</code></pre>
+<p>一般指令与常见Linux发行版相同，但是OpenWrt使用自己的包管理器：opkg，使用“opkg –help”查看帮助信息。以下是一些常用操作命令：</p>
+<pre><code>opkg update //更新软件包列表
+opkg install  //在线安装软件包
+opkg remove  //移除软件包</code></pre>
+<p>登录Web管理界面，前提是该OpenWrt系统中要安装了Web界面，一般是Luci，登录方式与普通路由器无异，打开浏览器，输入路由器IP即可进入登录界面，OpenWrt的默认IP是192.168.1.1。</p>
+<pre><code>openwrt-web</code></pre>
+<p>到此，OpenWrt的大门已为你敞开。接下来，开始尝试利用OpenWrt实现更多智能应用吧，比如单号多拨榨取运营商带宽、绑定域名远程控制、挂载大容量硬盘、搭建BT下载机、搭建网络摄像头、Samba/DLNA家庭NAS共享、私有云同步、FTP、个人网站/服务器…</p>
+
+
+
+<div class="row-fluid">
+<!--_____分享按钮___________
+<hr class="bg003">
+<div class="bshare-custom icon-medium"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/button.js#style=-1&amp;uuid=&amp;pophcol=3&amp;lang=zh"></script><a class="bshareDiv" onclick="javascript:return false;"></a><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+-_____分享按钮___________-->
+</div>
+
+</div><!--__maincontent2_____ -->
+<div class="sidebar span1 hidden-phone bg002">
+<!--__<marquee direction="top">Wecome to synBE!</marquee> __ -->
+</div>
+</div><!--_____main___________-->
+
+
+
+<div class="row-fluid bg003"><!--_____footer1 ______-->
+<div class="span2 hidden-phone"></div>
+<div class="span2">
+<ul class="nav nav-pills">
+    <li class="dropdown all-camera-dropdown dropup">
+           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              查看二维码<!--<i class="fa fa-qrcode fa-2x"></i>_____此为fontsome二维码图标___________-->
+               <b class="caret"></b>
+           </a>
+<ul class="dropdown-menu">
+<li data-filter-camera-type="all"><a data-toggle="tab" href="#">扫描二维码分享此页面</a></li>
+<!--_____二维码___________-->
+<head>
+    <meta charset="utf-8"/>
+   <!--
+   <base target="_blank">
+   -->
+    <script src="../../src/qrcode/qrcode.js"></script>
+    <style>
+      #qrcode img {
+        margin:0.5em auto;
+      }
+    </style>
+</head>
+<script>
+                thisURL = document.URL;
+window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 160,//设置宽高
+            height : 160,
+        });
+qrcode.makeCode(thisURL);
+    }
+</script>
+<div id="qrcode"></div>
+<!--_____二维码___________-->
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="span4 hidden-phone">
+<!--_____copyright___________-->
+ Copyright  © 2015-2017  <a href="http://www.synbe.com" target="_blank">synBE.com</a>  
+</div>
+<div class="span2 hidden-phone">
+<!--_____note1___________-->
+
+ <script type="text/javascript">
+
+      var downPdf = document.getElementById("renderPdf");
+
+      downPdf.onclick = function() {
+          html2canvas(document.body, {
+              onrendered:function(canvas) {
+
+                  var contentWidth = canvas.width;
+                  var contentHeight = canvas.height;
+
+                  //一页pdf显示html页面生成的canvas高度;
+                  var pageHeight = contentWidth / 592.28 * 841.89;
+                  //未生成pdf的html页面高度
+                  var leftHeight = contentHeight;
+                  //pdf页面偏移
+                  var position = 0;
+                  //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                  var imgWidth = 595.28;
+                  var imgHeight = 592.28/contentWidth * contentHeight;
+
+                  var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+                  var pdf = new jsPDF('', 'pt', 'a4');
+
+                  //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                  //当内容未超过pdf一页显示的范围，无需分页
+                  if (leftHeight < pageHeight) {
+                      pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+                  } else {
+                      while(leftHeight > 0) {
+                          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                          leftHeight -= pageHeight;
+                          position -= 841.89;
+                          //避免添加空白页
+                          if(leftHeight > 0) {
+                              pdf.addPage();
+                          }
+                      }
+                  }
+
+                  pdf.save('content.pdf');
+              }
+          })
+      }
+    </script>
+<!--_____note1___________-->
+</div>
+<div class="span2 hidden-phone"></div>
+</div><!--_____footer1 ______-->
+
+
+
+
+<!--_____返回顶部______
+<head>
+<style type="text/css">
+</style>
+<script type="text/javascript" src="../../../src/gototop/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../../../src/gototop/gotoTop.js"></script>
+<script type="text/javascript">
+$(function(){
+    $(".backToTop").goToTop();
+    $(window).bind('scroll resize',function(){
+        $(".backToTop").goToTop();
+    });
+});
+</script>
+</head>
+<a href="javascript:;" class="backToTop hidden-phone" title="返回顶部"></a>
+_____返回顶部______-->
+</body>
+</html>

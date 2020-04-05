@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>markdown +CSS转换html V2 #1级标题</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"id="viewport"name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../../src/jquery/jquery-2.1.4.min.js"></script>
+  <script src="../../src/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../../src/highlight/highlight.min.js"></script>
+  <script >hljs.initHighlightingOnLoad();</script>  
+  <script type="text/javascript" src="../../src/jspdf/html2canvas.js"></script>
+  <script type="text/javascript" src="../../src/jspdf/jsPdf.debug.js"></script>
+  <link href="../../src/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/docs.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/style_index.css" rel="stylesheet" media="screen">
+  <link href="../../src/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../../src/highlight/styles/monokai-sublime.css" rel="stylesheet">
+  <div class="row-fluid  hidden-phone">
+  <div class="span2"></div>
+  <div class="span8 bg001">
+  <br>
+  <p class="milky"> 
+        <!--<i class="fa fa-spinner fa-pulse"></i>_____此为fontsome图标___________-->
+        &nbsp;synBE
+   </p>
+  </div>
+  <div class="span2"></div>
+  </div>
+
+  <div class="row-fluid main"><!--_____main___________-->
+  <div class="sidebar span2 hidden-phone bg002  milky">
+  <!--__synBE__ -->
+  </div>
+  <div class="content span8"><!--__maincontent2_____ -->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">markdown +CSS转换html V2 #1级标题</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#级标题">1级标题</a>
+<ul>
+<li><a href="#级标题-1">2级标题</a>
+<ul>
+<li><a href="#级标题-2">3级标题</a></li>
+</ul></li>
+<li><a href="#代码">代码</a>
+<ul>
+<li><a href="#代码块pre-tab-或者">代码块pre <code>tab</code> 或者 <code>(````)</code></a></li>
+<li><a href="#行内代码code-行内代码">行内代码code <code>行内代码(``)</code></a></li>
+<li><a href="#代码高亮">代码高亮</a></li>
+</ul></li>
+<li><a href="#段落">段落</a></li>
+<li><a href="#表格">表格</a></li>
+<li><a href="#引用">引用</a>
+<ul>
+<li><a href="#复选框不支持">复选框：不支持</a></li>
+</ul></li>
+<li><a href="#列表">列表</a></li>
+</ul></li>
+<li><a href="#有序列表-内的引用">. 有序列表 内的引用</a></li>
+<li><a href="#css自定义">CSS自定义</a>
+<ul>
+<li><a href="#通用字体格式">通用字体格式</a></li>
+<li><a href="#自定义字体格式">自定义字体格式</a>
+<ul>
+<li><a href="#sup类定义格式">SUP类定义格式:</a></li>
+</ul></li>
+<li><a href="#内部链接">内部链接</a>
+<ul>
+<li><a href="#label">label</a></li>
+<li><a href="#字体颜色">字体颜色</a></li>
+<li><a href="#显示换字号字体功能">显示换字号、字体功能。</a></li>
+<li><a href="#数学公式">数学公式</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<pre><code>##2级标题
+
+###3级标题
+
+####4级标题
+
+#####5级标题　　
+
+######6级标题　　**强调** *斜体* *`斜体em里的代码`* **`强调strong里的代码`** ~~删除线~~
+
+#######7级标题
+
+########8级标题
+
+#########9级标题</code></pre>
+<p><strong>exam:</strong></p>
+<h1 id="级标题">1级标题</h1>
+<h2 id="级标题-1">2级标题</h2>
+<h3 id="级标题-2">3级标题</h3>
+<h4 id="级标题-3">4级标题</h4>
+<h5 id="级标题-4">5级标题　　</h5>
+<h6 id="级标题-强调-斜体-斜体em里的代码-强调strong里的代码删除线">6级标题　　<strong>强调</strong> <em>斜体</em> <em><code>斜体em里的代码</code></em> <strong><code>强调strong里的代码</code></strong><del>删除线</del></h6>
+<p class="heading" id="级标题-5">7级标题</p>
+<p class="heading" id="级标题-6">8级标题</p>
+<p class="heading" id="级标题-7">9级标题</p>
+<h2 id="代码">代码</h2>
+<h3 id="代码块pre-tab-或者">代码块pre <code>tab</code> 或者 <code>(````)</code></h3>
+<pre><code>代码代码代码代码代码代码代码代码代码代码代码代码代码代码
+代码代码代码代码代码代码代码代码代码代码代码代码代码代码
+代码代码代码代码代码代码代码代码代码代码代码代码代码代码</code></pre>
+<h3 id="行内代码code-行内代码">行内代码code <code>行内代码(``)</code></h3>
+<p>行内的代码<code>这是行内代码</code><br />
+行内的代码<code>这是行内代码 最好不超过1行</code></p>
+<h3 id="代码高亮">代码高亮</h3>
+<pre><code>    ``` python
+    @requires_authorization
+    def somefunc(param1=&#39;&#39;, param2=0):
+        &#39;&#39;&#39;A docstring&#39;&#39;&#39;
+        if param1 &gt; param2: # interesting
+            print &#39;Greater&#39;
+        return (param2 - param1 + 1) or None
+    class SomeClass:
+        pass
+    &gt;&gt;&gt; message = &#39;&#39;&#39;interpreter
+    ... prompt&#39;&#39;&#39;
+    ```</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="at">@requires_authorization</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">def</span> somefunc(param1<span class="op">=</span><span class="st">&#39;&#39;</span>, param2<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="co">&#39;&#39;&#39;A docstring&#39;&#39;&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="cf">if</span> param1 <span class="op">&gt;</span> param2: <span class="co"># interesting</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>        <span class="bu">print</span> <span class="st">&#39;Greater&#39;</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="cf">return</span> (param2 <span class="op">-</span> param1 <span class="op">+</span> <span class="dv">1</span>) <span class="kw">or</span> <span class="va">None</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="kw">class</span> SomeClass:</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    <span class="cf">pass</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="op">&gt;&gt;&gt;</span> message <span class="op">=</span> <span class="st">&#39;&#39;&#39;interpreter</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="st">... prompt&#39;&#39;&#39;</span></span></code></pre></div>
+<hr />
+<h2 id="段落">段落</h2>
+<dl>
+<dt><code>段落</code>段落样式<code>(:)</code></dt>
+<dd><p>段落段落段落段落段落段落段落段落段落段落段落段落段落段落</p>
+<p>段落段落段落段落段落段落段落段落段落段落段落段落段落段落</p>
+<p>普通强调<strong>段落段落段落段落段落段落段落段落段落段落段落</strong></p>
+<p>普通斜体<em>落段落段落段落段落段落段落段落段落段落段落段落</em></p>
+<p>段落段落段落段落段落段落段落段落段落段落段落段落段落段落</p>
+</dd>
+<dt><code>段落</code>段落样式<code>(~)</code></dt>
+<dd>段落段落段落段落段落段落段落段落段落段落段落段落段落段落 段落段落段落段落段落段落段落段落段落段落段落段落段落段落 段落段落段落段落段落段落段落段落段落段落段落段落段落段落 段落段落段落段落段落段落段落段落段落段落段落段落段落段落 段落段落段落段落段落段落段落段落段落段落段落段落段落段落
+</dd>
+</dl>
+<h2 id="表格">表格</h2>
+<pre><code>------------
+两行表格行1
+两行表格行2
+--------</code></pre>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">两行表格行1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">两行表格行2</td>
+</tr>
+</tbody>
+</table>
+<pre><code>|表格头   |第一列    |第二列
+---------|--------|---------
+|行1        | 值1       |值2
+|行2         |值1       |值2
+|强调**         |**强调样式**       |strong
+|斜体*         |*斜体样式*       |em
+|强调内代码        |**`强调样式`**       |strongcode
+|斜体内代码       |*`斜体样式`*       |emcode</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>表格头</th>
+<th>第一列</th>
+<th>第二列</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>行1</td>
+<td>值1</td>
+<td>值2</td>
+</tr>
+<tr class="even">
+<td>行2</td>
+<td>值1</td>
+<td>值2</td>
+</tr>
+<tr class="odd">
+<td>强调**</td>
+<td><strong>强调样式</strong></td>
+<td>strong</td>
+</tr>
+<tr class="even">
+<td>斜体*</td>
+<td><em>斜体样式</em></td>
+<td>em</td>
+</tr>
+<tr class="odd">
+<td>强调内代码</td>
+<td><strong><code>强调样式</code></strong></td>
+<td>strongcode</td>
+</tr>
+<tr class="even">
+<td>斜体内代码</td>
+<td><em><code>斜体样式</code></em></td>
+<td>emcode</td>
+</tr>
+</tbody>
+</table>
+<h2 id="引用">引用</h2>
+<pre><code>&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用1
+
+&gt;&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用2
+
+&gt;&gt;&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用3
+
+&gt;&gt;&gt;&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用4
+
+&gt;&gt;&gt;&gt;&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用5
+
+&gt;&gt;&gt;&gt;&gt;&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用6
+
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用7
+
+  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用8
+
+  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 引用引用引用引用引用引用引用引用引用引用引用引用引用9</code></pre>
+<p>效果:</p>
+<blockquote>
+<p>引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用1</p>
+</blockquote>
+<p>效果:</p>
+<blockquote>
+<blockquote>
+<p>引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用2</p>
+</blockquote>
+</blockquote>
+<p>效果:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用3</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>效果:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用4</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>效果:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用5</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>效果:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用6</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>效果:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用7</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>效果:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用8</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>效果:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用引用9</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<h3 id="复选框不支持">复选框：不支持</h3>
+<p>使用 <code>- [ ]</code> 和 <code>- [x]</code> 语法可以创建复选框，实现 todo-list 等功能。例如：</p>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+复选框</li>
+<li><input type="checkbox" disabled="" />
+复选框</li>
+<li><input type="checkbox" disabled="" checked="" />
+复选框</li>
+</ul>
+<h2 id="列表">列表</h2>
+<p><strong>无序列表</strong></p>
+<p><strong><code>代码</code></strong></p>
+<pre><code>* 无序列表
+ + 无序列表
+ + 无序列表
+    - 无序列表
+        - 无序列表
+            - 无序列表
+                - 无序列表
+                    - 无序列表
+* 无序列表
+* 无序列表
++ 无序列表
+- 无序列表
+- 无序列表</code></pre>
+<ul>
+<li>无序列表</li>
+<li>无序列表</li>
+<li>无序列表
+<ul>
+<li>无序列表
+<ul>
+<li>无序列表
+<ul>
+<li>无序列表
+<ul>
+<li>无序列表
+<ul>
+<li>无序列表</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>无序列表</li>
+<li>无序列表</li>
+<li>无序列表</li>
+<li>无序列表</li>
+<li>无序列表</li>
+</ul>
+<p><strong>有序列表</strong></p>
+<p><em><code>代码</code></em></p>
+<pre><code>1. 有序列表
+2. 有序列表 列表内的强调`(*)`: *列表内的斜体样式*
+8. 有序列表 列表内的强调`(**)`: **列表内的强调样式**
+#. 有序列表  内的引用
+#. 有序列表  内的引用
+
+    &gt;有序列表 内的引用
+    &gt;有序列表 内的引用
+
+9) 有序列表
+(8)有序列表
+(10) 有序列表
+
+9) 有序列表
+#. 有序列表
+
+(8)有序列表
+#. 有序列表
+
+(10)有序列表
+#. 有序列表</code></pre>
+<ol type="1">
+<li>有序列表</li>
+<li>有序列表 列表内的强调<code>(*)</code>: <em>列表内的斜体样式</em></li>
+<li>有序列表 列表内的强调<code>(**)</code>: <strong>列表内的强调样式</strong> # . 有序列表 内的引用</li>
+</ol>
+<h1 id="有序列表-内的引用">. 有序列表 内的引用</h1>
+<pre><code>&gt;有序列表 内的引用
+&gt;有序列表 内的引用</code></pre>
+<ol start="9" type="1">
+<li>有序列表 (8)有序列表</li>
+</ol>
+<ol start="10" type="1">
+<li>有序列表</li>
+</ol>
+<ol start="9" type="1">
+<li>有序列表 # . 有序列表</li>
+</ol>
+<p>(8)有序列表 # . 有序列表</p>
+<p>(10)有序列表 # . 有序列表</p>
+<h1 id="css自定义">CSS自定义</h1>
+<p><em><code>代码</code></em></p>
+<pre><code>&lt;div class=&quot;warning&quot;&gt;
+## 警告帮助你不出错
+
+如果不想出错，请注意这类消息
+&lt;/div&gt;
+</code></pre>
+<p><em><code>效果</code></em></p>
+<section id="警告帮助你不出错" class="warning">
+<h6>警告帮助你不出错</h6>
+<p>如果不想出错，请注意这类消息</p>
+</section>
+<pre><code>&lt;div class=&quot;menu&quot;&gt;
+[首页](../../../index.html)
+[文章列表](./list.md.html)
+[MarkdownEditor](../../../editor/index.html)
+&lt;/div&gt;</code></pre>
+<p>菜单效果:</p>
+<div class="menu">
+<p><a href="../../../index.html">首页</a> <a href="./list.md.html">文章列表</a> <a href="../../../editor/index.html">MarkdownEditor</a></p>
+</div>
+<h4 id="linkimg">link/img</h4>
+<pre><code>[![百度](./img/baidu3.gif)](http://www.baidu.com/)</code></pre>
+<hr />
+<h2 id="通用字体格式">通用字体格式</h2>
+<pre><code>**强调** *斜体*  ***斜粗体***  ~~删除线del~~　　下标~下标sub~　 上标^上标sup^  --删除线--   -删除线-
+
+~~^下划线del&gt;sup^~~</code></pre>
+<p><em><code>效果</code></em></p>
+<p><strong>强调</strong> <em>斜体</em> <strong><em>斜粗体</em></strong> <del>删除线del</del>　　下标<sub>下标sub</sub>　 上标<sup>上标sup</sup> –删除线– -删除线-</p>
+<p><del><sup>下划线del&gt;sup</sup></del></p>
+<p><em>多了空格的错误</em></p>
+<pre><code>**    强调**  *斜体   *  **  *斜粗体   ***  ~~删除线del ~  ~　　下标~下标sub     ~　 上标^上标sup  ^  --删除线--   -删除线-</code></pre>
+<p><em><code>效果</code></em></p>
+<p>** 强调** <em>斜体 </em> ** <em>斜粗体 </em>** ~~删除线del ~ <sub>　　下标</sub>下标sub ~　 上标^上标sup ^ –删除线– -删除线-</p>
+<h2 id="自定义字体格式">自定义字体格式</h2>
+<pre><code>|    样式  |strong                        | em                  | sub                  |sup                   |code                   | del                        |
+|---------|----------------------------|---------------------|--------------------|-------------------|---------------------|----------------------------|
+||||||||
+|原始|**strong**|*em*|下标~sub~|上标^sup^|`code`|~~del~~|
+|strong** |        |  ***strong&gt;em***     |   **~strong&gt;sub~**    |   **^strong&gt;sup^**   | **`strong&gt;code`**     | **~~strong&gt;del~~**      |
+|em*      |  ***em&gt;strong***         |      **em&gt;em**              |   高亮*~em&gt;sub~*        |  *^em&gt;sup^*       | *`em&gt;code`*            | *~~em&gt;del~~*           |
+|sub~     |     ~**sub&gt;strong**~        |     ~*sub&gt;em*~         |         ~~sub&gt;sub~~                     |    ~^sub&gt;sup^~       |     ~`sub&gt;code`~      |  ~~~sub&gt;del~~~         |       
+|code   \`|     `**code&gt;strong**`      |     `*code&gt;em*`            |`~code&gt;sub~`        |    `^code&gt;sup^`      |     ``code&gt;code``    |  `~~code&gt;del~~`        |
+|del ~~     |     ~~**del&gt;strong**~~     |     ~~*del&gt;em*~~         |~~~del&gt;sub~~~             |   下划线~~^del&gt;sup^~~       |     ~~`del&gt;code`~~    |  ~~~~del&gt;del~~~~   |
+</code></pre>
+<p><em><code>效果</code></em></p>
+<table>
+<thead>
+<tr class="header">
+<th>样式</th>
+<th>strong</th>
+<th>em</th>
+<th>sub</th>
+<th>sup</th>
+<th>code</th>
+<th>del</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>原始</td>
+<td><strong>strong</strong></td>
+<td><em>em</em></td>
+<td>下标<sub>sub</sub></td>
+<td>上标<sup>sup</sup></td>
+<td><code>code</code></td>
+<td><del>del</del></td>
+</tr>
+<tr class="odd">
+<td>strong**</td>
+<td></td>
+<td><strong><em>strong&gt;em</em></strong></td>
+<td><strong><sub>strong&gt;sub</sub></strong></td>
+<td><strong><sup>strong&gt;sup</sup></strong></td>
+<td><strong><code>strong&gt;code</code></strong></td>
+<td><strong><del>strong&gt;del</del></strong></td>
+</tr>
+<tr class="even">
+<td>em*</td>
+<td><strong><em>em&gt;strong</em></strong></td>
+<td><strong>em&gt;em</strong></td>
+<td>高亮<em><sub>em&gt;sub</sub></em></td>
+<td><em><sup>em&gt;sup</sup></em></td>
+<td><em><code>em&gt;code</code></em></td>
+<td><em><del>em&gt;del</del></em></td>
+</tr>
+<tr class="odd">
+<td>sub~</td>
+<td><sub><strong>sub&gt;strong</strong></sub></td>
+<td><sub><em>sub&gt;em</em></sub></td>
+<td><del>sub&gt;sub</del></td>
+<td><sub><sup>sub&gt;sup</sup></sub></td>
+<td><sub><code>sub&gt;code</code></sub></td>
+<td>~<del>sub&gt;del</del>~</td>
+</tr>
+<tr class="even">
+<td>code `</td>
+<td><code>**code&gt;strong**</code></td>
+<td><code>*code&gt;em*</code></td>
+<td><code>~code&gt;sub~</code></td>
+<td><code>^code&gt;sup^</code></td>
+<td><code>code&gt;code</code></td>
+<td><code>~~code&gt;del~~</code></td>
+</tr>
+<tr class="odd">
+<td>del ~~</td>
+<td><del><strong>del&gt;strong</strong></del></td>
+<td><del><em>del&gt;em</em></del></td>
+<td>~<del>del&gt;sub</del>~</td>
+<td>下划线<del><sup>del&gt;sup</sup></del></td>
+<td><del><code>del&gt;code</code></del></td>
+<td>~~<del>del&gt;del</del>~~</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sup类定义格式">SUP类定义格式:</h3>
+<pre><code>^**sup&gt;strong**^      </code></pre>
+<p><em><code>效果</code></em></p>
+<p><sup><strong>sup&gt;strong</strong></sup></p>
+<pre><code>^*sup&gt;em*^  </code></pre>
+<p><em><code>效果</code></em></p>
+<p><sup><em>sup&gt;em</em></sup></p>
+<pre><code>^`sup&gt;code`^    </code></pre>
+<p><em><code>效果</code></em></p>
+<p><sup><code>sup&gt;code</code></sup></p>
+<pre><code> ^~sup&gt;sub~^           </code></pre>
+<p><em><code>效果</code></em></p>
+<p><sup><sub>sup&gt;sub</sub></sup></p>
+<pre><code>^^sup&gt;sup^^    </code></pre>
+<p><em><code>效果</code></em></p>
+<p>^<sup>sup&gt;sup</sup>^</p>
+<h2 id="内部链接">内部链接</h2>
+<pre><code>
+[::返回顶部][header]
+
+[header]: #header
+
+[::返回列表][toc]
+
+[toc]: #TOC
+
+[*`返回顶部`*](#header)
+
+&lt;p  align=&quot;right&quot;&gt;&lt;em&gt;&lt;code&gt;&lt;a href=&quot;#header&quot;&gt;返回顶部&lt;/a&gt;&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
+</code></pre>
+<p><em><code>效果</code></em></p>
+<p><a href="#header"><strong><em>::返回顶部</em></strong></a></p>
+<p><a href="#TOC"><em><sub>::返回列表</sub></em></a></p>
+<p><a href="#header"><em><code>返回顶部</code></em></a></p>
+<p align="right">
+<em><code><a href="#header">返回顶部</a></code></em>
+</p>
+<hr />
+<h3 id="label">label</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">.label</span> {</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    <span class="kw">display</span>: <span class="dv">inline</span><span class="op">;</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>    <span class="kw">padding</span>: <span class="dv">.2</span><span class="dt">em</span> <span class="dv">.6</span><span class="dt">em</span> <span class="dv">.3</span><span class="dt">em</span><span class="op">;</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>    <span class="kw">font-size</span>: <span class="dv">75</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>    <span class="kw">font-weight</span>: <span class="dv">700</span><span class="op">;</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a>    <span class="kw">line-height</span>: <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a>    <span class="kw">color</span>: <span class="cn">#fff</span><span class="op">;</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a>    <span class="kw">text-align</span>: <span class="dv">center</span><span class="op">;</span></span>
+<span id="cb23-9"><a href="#cb23-9"></a>    <span class="kw">white-space</span>: <span class="dv">nowrap</span><span class="op">;</span></span>
+<span id="cb23-10"><a href="#cb23-10"></a>    <span class="kw">vertical-align</span>: <span class="dv">baseline</span><span class="op">;</span></span>
+<span id="cb23-11"><a href="#cb23-11"></a>    <span class="kw">border-radius</span>: <span class="dv">.25</span><span class="dt">em</span><span class="op">;</span></span>
+<span id="cb23-12"><a href="#cb23-12"></a>}</span>
+<span id="cb23-13"><a href="#cb23-13"></a><span class="fu">.label-default</span> {</span>
+<span id="cb23-14"><a href="#cb23-14"></a>    <span class="kw">background-color</span>: <span class="cn">#777</span><span class="op">;</span></span>
+<span id="cb23-15"><a href="#cb23-15"></a>}</span>
+<span id="cb23-16"><a href="#cb23-16"></a><span class="fu">.label-primary</span> {</span>
+<span id="cb23-17"><a href="#cb23-17"></a>    <span class="kw">background-color</span>: <span class="cn">#337ab7</span><span class="op">;</span></span>
+<span id="cb23-18"><a href="#cb23-18"></a>}</span>
+<span id="cb23-19"><a href="#cb23-19"></a><span class="fu">.label-success</span> {</span>
+<span id="cb23-20"><a href="#cb23-20"></a>    <span class="kw">background-color</span>: <span class="cn">#5cb85c</span><span class="op">;</span></span>
+<span id="cb23-21"><a href="#cb23-21"></a>}</span>
+<span id="cb23-22"><a href="#cb23-22"></a><span class="fu">.label-danger</span> {</span>
+<span id="cb23-23"><a href="#cb23-23"></a>    <span class="kw">background-color</span>: <span class="cn">#d9534f</span><span class="op">;</span></span>
+<span id="cb23-24"><a href="#cb23-24"></a>}</span>
+<span id="cb23-25"><a href="#cb23-25"></a><span class="fu">.label-warning</span> {</span>
+<span id="cb23-26"><a href="#cb23-26"></a>    <span class="kw">background-color</span>: <span class="cn">#f0ad4e</span><span class="op">;</span></span>
+<span id="cb23-27"><a href="#cb23-27"></a>}</span>
+<span id="cb23-28"><a href="#cb23-28"></a><span class="fu">.label-info</span> {</span>
+<span id="cb23-29"><a href="#cb23-29"></a>    <span class="kw">background-color</span>: <span class="cn">#5bc0de</span><span class="op">;</span></span>
+<span id="cb23-30"><a href="#cb23-30"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;label label-default&quot;</span><span class="kw">&gt;</span>Default<span class="kw">&lt;/span&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;label label-primary&quot;</span><span class="kw">&gt;</span>Primary<span class="kw">&lt;/span&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;label label-success&quot;</span><span class="kw">&gt;</span>Success<span class="kw">&lt;/span&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;label label-warning&quot;</span><span class="kw">&gt;</span>Warning<span class="kw">&lt;/span&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;label label-danger&quot;</span><span class="kw">&gt;</span>Danger<span class="kw">&lt;/span&gt;</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;label label-info&quot;</span><span class="kw">&gt;</span>Info<span class="kw">&lt;/span&gt;</span></span></code></pre></div>
+<p>效果：</p>
+<p><span class="label label-default">Default</span> <span class="label label-primary">Primary</span> <span class="label label-success">Success</span> <span class="label label-warning">Warning</span> <span class="label label-danger">Danger</span> <span class="label label-info">Info</span></p>
+<h3 id="字体颜色">字体颜色</h3>
+<p>更改代码颜色代码如下：</p>
+<pre><code>Default Color
+&lt;font color=&#39;red&#39;&gt;Red Color&lt;/font&gt;
+&lt;font color=&#39;blue&#39;&gt;Blue Color&lt;/font&gt;
+&lt;font color=&#39;green&#39;&gt;Green Color&lt;/font&gt;
+&lt;font color=&#39;yellow&#39;&gt;Yellow Color&lt;/font&gt;
+&lt;font color=&#39;pink&#39;&gt;Pink Color&lt;/font&gt;
+&lt;font color=&#39;purple&#39;&gt;Purple Color&lt;/font&gt;
+&lt;font color=&#39;orange&#39;&gt;Orange Color&lt;/font&gt;</code></pre>
+<p>更改颜色：</p>
+<p>Default Color <font color='red'>Red Color</font> <font color='blue'>Blue Color</font> <font color='green'>Green Color</font> <font color='yellow'>Yellow Color</font> <font color='pink'>Pink Color</font> <font color='purple'>Purple Color</font> <font color='orange'>Orange Color</font></p>
+<h3 id="显示换字号字体功能">显示换字号、字体功能。</h3>
+<p>代码：</p>
+<pre><code>&lt;font size=&#39;-2&#39;&gt;Small Size&lt;/font&gt;
+Normal Size
+&lt;font size=&#39;+2&#39;&gt;Big Size&lt;/font&gt;
+&lt;font size=&#39;+2&#39; face=&#39;Times&#39;&gt;Time New Roman&lt;/font&gt;</code></pre>
+<p>效果</p>
+<p><font size='-2'>Small Size</font> Normal Size <font size='+2'>Big Size</font> <font size='+2' face='Times'>Time New Roman</font></p>
+<h3 id="数学公式">数学公式</h3>
+<p>明星组合：Markdown + MathJax。</p>
+<p>这里（http://mathjax-chinese-doc.readthedocs.org/en/latest/start.html）有一个MathJax的汉化入门指南，感兴趣的同学可以看看。</p>
+<p>例如，以下代码可以给出一个行间公式：</p>
+<pre><code>$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
+\\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\\)</code></pre>
+<p>其输出为：</p>
+<p><br /><span class="math display">$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$</span><br /> \(x=\)</p>
+<p>图片：</p>
+<pre><code>![](./library/help-code/001.jpg)    </code></pre>
+<p>效果：</p>
+<p><img src="./library/help-code/001.jpg" /></p>
+<hr />
+<h4 id="bs-callout-bs">bs-callout bs</h4>
+<pre><code>&lt;div class=&quot;bs-callout bs-callout-warning&quot;&gt;
+&lt;h4&gt;链接的原始功能不受影响&lt;/h4&gt;
+&lt;p&gt;上面提到的类只是通过设置 &lt;code&gt;pointer-events: none&lt;/code&gt; 来禁止 &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; 元素作为链接的原始功能，但是，这一 CSS 属性并没有被标准化，并且 Opera 18 及更低版本的浏览器并没有完全支持这一属性，同样，Internet Explorer 11 也不支持。In addition, even in browsers that do support &lt;code&gt;pointer-events: none&lt;/code&gt;, keyboard navigation remains unaffected, meaning that sighted keyboard users and users of assistive technologies will still be able to activate these links. 因此，为了安全起见，建议通过 JavaScript 代码来禁止链接的原始功能。&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;bs-callout bs-callout-info&quot;&gt;
+&lt;h4&gt;链接的原始功能不受影响&lt;/h4&gt;
+&lt;p&gt;上面提到的类只是通过设置 &lt;code&gt;pointer-events: none&lt;/code&gt; 来禁止 &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; 元素作为链接的原始功能，但是，这一 CSS 属性并没有被标准化，并且 Opera 18 及更低版本的浏览器并没有完全支持这一属性，同样，Internet Explorer 11 也不支持。In addition, even in browsers that do support &lt;code&gt;pointer-events: none&lt;/code&gt;, keyboard navigation remains unaffected, meaning that sighted keyboard users and users of assistive technologies will still be able to activate these links. 因此，为了安全起见，建议通过 JavaScript 代码来禁止链接的原始功能。&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;bs-callout bs-callout-danger&quot;&gt;
+&lt;h4&gt;链接的原始功能不受影响&lt;/h4&gt;
+&lt;p&gt;上面提到的类只是通过设置 &lt;code&gt;pointer-events: none&lt;/code&gt; 来禁止 &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; 元素作为链接的原始功能，但是，这一 CSS 属性并没有被标准化，并且 Opera 18 及更低版本的浏览器并没有完全支持这一属性，同样，Internet Explorer 11 也不支持。In addition, even in browsers that do support &lt;code&gt;pointer-events: none&lt;/code&gt;, keyboard navigation remains unaffected, meaning that sighted keyboard users and users of assistive technologies will still be able to activate these links. 因此，为了安全起见，建议通过 JavaScript 代码来禁止链接的原始功能。&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+<div class="bs-callout bs-callout-warning">
+<h4>
+链接的原始功能不受影响
+</h4>
+<p>
+上面提到的类只是通过设置 <code>pointer-events: none</code> 来禁止 <code>&lt;a&gt;</code> 元素作为链接的原始功能，但是，这一 CSS 属性并没有被标准化，并且 Opera 18 及更低版本的浏览器并没有完全支持这一属性，同样，Internet Explorer 11 也不支持。In addition, even in browsers that do support <code>pointer-events: none</code>, keyboard navigation remains unaffected, meaning that sighted keyboard users and users of assistive technologies will still be able to activate these links. 因此，为了安全起见，建议通过 JavaScript 代码来禁止链接的原始功能。
+</p>
+</div>
+<div class="bs-callout bs-callout-info">
+<h4>
+链接的原始功能不受影响
+</h4>
+<p>
+上面提到的类只是通过设置 <code>pointer-events: none</code> 来禁止 <code>&lt;a&gt;</code> 元素作为链接的原始功能，但是，这一 CSS 属性并没有被标准化，并且 Opera 18 及更低版本的浏览器并没有完全支持这一属性，同样，Internet Explorer 11 也不支持。In addition, even in browsers that do support <code>pointer-events: none</code>, keyboard navigation remains unaffected, meaning that sighted keyboard users and users of assistive technologies will still be able to activate these links. 因此，为了安全起见，建议通过 JavaScript 代码来禁止链接的原始功能。
+</p>
+</div>
+<div class="bs-callout bs-callout-danger">
+<h4>
+链接的原始功能不受影响
+</h4>
+<p>
+上面提到的类只是通过设置 <code>pointer-events: none</code> 来禁止 <code>&lt;a&gt;</code> 元素作为链接的原始功能，但是，这一 CSS 属性并没有被标准化，并且 Opera 18 及更低版本的浏览器并没有完全支持这一属性，同样，Internet Explorer 11 也不支持。In addition, even in browsers that do support <code>pointer-events: none</code>, keyboard navigation remains unaffected, meaning that sighted keyboard users and users of assistive technologies will still be able to activate these links. 因此，为了安全起见，建议通过 JavaScript 代码来禁止链接的原始功能。
+</p>
+</div>
+
+
+
+<div class="row-fluid">
+<!--_____分享按钮___________
+<hr class="bg003">
+<div class="bshare-custom icon-medium"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/button.js#style=-1&amp;uuid=&amp;pophcol=3&amp;lang=zh"></script><a class="bshareDiv" onclick="javascript:return false;"></a><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+-_____分享按钮___________-->
+</div>
+
+</div><!--__maincontent2_____ -->
+<div class="sidebar span1 hidden-phone bg002">
+<!--__<marquee direction="top">Wecome to synBE!</marquee> __ -->
+</div>
+</div><!--_____main___________-->
+
+
+
+<div class="row-fluid bg003"><!--_____footer1 ______-->
+<div class="span2 hidden-phone"></div>
+<div class="span2">
+<ul class="nav nav-pills">
+    <li class="dropdown all-camera-dropdown dropup">
+           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              查看二维码<!--<i class="fa fa-qrcode fa-2x"></i>_____此为fontsome二维码图标___________-->
+               <b class="caret"></b>
+           </a>
+<ul class="dropdown-menu">
+<li data-filter-camera-type="all"><a data-toggle="tab" href="#">扫描二维码分享此页面</a></li>
+<!--_____二维码___________-->
+<head>
+    <meta charset="utf-8"/>
+   <!--
+   <base target="_blank">
+   -->
+    <script src="../../src/qrcode/qrcode.js"></script>
+    <style>
+      #qrcode img {
+        margin:0.5em auto;
+      }
+    </style>
+</head>
+<script>
+                thisURL = document.URL;
+window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 160,//设置宽高
+            height : 160,
+        });
+qrcode.makeCode(thisURL);
+    }
+</script>
+<div id="qrcode"></div>
+<!--_____二维码___________-->
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="span4 hidden-phone">
+<!--_____copyright___________-->
+ Copyright  © 2015-2017  <a href="http://www.synbe.com" target="_blank">synBE.com</a>  
+</div>
+<div class="span2 hidden-phone">
+<!--_____note1___________-->
+
+ <script type="text/javascript">
+
+      var downPdf = document.getElementById("renderPdf");
+
+      downPdf.onclick = function() {
+          html2canvas(document.body, {
+              onrendered:function(canvas) {
+
+                  var contentWidth = canvas.width;
+                  var contentHeight = canvas.height;
+
+                  //一页pdf显示html页面生成的canvas高度;
+                  var pageHeight = contentWidth / 592.28 * 841.89;
+                  //未生成pdf的html页面高度
+                  var leftHeight = contentHeight;
+                  //pdf页面偏移
+                  var position = 0;
+                  //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                  var imgWidth = 595.28;
+                  var imgHeight = 592.28/contentWidth * contentHeight;
+
+                  var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+                  var pdf = new jsPDF('', 'pt', 'a4');
+
+                  //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                  //当内容未超过pdf一页显示的范围，无需分页
+                  if (leftHeight < pageHeight) {
+                      pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+                  } else {
+                      while(leftHeight > 0) {
+                          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                          leftHeight -= pageHeight;
+                          position -= 841.89;
+                          //避免添加空白页
+                          if(leftHeight > 0) {
+                              pdf.addPage();
+                          }
+                      }
+                  }
+
+                  pdf.save('content.pdf');
+              }
+          })
+      }
+    </script>
+<!--_____note1___________-->
+</div>
+<div class="span2 hidden-phone"></div>
+</div><!--_____footer1 ______-->
+
+
+
+
+<!--_____返回顶部______
+<head>
+<style type="text/css">
+</style>
+<script type="text/javascript" src="../../../src/gototop/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../../../src/gototop/gotoTop.js"></script>
+<script type="text/javascript">
+$(function(){
+    $(".backToTop").goToTop();
+    $(window).bind('scroll resize',function(){
+        $(".backToTop").goToTop();
+    });
+});
+</script>
+</head>
+<a href="javascript:;" class="backToTop hidden-phone" title="返回顶部"></a>
+_____返回顶部______-->
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>使程序在Linux下后台运行（关掉终端继续让程序运行的方法）</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"id="viewport"name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../../src/jquery/jquery-2.1.4.min.js"></script>
+  <script src="../../src/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../../src/highlight/highlight.min.js"></script>
+  <script >hljs.initHighlightingOnLoad();</script>  
+  <script type="text/javascript" src="../../src/jspdf/html2canvas.js"></script>
+  <script type="text/javascript" src="../../src/jspdf/jsPdf.debug.js"></script>
+  <link href="../../src/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/docs.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/style_index.css" rel="stylesheet" media="screen">
+  <link href="../../src/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../../src/highlight/styles/monokai-sublime.css" rel="stylesheet">
+  <div class="row-fluid  hidden-phone">
+  <div class="span2"></div>
+  <div class="span8 bg001">
+  <br>
+  <p class="milky"> 
+        <!--<i class="fa fa-spinner fa-pulse"></i>_____此为fontsome图标___________-->
+        &nbsp;synBE
+   </p>
+  </div>
+  <div class="span2"></div>
+  </div>
+
+  <div class="row-fluid main"><!--_____main___________-->
+  <div class="sidebar span2 hidden-phone bg002  milky">
+  <!--__synBE__ -->
+  </div>
+  <div class="content span8"><!--__maincontent2_____ -->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">使程序在Linux下后台运行（关掉终端继续让程序运行的方法）</h1>
+</header>
+<p>一、为什么要使程序在后台执行</p>
+<p>我们计算的程序都是周期很长的，通常要几个小时甚至一个星期。我们用的环境是用putty远程连接到日本Linux服务器。所以使程序在后台跑有以下三个好处：</p>
+<p>1：我们这边是否关机不影响日本那边的程序运行。（不会像以前那样，我们这网络一断开，或一关机，程序就断掉或找不到数据，跑了几天的程序只能重头再来，很是烦恼）</p>
+<p>2：不影响计算效率</p>
+<p>2：让程序在后台跑后，不会占据终端，我们可以用终端做别的事情。</p>
+<p>二、怎么样使程序在后台执行</p>
+<p>方法有很多，这里主要列举两种。假如我们有程序pso.cpp,通过编译后产生可执行文件pso，我们要使pso在linux服务器后台执行。当客户端关机后重新登入服务器后继续查看本来在终端输出的运行结果。（假设操作都在当前目录下）</p>
+<p>方法1在终端输入命令：</p>
+<pre><code># ./pso &gt; pso.file 2&gt;&amp;1 &amp; </code></pre>
+<p>解释：将pso直接放在后台运行，并把终端输出存放在当前目录下的pso.file文件中。</p>
+<p>当客户端关机后重新登陆服务器后，直接查看pso.file文件就可看执行结果（命</p>
+<p>令：#cat pso.file ）。</p>
+<p>方法2在终端输入命令：</p>
+<pre><code># nohup  ./pso &gt; pso.file 2&gt;&amp;1 &amp;</code></pre>
+<p>解释：nohup就是不挂起的意思，将pso直接放在后台运行，并把终端输出存放在当前</p>
+<p>目录下的pso.file文件中。当客户端关机后重新登陆服务器后，直接查看pso.file</p>
+<p>文件就可看执行结果（命令：#cat pso.file ）。</p>
+<p>三、常用任务管理命令</p>
+<pre><code># jobs      //查看任务，返回任务编号n和进程号
+
+# bg  %n   //将编号为n的任务转后台运行
+
+# fg  %n   //将编号为n的任务转前台运行
+
+# ctrl+z    //挂起当前任务
+
+# ctrl+c    //结束当前任务</code></pre>
+<p>注：如果要使在前天执行任务放到后台运行，则先要用ctrl+z挂起该任务，然后用bg使之后台执行。</p>
+<p>附：</p>
+<p>在Linux中，如果要让进程在后台运行，一般情况下，我们在命令后面加上&amp;即可，实际上，这样是将命令放入到一个作业队列中了：</p>
+<pre><code>$ ./test.sh &amp; 
+[1] 17208  
+$ jobs -l 
+[1]+ 17208 Running                 ./test.sh &amp; </code></pre>
+<p>对于已经在前台执行的命令，也可以重新放到后台执行，首先按ctrl+z暂停已经运行的进程，然后使用bg命令将停止的作业放到后台运行：</p>
+<pre><code>$ ./test.sh 
+[1]+  Stopped                 ./test.sh  
+$ bg %1 [1]+ ./test.sh &amp;  
+$ jobs -l 
+[1]+ 22794 Running                 ./test.sh &amp; </code></pre>
+<p>但是如上方到后台执行的进程，其父进程还是当前终端shell的进程，而一旦父进程退出，则会发送hangup信号给所有子进程，子进程收到hangup以后也会退出。如果我们要在退出shell的时候继续运行进程，则需要使用nohup忽略hangup信号，或者setsid将将父进程设为init进程(进程号为1)</p>
+<pre><code>$ echo $$ 
+21734  
+$ nohup ./test.sh &amp; 
+[1] 29016  
+$ ps -ef | grep test 
+515      29710 21734  0 11:47 pts/12   00:00:00 /bin/sh ./test.sh 
+515      29713 21734  0 11:47 pts/12   00:00:00 grep test 
+
+$ setsid ./test.sh &amp; 
+[1] 409  
+$ ps -ef | grep test 
+515        410     1  0 11:49 ?        00:00:00 /bin/sh ./test.sh 
+515        413 21734  0 11:49 pts/12   00:00:00 grep test </code></pre>
+<p>上面的试验演示了使用nohup/setsid加上&amp;使进程在后台运行，同时不受当前shell退出的影响。那么对于已经在后台运行的进程，该怎么办呢？可以使用disown命令：</p>
+<pre><code>$ ./test.sh &amp; 
+[1] 2539  
+$ jobs -l 
+[1]+  2539 Running                 ./test.sh &amp;  
+$ disown -h %1  
+$ ps -ef | grep test 
+515        410     1  0 11:49 ?        00:00:00 /bin/sh ./test.sh 
+515       2542 21734  0 11:52 pts/12   00:00:00 grep test </code></pre>
+<p>另外还有一种方法，即使将进程在一个subshell中执行，其实这和setsid异曲同工。方法很简单，将命令用括号() 括起来即可：</p>
+<pre><code>$ (./test.sh &amp;)  
+$ ps -ef | grep test 
+515        410     1  0 11:49 ?        00:00:00 /bin/sh ./test.sh 
+515      12483 21734  0 11:59 pts/12   00:00:00 grep test </code></pre>
+<p>注：本文试验环境为Red Hat Enterprise Linux AS release 4 (Nahant Update 5),shell为/bin/bash，不同的OS和shell可能命令有些不一样。例如AIX的ksh，没有disown，但是可以使用nohup -p PID来获得disown同样的效果。</p>
+<p>还有一种更加强大的方式是使用screen，首先创建一个断开模式的虚拟终端，然后用-r选项重新连接这个虚拟终端，在其中执行的任何命令，都能达到nohup的效果，这在有多个命令需要在后台连续执行的时候比较方便：</p>
+<pre><code>$ screen -dmS screen_test  
+$ screen -list There is a screen on:
+27963.screen_test       (Detached) 1 Socket in /tmp/uscreens/S-jiangfeng.  
+$ screen -r screen_test  </code></pre>
+
+
+
+<div class="row-fluid">
+<!--_____分享按钮___________
+<hr class="bg003">
+<div class="bshare-custom icon-medium"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/button.js#style=-1&amp;uuid=&amp;pophcol=3&amp;lang=zh"></script><a class="bshareDiv" onclick="javascript:return false;"></a><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+-_____分享按钮___________-->
+</div>
+
+</div><!--__maincontent2_____ -->
+<div class="sidebar span1 hidden-phone bg002">
+<!--__<marquee direction="top">Wecome to synBE!</marquee> __ -->
+</div>
+</div><!--_____main___________-->
+
+
+
+<div class="row-fluid bg003"><!--_____footer1 ______-->
+<div class="span2 hidden-phone"></div>
+<div class="span2">
+<ul class="nav nav-pills">
+    <li class="dropdown all-camera-dropdown dropup">
+           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              查看二维码<!--<i class="fa fa-qrcode fa-2x"></i>_____此为fontsome二维码图标___________-->
+               <b class="caret"></b>
+           </a>
+<ul class="dropdown-menu">
+<li data-filter-camera-type="all"><a data-toggle="tab" href="#">扫描二维码分享此页面</a></li>
+<!--_____二维码___________-->
+<head>
+    <meta charset="utf-8"/>
+   <!--
+   <base target="_blank">
+   -->
+    <script src="../../src/qrcode/qrcode.js"></script>
+    <style>
+      #qrcode img {
+        margin:0.5em auto;
+      }
+    </style>
+</head>
+<script>
+                thisURL = document.URL;
+window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 160,//设置宽高
+            height : 160,
+        });
+qrcode.makeCode(thisURL);
+    }
+</script>
+<div id="qrcode"></div>
+<!--_____二维码___________-->
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="span4 hidden-phone">
+<!--_____copyright___________-->
+ Copyright  © 2015-2017  <a href="http://www.synbe.com" target="_blank">synBE.com</a>  
+</div>
+<div class="span2 hidden-phone">
+<!--_____note1___________-->
+
+ <script type="text/javascript">
+
+      var downPdf = document.getElementById("renderPdf");
+
+      downPdf.onclick = function() {
+          html2canvas(document.body, {
+              onrendered:function(canvas) {
+
+                  var contentWidth = canvas.width;
+                  var contentHeight = canvas.height;
+
+                  //一页pdf显示html页面生成的canvas高度;
+                  var pageHeight = contentWidth / 592.28 * 841.89;
+                  //未生成pdf的html页面高度
+                  var leftHeight = contentHeight;
+                  //pdf页面偏移
+                  var position = 0;
+                  //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                  var imgWidth = 595.28;
+                  var imgHeight = 592.28/contentWidth * contentHeight;
+
+                  var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+                  var pdf = new jsPDF('', 'pt', 'a4');
+
+                  //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                  //当内容未超过pdf一页显示的范围，无需分页
+                  if (leftHeight < pageHeight) {
+                      pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+                  } else {
+                      while(leftHeight > 0) {
+                          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                          leftHeight -= pageHeight;
+                          position -= 841.89;
+                          //避免添加空白页
+                          if(leftHeight > 0) {
+                              pdf.addPage();
+                          }
+                      }
+                  }
+
+                  pdf.save('content.pdf');
+              }
+          })
+      }
+    </script>
+<!--_____note1___________-->
+</div>
+<div class="span2 hidden-phone"></div>
+</div><!--_____footer1 ______-->
+
+
+
+
+<!--_____返回顶部______
+<head>
+<style type="text/css">
+</style>
+<script type="text/javascript" src="../../../src/gototop/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../../../src/gototop/gotoTop.js"></script>
+<script type="text/javascript">
+$(function(){
+    $(".backToTop").goToTop();
+    $(window).bind('scroll resize',function(){
+        $(".backToTop").goToTop();
+    });
+});
+</script>
+</head>
+<a href="javascript:;" class="backToTop hidden-phone" title="返回顶部"></a>
+_____返回顶部______-->
+</body>
+</html>

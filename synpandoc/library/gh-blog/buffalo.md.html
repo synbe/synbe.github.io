@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>BuffaloWHR-G300NCHv2刷OpenWrt教程</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"id="viewport"name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../../src/jquery/jquery-2.1.4.min.js"></script>
+  <script src="../../src/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../../src/highlight/highlight.min.js"></script>
+  <script >hljs.initHighlightingOnLoad();</script>  
+  <script type="text/javascript" src="../../src/jspdf/html2canvas.js"></script>
+  <script type="text/javascript" src="../../src/jspdf/jsPdf.debug.js"></script>
+  <link href="../../src/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/docs.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/style_index.css" rel="stylesheet" media="screen">
+  <link href="../../src/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../../src/highlight/styles/monokai-sublime.css" rel="stylesheet">
+  <div class="row-fluid  hidden-phone">
+  <div class="span2"></div>
+  <div class="span8 bg001">
+  <br>
+  <p class="milky"> 
+        <!--<i class="fa fa-spinner fa-pulse"></i>_____此为fontsome图标___________-->
+        &nbsp;synBE
+   </p>
+  </div>
+  <div class="span2"></div>
+  </div>
+
+  <div class="row-fluid main"><!--_____main___________-->
+  <div class="sidebar span2 hidden-phone bg002  milky">
+  <!--__synBE__ -->
+  </div>
+  <div class="content span8"><!--__maincontent2_____ -->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">BuffaloWHR-G300NCHv2刷OpenWrt教程</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#openwrt-buffalo-whr-g300n-v2-官方链接">OpenWrt　Buffalo WHR-G300N V2 官方链接</a></li>
+<li><a href="#史上最全面的buffalo-whr-g300n-ch-v2-刷openwrt教程">史上最全面的Buffalo WHR-G300N CH v2 刷OpenWrt教程</a>
+<ul>
+<li><a href="#ubuntugentoo下刷机脚本">ubuntu/gentoo下刷机脚本：</a></li>
+</ul></li>
+<li><a href="#openwrt-sysupgrade-命令行更新固件到最新版">OpenWrt sysupgrade 命令行更新固件到最新版</a>
+<ul>
+<li><a href="#ssh登录路由器">1、SSH登录路由器</a></li>
+<li><a href="#下载openwrt最新trunk版本固件">２、下载OpenWrt最新trunk版本固件</a></li>
+<li><a href="#升级openwrt固件">３、升级OpenWrt固件</a></li>
+</ul></li>
+</ul>
+</nav>
+<h2 id="openwrt-buffalo-whr-g300n-v2-官方链接">OpenWrt　Buffalo WHR-G300N V2 官方链接</h2>
+<ol type="1">
+<li><a href="https://wiki.openwrt.org/">wiki.openwrt.org</a></li>
+<li><a href="https://wiki.openwrt.org/doc/howto/generic.flashing">Installing OpenWrt</a></li>
+<li><a href="https://wiki.openwrt.org/toh/buffalo/whr-g300nv2">Buffalo WHR-G300N V2</a></li>
+<li><a href="https://wiki.openwrt.org/toh/hwdata/buffalo/buffalo_whr-g300n_v2">Techdata: Buffalo WHR-G300N v2</a></li>
+<li><a href="https://downloads.openwrt.org/">OpenWrt Downloads</a></li>
+<li><a href="https://www.gargoyle-router.com/">Gargoyle</a></li>
+</ol>
+<h2 id="史上最全面的buffalo-whr-g300n-ch-v2-刷openwrt教程">史上最全面的Buffalo WHR-G300N CH v2 刷OpenWrt教程</h2>
+<p>Buffalo WHR-G300N CH v2 刷OpenWrt、有两种办法、一种是Windows下刷、一种是在linux下使用tftp刷.</p>
+<p>Buffalo WHR-G300N-CH v2的openwrt固件在这个地址下载：</p>
+<p>http://downloads.openwrt.org/snapshots/trunk/ar71xx/</p>
+<p>openwrt官方对G300N v2的支持时有时无、还没有正式支持</p>
+<p>由于硬件一样、我们可以下载使用WHR-G301N或者WHR-HP-G300N的固件</p>
+<p>而这两款路由也没有得到openwrt正式的支持</p>
+<p>openwrt每次会发布G301N和HP-G300N的openwrt固件、而每次发布没几天、该固件就会被openwrt取消下载</p>
+<p>所以http://downloads.openwrt.org/snapshots/trunk/ar71xx/这个链接里偶尔才会有对应的固件下载、</p>
+<p>为了提供方便、在这里我提供下载:</p>
+<p>squashfs-factory版</p>
+<p>squashfs-sysupgrade版</p>
+<p>squashfs-tftp版</p>
+<p>内核3.2.6</p>
+<p>提前说一下、这个路由是刷不死的、不管怎样都可以用linux下tftp刷回</p>
+<h4 id="windows下">Ⅰ.Windows下：</h4>
+<p>我们需要用到两个工具</p>
+<p>1.hfs （点此下载hfs）</p>
+<p>2.Telnet</p>
+<p>Windows7默认没有开启telnet功能、在此讲述一下telnet的开启方法:</p>
+<p>控制面板-程序-程序和功能-打开或关闭Windows功能;</p>
+<p>把telnet服务端和telnet客户端勾选、确定</p>
+<p>下载上面提供的sysupgrade版固件</p>
+<p>使用hfs挂载、挂载方法：</p>
+<p>挂载方法：</p>
+<p>①.打开hfs</p>
+<p>menu-IP Adress、选择你的路由给你电脑分配的IP地址</p>
+<p>（一般为192.168.1.？、图中我的即是192.168.36.2）</p>
+<p>把固件包拖到左侧“Virtual File System”下、成为这样：</p>
+<p>telnet或者ssh登录路由、输入以下命令：</p>
+<pre><code>cd /tmp 
+wget http://192.168.1.109/openwrt-ar71xx-generic-whr-g301n-squashfs-sysupgrade.bin                    在这里提示一下、①.可把固件名改为“1.bin”再挂载、这里的命令就可以简写了、②.这里的192.168.1.109应改为本机IP、像如图、我就应该改为192.168.36.2、 
+mtd -e linux -r write openwrt-ar71xx-generic-whr-g301n-squashfs-sysupgrade.bin linux</code></pre>
+<p>（附固件改名后菜鸟命令：</p>
+<pre><code>cd /tmp 
+wget http://192.168.1.109/1.bin 
+mtd -e linux -r write 1.bin linux</code></pre>
+<p>）</p>
+<p>等待画面显示失去主机连接后</p>
+<p>等待1分钟、待power和router亮起、说明刷机成功了、下面我来讲linux下刷路由教程、刷好后却不能打开配置页面我将在另一篇文章中详细描述</p>
+<p>http://zzsjlove.diandian.com/2012/04/whr-g300n-v2-openwrt-luci/</p>
+<h4 id="linux下以ubuntu为例">Ⅱ.Linux下（以ubuntu为例）：</h4>
+<p>下载tftp版固件（上文有提供下载）、同样还是建议把固件名改为1.bin把固件放入ubuntu的主文件夹（home）、先把ubuntu联网、怎么联网我就不赘述了</p>
+<p>安装tftp</p>
+<p>在终端中输入:</p>
+<pre><code>sudo apt-get update 
+sudo apt-get install tftp</code></pre>
+<p>在终端中输入</p>
+<pre><code>ifconfig</code></pre>
+<p>查看你的网卡哪个是本地网卡、如果是虚拟机用户看清楚哪个是连接虚拟机与主机的网卡、哪个是直接连接路由器的网卡</p>
+<p>用网线连接电脑网口与路由LAN口</p>
+<p>在终端输入：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">+------------</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">sudo</span> service networking stop  <span class="co">#树莓派、Ubuntu 9.10用户用这个命令、 </span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">sudo</span> service network-manager stop  <span class="co">#Ubuntu 10.4或以上系统用这个命令、 </span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="fu">sudo</span> rc-service NetworkManager restart   <span class="co">#gentoo</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="ex">+------------</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="fu">sudo</span> ifconfig eth0 192.168.11.2    <span class="co"># 必须是这个IP段、即使你已经改了路由的IP、这里你还是必须要配置本地网卡为192.168.11.？</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="fu">sudo</span> ifconfig enp134s0　192.168.11.2  ＃ｇｅｎｔｏｏ</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="ex">+------------</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="fu">sudo</span> ifconfig eth0 netmask 255.255.255.0    <span class="co">#(此步可以省略) </span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="ex">+------------</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="fu">sudo</span> arp -s 192.168.11.1  AABBCCDDEE5F        <span class="co">#AABBCCDDEEFF改为你的路由器mac地址（在路由器背面有标签）、可加冒号也可不加、</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="ex">+------------</span></span></code></pre></div>
+<p>拔掉路由电源</p>
+<p>在终端输入</p>
+<pre><code>tftp 
+tftp&gt; verbose 
+提示Verbose mode on. 
+tftp&gt; binary 
+提示 mode set to octet. 
+tftp&gt; trace 
+提示 Packet tracing on. 
+tftp&gt; rexmt 1 
+tftp&gt; timeout 60 
+tftp&gt; connect 192.168.11.1 
+tftp&gt; put 1.bin</code></pre>
+<p>这时立即插上路由器电源、待ubuntu显示正在推送固件、然后推送完成、会等待输入</p>
+<p>输入</p>
+<pre><code>quit</code></pre>
+<p>退出tftp</p>
+<p>输入</p>
+<pre><code>exit</code></pre>
+<p>退出终端，等待路由重启完成、亮起power与router、刷机完成，刷机后在浏览器输入 192.168.1.1并不能正常打开、我会在另一篇文章中详细解说</p>
+<p>http://zzsjlove.diandian.com/2012/04/whr-g300n-v2-openwrt-luci/</p>
+<p>需设置初始密码才可登录web后台：</p>
+<pre><code>telnet  192.168.1.1 </code></pre>
+<p>提示输入新密码.</p>
+<p>PS：ubuntu下tftp刷路由的方法可以刷回官方固件</p>
+<p>PS：openwrt下刷回官方只能用tftp的方法、而openwrt下刷回DD-wrt可以用这个固件：</p>
+<p>whr-g300nv2-openwrt-to-dd.bin</p>
+<p>用这个固件在op下页面升级到dd，刷到DD后建议reset一次、或者再刷DD的更新版本即可．</p>
+<p>－－－－－－－－－－－－－－－－－－－</p>
+<h3 id="ubuntugentoo下刷机脚本">ubuntu/gentoo下刷机脚本：</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">#!/bin/bash  </span></span>
+<span id="cb10-2"><a href="#cb10-2"></a></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="bu">echo</span> <span class="st">&quot;方法:</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="st">下载tftp版固件,把固件名改为1.bin，把固件放入与该脚本同级文件夹下（如主文件夹home）</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="st">用网线连接电脑网口与路由LAN口,拔掉路由电源，运行该脚本。</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="st">然后，在终端输入：</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="st">-----------------</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="st">tftp </span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="st">tftp&gt; verbose </span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="st">提示Verbose mode on. </span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="st">tftp&gt; binary </span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="st">提示 mode set to octet. </span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="st">tftp&gt; trace </span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="st">提示 Packet tracing on. </span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="st">tftp&gt; rexmt 1 </span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="st">tftp&gt; timeout 60 </span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="st">tftp&gt; connect 192.168.11.1 </span></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="st">tftp&gt; put 1.bin</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="st">-----------------</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="st">这时立即插上路由器电源、待ubuntu显示正在推送固件、然后推送完成、会等待输入</span></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="st">-----------------</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="st">完成后，输入quit 退出tftp，退出终端，等待路由重启完成、亮起power与router、刷机完成，刷机后在浏览器输入 192.168.1.1&quot;</span></span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="co"># -----------------</span></span>
+<span id="cb10-24"><a href="#cb10-24"></a></span>
+<span id="cb10-25"><a href="#cb10-25"></a><span class="co"># # ubuntu:</span></span>
+<span id="cb10-26"><a href="#cb10-26"></a></span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="co"># sudo service networking stop </span></span>
+<span id="cb10-28"><a href="#cb10-28"></a></span>
+<span id="cb10-29"><a href="#cb10-29"></a><span class="co"># sudo ifconfig eth0 192.168.11.2</span></span>
+<span id="cb10-30"><a href="#cb10-30"></a></span>
+<span id="cb10-31"><a href="#cb10-31"></a><span class="co"># sudo ifconfig eth0 netmask 255.255.255.0</span></span>
+<span id="cb10-32"><a href="#cb10-32"></a></span>
+<span id="cb10-33"><a href="#cb10-33"></a><span class="co"># sudo arp -s 192.168.11.1  106F3F389CC8</span></span>
+<span id="cb10-34"><a href="#cb10-34"></a></span>
+<span id="cb10-35"><a href="#cb10-35"></a><span class="co"># # #ifconfig </span></span>
+<span id="cb10-36"><a href="#cb10-36"></a></span>
+<span id="cb10-37"><a href="#cb10-37"></a><span class="co"># tftp 192.168.11.1</span></span>
+<span id="cb10-38"><a href="#cb10-38"></a></span>
+<span id="cb10-39"><a href="#cb10-39"></a><span class="co"># -----------------</span></span>
+<span id="cb10-40"><a href="#cb10-40"></a></span>
+<span id="cb10-41"><a href="#cb10-41"></a><span class="co"># gentoo:</span></span>
+<span id="cb10-42"><a href="#cb10-42"></a></span>
+<span id="cb10-43"><a href="#cb10-43"></a><span class="fu">sudo</span> rc-service NetworkManager stop </span>
+<span id="cb10-44"><a href="#cb10-44"></a><span class="fu">sudo</span> ifconfig enp134s0 192.168.11.2</span>
+<span id="cb10-45"><a href="#cb10-45"></a><span class="fu">sudo</span> ifconfig enp134s0 netmask 255.255.255.0</span>
+<span id="cb10-46"><a href="#cb10-46"></a><span class="fu">sudo</span> arp -s 192.168.11.1  106F3F389CC8</span>
+<span id="cb10-47"><a href="#cb10-47"></a><span class="co"># ifconfig </span></span>
+<span id="cb10-48"><a href="#cb10-48"></a></span>
+<span id="cb10-49"><a href="#cb10-49"></a><span class="ex">tnftp</span> 192.168.11.1</span></code></pre></div>
+<h2 id="openwrt-sysupgrade-命令行更新固件到最新版">OpenWrt sysupgrade 命令行更新固件到最新版</h2>
+<p>下面我们要使用 sysupgrade 更新固件到trunk最新版。</p>
+<p>要注意的是，trunk包含试验的功能，可能不稳定，刷机风险自己承担。</p>
+<p>在浏览器里登陆 192.168.1.1（可通过ｗｅｂ或telent界面改成：192.168.1１.1） 进行固件升级是比较简单的。今天我们要尝试的的是命令行刷机升级。命令行的方式更强大。</p>
+<h3 id="ssh登录路由器">1、SSH登录路由器</h3>
+<p>在Ubuntu里，按Ctrl+Alt+T打开命令行终端，输入：</p>
+<pre><code>ssh root@192.168.１1.1</code></pre>
+<p>输入密码（必须先通过ｗｅｂ界面改密码），登录成功:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">ssh</span> root@192.168.11.1              </span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="ex">root@192.168.11.1</span><span class="st">&#39;s password: </span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="st">BusyBox v1.19.4 (2015-01-02 10:48:30 CST) built-in shell (ash)</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="st">Enter &#39;</span>help<span class="st">&#39; for a list of built-in commands.</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="st">------------------------------------------------------------------</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="st">|            _____                             _                 |</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="st">|           |  __ \                           | |                |</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="st">|           | |  \/ __ _ _ __ __ _  ___  _   _| | ___            |</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="st">|           | | __ / _` | &#39;</span>__/ _<span class="kw">`</span> <span class="kw">|</span><span class="ex">/</span> _ <span class="dt">\|</span> <span class="kw">|</span> <span class="kw">|</span> <span class="kw">|</span> <span class="kw">|</span><span class="ex">/</span> _ <span class="dt">\ </span>          <span class="kw">|</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="kw">|</span>           <span class="kw">|</span> <span class="kw">|</span><span class="ex">_\ \ </span>(_<span class="kw">|</span> <span class="kw">|</span> <span class="kw">|</span> <span class="kw">|</span> <span class="kw">(</span><span class="ex">_</span><span class="kw">|</span> <span class="kw">|</span> <span class="kw">(</span><span class="ex">_</span><span class="kw">)</span> <span class="kw">|</span> <span class="kw">|</span><span class="ex">_</span><span class="kw">|</span> <span class="kw">|</span> <span class="kw">|</span>  <span class="ex">__/</span>           <span class="kw">|</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="kw">|</span>            \<span class="ex">____</span>/\<span class="ex">__</span>,_<span class="kw">|</span><span class="ex">_</span><span class="kw">|</span>  \<span class="ex">__</span>, <span class="kw">|</span>\<span class="ex">___/</span> \__, <span class="kw">|</span><span class="ex">_</span><span class="kw">|</span>\<span class="ex">___</span><span class="kw">|</span>           <span class="kw">|</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="kw">|</span>                             <span class="ex">__/</span> <span class="kw">|</span>       <span class="ex">__/</span> <span class="kw">|</span>                  <span class="kw">|</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="kw">|</span>                            <span class="kw">|</span><span class="ex">___/</span>       <span class="kw">|</span><span class="ex">___/</span>                   <span class="kw">|</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="kw">|</span>                                                                <span class="kw">|</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="kw">|</span><span class="ex">----------------------------------------------------------------</span><span class="kw">|</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="kw">|</span> <span class="ex">Gargoyle</span> version 1.6.2    <span class="kw">|</span> <span class="ex">OpenWrt</span> Attitude Adjustment branch <span class="kw">|</span></span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="kw">|</span> <span class="ex">Gargoyle</span> revision         <span class="kw">|</span> <span class="ex">OpenWrt</span> revision r42171            <span class="kw">|</span></span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="kw">|</span> <span class="ex">Built</span> January 02, 2015    <span class="kw">|</span> <span class="ex">Target</span>  ar71xx/custom              <span class="kw">|</span></span>
+<span id="cb12-19"><a href="#cb12-19"></a><span class="ex">------------------------------------------------------------------</span></span></code></pre></div>
+<p>进入OpenWrt /tmp目录</p>
+<pre><code>cd /tmp</code></pre>
+<p>检查OpenWrt路由器是否有足够的内存</p>
+<pre><code>df -h</code></pre>
+<p>可以看出， /tmp 还有29.5MB可用空间，而升级固件在3MB左右，足够了。</p>
+<h3 id="下载openwrt最新trunk版本固件">２、下载OpenWrt最新trunk版本固件</h3>
+<p>#####　２．１　方法一：</p>
+<p>在Ubuntu里浏览器打开</p>
+<pre><code>http://downloads.openwrt.org/snapshots/trunk/</code></pre>
+<p>TP-LINK WR2543N路由器的芯片类型是ar71xx，就点击 ar71xx 目录进入。要注意，路由器的芯片类型千万不能搞错，不同路由器很可能是不同的。</p>
+<p>按Ctrl+F查找自己的路由器型号。比如我输入的是 wr2543, 有两个固件，升级用的是 sysupgrade.bin文件。右键点击该链接，复制下载地址。</p>
+<p>回到Ubuntu命令行终端， 下载固件到 /tmp 目录。TP-LINK wr2543路由器是这样的:</p>
+<pre><code> root@OpenWrt:/tmp# wget http://downloads.openwrt.org/snapshots/trunk/ar71xx/openwrt-ar71xx-generic-tl-wr2543-v1-squashfs-sysupgrade.bin</code></pre>
+<p>固件名称较长，可改为如sysupgrade.bin 、1.bin等名称。</p>
+<h5 id="方法二">２．２　方法二：</h5>
+<p>无网络情况下：须先将固件复制sysupgrade.bin到电脑</p>
+<p>Buffalo WHR-G300N CH v2无USB接口，然后在ysupgrade.bin文件的同级目录下运行simpleHTTPServer，脚本如下：</p>
+<pre><code>#!/bin/bash
+ifconfig　　　　　　　　　　　　　　　　　　　
+firefox http://192.168.11.120:8000/　　　＃＃打开firefox查看文件服务器文件
+python -m SimpleHTTPServer
+read -n1 -p &quot;Press any key to continue...&quot;</code></pre>
+<p>然后，ＳＳＨ进入路由器，下载固件sysupgrade.bin ：</p>
+<pre><code>root@OpenWrt:/tmp# wget http://192.168.11.120:8000/sysupgrade.bin   
+＃其中，192.168.11.120为电脑的ＩＰ，可通过ifconfig命令查看。</code></pre>
+<p>md5校验，确保下载的固件完整（可略）:</p>
+<pre><code>root@OpenWrt:/tmp# wget http://downloads.openwrt.org/snapshots/trunk/ar71xx/md5sums  
+root@OpenWrt:/tmp# md5sum -c md5sums 2&gt; /dev/null | grep OK  
+openwrt-ar71xx-generic-tl-wr2543-v1-squashfs-sysupgrade.bin: OK        </code></pre>
+<p>输出结尾是OK，说明固件是完整的。</p>
+<h3 id="升级openwrt固件">３、升级OpenWrt固件</h3>
+<p>OpenWrt sysupgrade命令升级OpenWrt固件</p>
+<pre><code>root@OpenWrt:/tmp# sysupgrade -v sysupgrade.bin 
+... 
+Upgrade completed
+Rebooting system...</code></pre>
+<p>过约2分钟，等路由器重启成功，如果没有意外，会发现有线和无线上网都正常。但浏览器192.168.1１.1无法登陆，因为snapshots版本固件是不带LuCI网页管理界面的。没有也好，可以节省路由器的存储空间，也可以学习一下命令行管理OpenWrt路由器。</p>
+
+
+
+<div class="row-fluid">
+<!--_____分享按钮___________
+<hr class="bg003">
+<div class="bshare-custom icon-medium"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/button.js#style=-1&amp;uuid=&amp;pophcol=3&amp;lang=zh"></script><a class="bshareDiv" onclick="javascript:return false;"></a><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+-_____分享按钮___________-->
+</div>
+
+</div><!--__maincontent2_____ -->
+<div class="sidebar span1 hidden-phone bg002">
+<!--__<marquee direction="top">Wecome to synBE!</marquee> __ -->
+</div>
+</div><!--_____main___________-->
+
+
+
+<div class="row-fluid bg003"><!--_____footer1 ______-->
+<div class="span2 hidden-phone"></div>
+<div class="span2">
+<ul class="nav nav-pills">
+    <li class="dropdown all-camera-dropdown dropup">
+           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              查看二维码<!--<i class="fa fa-qrcode fa-2x"></i>_____此为fontsome二维码图标___________-->
+               <b class="caret"></b>
+           </a>
+<ul class="dropdown-menu">
+<li data-filter-camera-type="all"><a data-toggle="tab" href="#">扫描二维码分享此页面</a></li>
+<!--_____二维码___________-->
+<head>
+    <meta charset="utf-8"/>
+   <!--
+   <base target="_blank">
+   -->
+    <script src="../../src/qrcode/qrcode.js"></script>
+    <style>
+      #qrcode img {
+        margin:0.5em auto;
+      }
+    </style>
+</head>
+<script>
+                thisURL = document.URL;
+window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 160,//设置宽高
+            height : 160,
+        });
+qrcode.makeCode(thisURL);
+    }
+</script>
+<div id="qrcode"></div>
+<!--_____二维码___________-->
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="span4 hidden-phone">
+<!--_____copyright___________-->
+ Copyright  © 2015-2017  <a href="http://www.synbe.com" target="_blank">synBE.com</a>  
+</div>
+<div class="span2 hidden-phone">
+<!--_____note1___________-->
+
+ <script type="text/javascript">
+
+      var downPdf = document.getElementById("renderPdf");
+
+      downPdf.onclick = function() {
+          html2canvas(document.body, {
+              onrendered:function(canvas) {
+
+                  var contentWidth = canvas.width;
+                  var contentHeight = canvas.height;
+
+                  //一页pdf显示html页面生成的canvas高度;
+                  var pageHeight = contentWidth / 592.28 * 841.89;
+                  //未生成pdf的html页面高度
+                  var leftHeight = contentHeight;
+                  //pdf页面偏移
+                  var position = 0;
+                  //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                  var imgWidth = 595.28;
+                  var imgHeight = 592.28/contentWidth * contentHeight;
+
+                  var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+                  var pdf = new jsPDF('', 'pt', 'a4');
+
+                  //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                  //当内容未超过pdf一页显示的范围，无需分页
+                  if (leftHeight < pageHeight) {
+                      pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+                  } else {
+                      while(leftHeight > 0) {
+                          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                          leftHeight -= pageHeight;
+                          position -= 841.89;
+                          //避免添加空白页
+                          if(leftHeight > 0) {
+                              pdf.addPage();
+                          }
+                      }
+                  }
+
+                  pdf.save('content.pdf');
+              }
+          })
+      }
+    </script>
+<!--_____note1___________-->
+</div>
+<div class="span2 hidden-phone"></div>
+</div><!--_____footer1 ______-->
+
+
+
+
+<!--_____返回顶部______
+<head>
+<style type="text/css">
+</style>
+<script type="text/javascript" src="../../../src/gototop/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../../../src/gototop/gotoTop.js"></script>
+<script type="text/javascript">
+$(function(){
+    $(".backToTop").goToTop();
+    $(window).bind('scroll resize',function(){
+        $(".backToTop").goToTop();
+    });
+});
+</script>
+</head>
+<a href="javascript:;" class="backToTop hidden-phone" title="返回顶部"></a>
+_____返回顶部______-->
+</body>
+</html>
