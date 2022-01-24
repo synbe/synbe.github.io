@@ -5,11 +5,11 @@
 #/run/media/xun/45941f25-3467-41dc-991a-7b475e40750f/home2/xun/git/.github.com/synbe.github.io/
 #cd /run/media/xun/45941f25-3467-41dc-991a-7b475e40750f/home2/xun/git/.github.com/synbe.github.io/
 echo ——————————准备push本目录下的所有文件—————————————————————————
-git pull origin master
-git checkout  master
+git pull origin main
+git checkout  main
 git add --all
 today=`date +%Y-%m-%d/%H:%M:%S`
 git commit -a -m "提交时间:$today"
-git push origin master
+git push origin main
 echo —————————————————————完毕！—————————————————————————————————
 # read -n1 -p "Press any key to continue..."
