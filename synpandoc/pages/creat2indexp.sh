@@ -3,7 +3,7 @@
 TODAY=`date +%Y-%m-%d\ %H:%M:%S`
 ##  生成ablums index
 touch ./index.html
-cat ./header.html > ./index.html
+cat ../src/index_header.html > ./index.html
 echo -e '\n<h1>Index</h1>'  >> ./index.html
 echo -e '<p>'$TODAY'</p>'  >> ./index.html
 echo -e '<hr>\n<ol>'  >> ./index.html
