@@ -1,0 +1,353 @@
+/*本文件为自定义部分ＣＳＳ*/
+
+
+html
+{
+    margin: auto;
+}
+body
+{
+/*    font-family: 'PingFang SC', 'Noto Sans CJK', 'Source Han Sans', 'Microsoft Yahei', source-han-sans-simplified-c, sans-serif;
+    font-size: 16px;*/
+    line-height: 140%;
+
+    width: auto;
+    /*margin:auto;*/
+    margin: -14px 0;
+    padding: 1em .5em 1em .5em;
+}
+#header
+{
+}
+h1.title
+{
+    font-size: 1.8em;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+h2.author,
+h3.date
+{
+    font-size: 1em !important;
+    text-align:left;
+    color: #8c8c8c !important;
+    border-top: 2px solid #e1e1e1;
+    padding-top: 1em !important;
+    vertical-align: middle;
+    margin-bottom: 1.5em !important;
+    line-height: 20px;
+    word-wrap: break-word;
+    hyphens: auto;
+    font-weight:normal !important;
+}
+
+.main
+{
+    background-color: #fff;
+}
+
+code
+{
+    border: 1px solid rgba(254, 190, 190, .7)!important;
+}
+pre {
+    padding: 0px !important;
+}
+pre code
+{
+    font-size: 1em !important;
+
+    border: 0 !important;
+}
+
+.content
+{
+    border: 1px solid #f8f8f8;
+}
+
+.sidebar
+{
+    background-color: #f8f8f8;
+}
+
+
+
+.footer
+{
+    color: #fff;
+    border-color: #463c65;
+    background-color: #54487a;
+    background-image: linear-gradient(to bottom, #54487a 0px, #493f6a 100%);
+}
+/*
+.footerspan {
+border: 2px solid #463C65;
+}
+*/
+img
+{
+    display: block;
+
+    max-width: 100%;
+    margin: 0;
+    padding-top: 0;
+    padding-left: 0;
+
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+#TOC
+{
+    float: right;
+
+    width: 18em;
+    margin:3em 1em;
+    border: 1px solid #f5f5f5;
+    border-top: 3px solid #f5f5f5;
+    border-left: 3px solid #f5f5f5;
+}
+#TOC li
+{
+    padding-right: .5em;
+
+    color: #f5f5f5;
+}
+
+table
+{
+    border: 1px solid #ccc;
+    margin:1em auto;
+    margin-left:0em;
+}
+table tr:nth-child(2n)
+{
+    background-color: #d4d7d0;
+}
+thead tr th
+{
+    background-color: #d4d7d0;
+    text-shadow: 1px 1px 0 #fff;
+}
+caption
+{
+    color: #935417 !important;
+    border: 1px solid #f2e7ab;
+    background: #fcffcf ;
+}
+
+/*
+table tr:nth-child(2n+1) {
+background-color: #FFF8D4;
+}
+*/
+
+.backToTop
+{
+    position: fixed;
+    z-index: 100;
+    right: 20px;
+    bottom: 20px;
+
+    display: none;
+
+    width: 38px;
+    height: 38px;
+
+    cursor: pointer;
+    text-indent: -9999px;
+
+    border: 1px solid rgb(214, 210, 208);
+    background: url('../gototop/backtotop.png') no-repeat scroll center center transparent;
+}
+a.backToTop:hover
+{
+    text-decoration: none;
+
+    color: #f60;
+}
+.bg001
+{
+    font-size: 1.4em;
+
+    width: 101.1% !important;
+    /*background-image: linear-gradient(to bottom, #BEB8DB 0px, #DDDAEC 10%);*/
+    height: 3em;
+    margin-right: -7px;
+    margin-bottom: .5em;
+    margin-left: -7px !important;
+
+    color: #fff;
+    border-color: #463c65;
+    border-bottom: 1px solid #dbd6d6;
+    background-color: #54487a;
+    background-image: linear-gradient(to bottom, #237bb3 0px, #3da6e9 100%);
+}
+
+.bg002
+{
+    /*background-image: linear-gradient(to bottom, #F8F8F8 0em, #FFF 20em);*/
+    /*background-repeat: no-repeat;
+background-size: 100% auto;*/
+    height: 100%;
+
+    background: #fff;
+}
+
+.bg003
+{
+    margin-top: .5em;
+
+    border-top: 1px solid #dbd6d6;
+    background: #fff;
+}
+.milky
+{
+    font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+    /* text-transform: uppercase;*/
+    font-size: 2.5em;
+    font-weight: bold;
+
+    letter-spacing: 0;
+
+    color: #fff;
+    text-shadow: 0 2px 1px #443535, 1px -1px 1px #fff;;
+}
+.width50
+{
+    width: 50%;
+}
+
+.input-group
+{
+    width: 100%;
+}
+
+.ds-sync
+{
+    visibility: hidden;
+}
+
+h1{
+font-size: 1.8em !important;
+color: #4c9ed9;
+font-weight: bold;
+}
+h2{
+font-size: 1.6em !important;
+color: #4c9ed9;
+font-weight: bold;
+}
+h3{
+font-size: 1.4em !important;
+color: #4c9ed9;
+font-weight: bold;
+}
+h4{
+font-size: 1.2em !important;
+color: #4c9ed9;
+font-weight: bold;
+}
+h5{
+font-size: 1em !important;
+color: #4c9ed9;
+font-weight: bold;
+}
+
+h6 {
+font-size: 0.9em !important;
+color: #447171 !important;
+border-bottom:#447171 solid 1px;
+padding-bottom:1em;
+font-weight: bold;
+}
+
+blockquote
+{
+    padding: .5em;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    font-size:1em;
+    line-height:1.1em;
+/*    box-shadow: 0 1px 3px rgba(0, 0, 0, .1);*/
+}
+
+blockquote
+{
+    margin: 10px;
+
+    background: #777;
+}
+
+blockquote blockquote
+{
+    margin: -10px;
+
+    background: #337ab7;
+}
+
+blockquote blockquote  blockquote
+{
+    margin: -10px;
+
+    background: #5cb85c;
+}
+
+blockquote blockquote  blockquote blockquote
+{
+    margin: -10px;
+
+    background: #f0ad4e;
+}
+
+blockquote blockquote  blockquote blockquote blockquote
+{
+    margin: -10px;
+
+    background: #f32721;
+}
+
+blockquote blockquote  blockquote blockquote blockquote blockquote
+{
+    margin: -10px;
+
+    background: #5bc0de;
+}
+
+/*以下为屏幕适应改变*/
+
+@media screen and (max-width:767px)
+{
+    #TOC
+    {
+        display: none;
+    }
+    #header
+    {
+        margin-bottom: 12px;
+
+        border-bottom: 0;
+        background-color: #fff;
+    }
+    h2.author,
+    h3.date
+    {
+    border-top: 0px solid #e1e1e1;
+    padding-top: 0em !important;
+    margin-bottom: 1em !important;
+}
+    }
+    h1.title
+    {
+        font-weight: bold;
+
+        text-align: left;
+
+        color: #000;
+    }
+    .width50
+    {
+        width: 100%;
+    }
+}

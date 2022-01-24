@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>使用jquery.qrcode生成二维码</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"id="viewport"name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../../blog/src/jquery/jquery-2.1.4.min.js"></script>
+  <script src="../../blog/src/bootstrap/js/bootstrap.min.js"></script>
+  <link href="../../blog/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="../../blog/src/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="../../blog/src/assets/docs.min.css" rel="stylesheet" media="screen">
+  <link href="../../blog/src/assets/style_index.css" rel="stylesheet" media="screen">
+  <div class="row-fluid  hidden-phone">
+    <div class="span12 bg001">
+        <BR>
+        <p class="milky"> &nbsp;synBE</p>
+     </div>
+  </div>
+  <div class="row-fluid">
+     <div class="span1"></div>
+     <div class="span10">
+        <nav class="navbar navbar-default" role="navigation">
+           <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+              <span class="sr-only">切换导航</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">synBE</a>
+           </div>
+           <div class="collapse navbar-collapse" id="example-navbar-collapse">
+              <ul class="nav navbar-nav">
+                 <li><a href="#">Category</a></li>
+                 <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                       Tools <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                       <li><a href="#">EJB</a></li>
+                       <li><a href="#">Jasper Report</a></li>
+                       <li class="divider"></li>
+                       <li><a href="#">分离的链接</a></li>
+                       <li class="divider"></li>
+                       <li><a href="#">另一个分离的链接</a></li>
+                    </ul>
+                 </li>
+              </ul>
+           </div>
+        </nav>
+     </div>
+  </div>
+  </div>
+  <div class="row-fluid main"><!--_____main___________-->
+  <div class="sidebar span1 hidden-phone bg002  milky"></div>
+  <div class="content span10"><!--__maincontent2_____ -->
+</head>
+<body>
+<div id="header">
+<h1 class="title">使用jquery.qrcode生成二维码</h1>
+</div>
+<head>
+<meta charset="utf-8"/> <!--<base target="_blank">-->
+<script src="./js/qrcode.js"></script>
+<style>
+#qrcode{
+border: 2px solid #D3E4E0;
+background: none repeat scroll 0% 0% #E8F3E8;
+padding: 2em;
+}
+
+#qrcode:hover{
+border:1px solid white;
+}
+#qrcode img:hover{
+border:1px solid yellow;
+}
+#qrcode img{
+margin:auto;
+}
+#getval {
+width:16em;
+height:100px;
+word-break:break-all;
+}
+</style>
+</head>
+
+<hr />
+<p align="center"><textarea name="input" "type="text" id="getval"  placeholder="请输入文字或者网址，然后点击生成二维码按钮"/"></textarea> </p>
+<p align="center"><button id="send">
+生成二维码
+</button></p>
+
+
+<div id="qrcode"></div>
+
+<script>
+    window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 200,//设置宽高
+            height : 200,
+        });
+        qrcode.makeCode("http://www.synbe.com");
+        document.getElementById("send").onclick =function(){
+            qrcode.makeCode(document.getElementById("getval").value);
+        }
+    }
+
+</script>
+
+<p><em><sub>参考:</sub></em> <a href="https://github.com/jeromeetienne/jquery-qrcode">jquery-qrcode</a> <a href="http://www.qrcode.com/zh">qrcode</a> <a href="http://jquery.com/">jqurey</a></p>
+
+
+<div class="row-fluid">
+  <!--_____分享按钮___________-->
+  <!--_____分享按钮___________-->
+</div>
+</div><!--__maincontent2_____ -->
+<div class="sidebar span1 hidden-phone bg002">
+  <marquee direction="top"></marquee>
+</div>
+</div><!--_____main___________-->
+<div class="row-fluid bg003"><!--_____footer1 ______-->
+<div class="span1 hidden-phone"></div>
+<div class="span2">
+<!--_____二维码___________-->
+</div>
+<div class="span2 hidden-phone">
+  <!--_____copyright___________-->
+  ©2015-2017
+  <p class=" milky">synBE</p>
+  <!--_____copyright___________-->
+</div>
+<div class="span3 hidden-phone">
+  <!--_____note1___________-->
+  <p><strong>分享images</strong></p>
+  <!--_____note1___________-->
+</div>
+<div class="span3 hidden-phone">
+  <!--_____note1___________-->
+  <p><strong>分享images</strong></p>
+  <!--_____note1___________-->
+</div>
+<div class="span1 hidden-phone"></div>
+</div><!--_____footer1 ______-->
+<div class="row-fluid footer hidden-phone"><!--_____footer2 ______-->
+<div class="footerspan span3">
+  <!--_____note1___________-->
+  welcome!
+  <!--
+  <div class="progress progress-striped active">
+    <div class="progress-bar progress-bar-success" role="progressbar"
+      aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+      style="width: 100%;">
+      <span class="sr-only">100% 完成</span>
+    </div>
+  </div>
+  -->
+  <!--_____note1___________-->
+</div>
+<div class="footerspan span3">
+  <!--_____copyright___________-->
+  ©2015-2017
+  <!--_____copyright___________-->
+</div>
+<div class="footerspan span3">
+  <!--_____note1___________-->
+  <p><strong>分享images</strong></p>
+  <!--_____note1___________-->
+</div>
+<div class="footerspan span3">
+  <!--_____note1___________-->
+  <p><strong>分享images</strong></p>
+  <!--_____note1___________-->
+</div>
+</div><!--_____footer2 ______-->
+<!--_____返回顶部______-->
+<head>
+  <style type="text/css">
+  </style>
+  <script type="text/javascript" src="../../../blog/src/gototop/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="../../../blog/src/gototop/gotoTop.js"></script>
+  <script type="text/javascript">
+  $(function(){
+  $(".backToTop").goToTop();
+  $(window).bind('scroll resize',function(){
+  $(".backToTop").goToTop();
+  });
+  });
+  </script>
+</head>
+<a href="javascript:;" class="backToTop hidden-phone" title="返回顶部"></a>
+<!--_____返回顶部______-->
+</body>
+</html>
