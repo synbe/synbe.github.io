@@ -10,7 +10,6 @@ body
 /*    font-family: 'PingFang SC', 'Noto Sans CJK', 'Source Han Sans', 'Microsoft Yahei', source-han-sans-simplified-c, sans-serif;
     font-size: 16px;*/
     line-height: 140%;
-
     width: auto;
     /*margin:auto;*/
     margin: -14px 0;
@@ -64,6 +63,7 @@ pre code
 .content
 {
     border: 1px solid #f8f8f8;
+    border-bottom: 1px solid#80808045;;
 }
 
 .sidebar
@@ -88,13 +88,8 @@ border: 2px solid #463C65;
 img
 {
     display: block;
-
     max-width: 100%;
-    margin: 0;
-    padding-top: 0;
-    padding-left: 0;
-
-    border: 1px solid gray;
+    margin: 1em;
     border-radius: 4px;
 }
 #TOC
@@ -183,21 +178,10 @@ a.backToTop:hover
 
 .bg002
 {
-    /*background-image: linear-gradient(to bottom, #F8F8F8 0em, #FFF 20em);*/
-    /*background-repeat: no-repeat;
-background-size: 100% auto;*/
     height: 100%;
-
     background: #fff;
 }
 
-.bg003
-{
-    margin-top: .5em;
-
-    border-top: 1px solid #dbd6d6;
-    background: #fff;
-}
 .milky
 {
     font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
