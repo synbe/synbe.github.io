@@ -1,0 +1,384 @@
+<head>                
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />                                
+<style>
+/*本文件为自定义部分ＣＳＳ*/
+html
+{
+margin: auto;
+}
+body
+{
+/*    font-family: 'PingFang SC', 'Noto Sans CJK', 'Source Han Sans', 'Microsoft Yahei', source-han-sans-simplified-c, sans-serif;
+font-size: 16px;*/
+font-family: Georgia, serif;
+line-height: 140%;
+max-width: 1024px;
+margin: 1em auto;
+padding: 0.5em;
+/* border-radius: 4px; */
+/* box-shadow: 1px 1px 2px #407971; */
+background:#fff;
+/* background-image: linear-gradient(to bottom, #cfd8f2 1px, #fff 5%); */
+}
+body:before{
+content: "";
+border: 2em solid transparent;
+border-top: 2em solid red;
+border-left: 0em solid red;
+color: #1993df;
+}
+body:after{
+content: "synBE";
+border: 1em solid transparent;
+border-top: 1em solid #d4edfbf0;
+border-bottom: 1em solid #f9dddd;
+border-left: 0em solid #d6edf7;
+border-right: 0em solid #d2f9e7;
+color: #fff;
+border-radius: 22%;
+margin-left: 90%;
+text-shadow: 1px 1px 1px #6f6868;
+background: #e9fae9;
+box-shadow: 1px 1px 3px #a8a8a8;
+word-spacing: 20px;
+letter-spacing: 2px;
+padding: 0 2px;
+}
+a 
+{
+color:#0f8050;
+}
+a:visited
+{
+color:#0f8050;
+}
+img
+{
+display: block;
+
+max-width: 100%;
+margin: auto;
+padding-top: 0;
+padding-left: 0;
+
+/*     border: 1px solid gray; */
+border-radius: 4px;
+}
+#TOC
+{
+float: right;
+
+width: 18em;
+margin:3em 1em;
+border: 1px solid #f5f5f5;
+border-top: 3px solid #f5f5f5;
+border-left: 3px solid #f5f5f5;
+}
+#TOC li
+{
+padding-right: .5em;
+
+color: #f5f5f5;
+}
+
+table
+{
+margin:1em auto;
+margin-left:0em;
+box-shadow: 3px 3px 6px #423636;
+border-radius: 4px;
+padding: 0.5em;
+}
+table tr td{
+padding: 0 0.5em;
+}
+table tr:nth-child(2n)
+{
+background-color: #baddd2;
+}
+thead tr th
+{
+color:#fff;
+background-color: #09787d;
+text-shadow: 1px 1px 0 rgb(20, 1, 1);
+font-weight: bold;
+}
+caption
+{
+color: #935417;
+border: 1px solid #f2e7ab;
+background: #fcffcf ;
+}
+
+/*
+table tr:nth-child(2n+1) {
+background-color: #FFF8D4;
+}
+*/
+
+h1{
+font-size: 1.8em;
+color: #108388;
+font-weight: bold;
+/* text-shadow: 1px 1px 1px #000; */
+padding: 0.5em;
+/* background-image: linear-gradient(to right, #1fd7c6 1px, #74c5f7 55%);
+border-radius: 4px;
+box-shadow: 1px 1px 3px #000; */
+}
+h2{
+font-size: 1.6em;
+line-height: 1.2em;
+}
+h2:before{
+content: "“"
+}
+h3{
+font-size: 1.4em;
+line-height: 1.2em;
+}
+h3:before{
+content: "‘“"
+}
+h4{
+font-size: 1.2em;
+}
+h4:before{
+content: "““";
+}
+h5{
+font-size: 1em;
+}
+h5:before{
+content: "‘““";
+}
+h6 {
+font-size: 0.9em;
+border-bottom: 2px solid #74c5f7;
+}
+h2,h3,h4,h5,h6{
+color: #032237;
+font-weight: bold;
+/* text-shadow: 1px 1px 6px #8c8c8c; */
+/* background-image: linear-gradient(to right, #1fd7c6 0.5em, #fff 2em); */
+}
+h2::before,h3::before,h4::before,h5::before{
+color: rgb(255, 255, 255);
+text-shadow: 1px 1px 1px #000;
+/* margin-right: 0.5em; */
+/* background-image: linear-gradient(to right, #1fd7c6 1px, #74c5f7 55%); */
+/* border-radius: 20%; */
+/* box-shadow: 1px 1px 3px #000; */
+padding: 2px;
+font-size:200%;
+}
+pre {
+
+background-color: #213c48;
+color: #cedee6;
+padding-left: 1em;
+border-radius: 4px;
+box-shadow: 3px 3px 5px #000;
+}
+
+pre > code {
+color: #fff;
+background: transparent;
+font-size: 1em !important;
+box-shadow: 0px 0px 0px #000;
+text-shadow: 5px 5px 8px #000;
+}
+code{
+color: #9f3c0c;
+border-radius: 3px;
+background: #f9e8e8;
+font-size: 1em;
+box-shadow: 1px 1px 1px #750b0b;
+text-shadow: 1px 1px 1px #fff;
+}
+
+hr{
+/* width:100%; */
+margin:1em auto;
+/* height: 1px; */
+/* background-image: linear-gradient(to right, #1fd7c6 1px, #74c5f7 55%); */
+/* border-radius: 4px; */
+/* box-shadow: 3px 3px 5px #3a6297; */
+}
+blockquote
+{
+padding: 0 .5em;
+color: #fff;
+border: 2px solid #fff;
+border-radius: 4px;
+font-size:1em;
+line-height:1.1em;
+text-shadow: 5px 5px 8px #000;
+/* box-shadow: -1px 1px 1px #084a51; */
+}
+
+blockquote
+{
+margin: 10px;
+background: #777;
+}
+
+blockquote blockquote
+{
+margin: 0 -10px;
+background: #337ab7;
+}
+
+blockquote blockquote  blockquote
+{
+margin: 0 -10px;
+background: #5cb85c;
+}
+
+blockquote blockquote  blockquote blockquote
+{
+margin: 0 -10px;
+background: #f0ad4e;
+}
+
+blockquote blockquote  blockquote blockquote blockquote
+{
+margin: 0 -10px;
+background: #f32721;
+}
+
+blockquote blockquote  blockquote blockquote blockquote blockquote
+{
+margin: 0 -10px;
+background: #5bc0de;
+}
+
+.div-a{ 
+float:left;
+width:49%;
+} 
+.div-b{ 
+float:right;
+width:49%;
+/* border:1px solid #4c9ed9; */
+} 
+
+.div-c{ 
+width:95%;
+padding: 1em;
+background:rgb(240, 242, 222);
+border: rgb(170, 162, 44) 1px solid;
+margin-bottom: 2em;
+border-radius:4px;
+box-shadow: 10px 10px 5px #888888;
+position: relative;
+} 
+
+.div-c h1 {
+color:#fff;
+text-shadow: 1px 1px 2px rgb(16, 11, 75);
+background: transparent !important;
+padding: 0em;
+box-shadow: 0px 0px 0px #000;
+}
+
+.div-c-banner{ 
+margin-left: -32px;
+padding-right: 10px;
+font-weight: bold;
+color: rgb(255, 255, 255);
+line-height: 0px;
+border-right-color: transparent !important;
+box-shadow: -5px 11px 8px -5px #110f0f;
+width: 101%;
+} 
+
+.div-c-banner-tag{ 
+margin-left: -32px;
+width: 0;
+border: #332317 8px solid;
+border-left-color: transparent;
+border-bottom-color: transparent;
+} 
+
+.div-c-content{
+margin-top: -4em;
+}
+.div-c-date{ 
+float: left;
+width: 49%;
+text-shadow: 1px 1px 0px #fff;
+} 
+.div-c-icon{ 
+float: right;
+text-align: right;
+width: 49%;
+text-shadow: 1px 1px 0px #fff;
+} 
+.div-c-footer{ 
+border-top: rgb(170, 162, 44) 1px solid;
+color:  rgb(170, 162, 44);
+padding: 1em;
+} 
+
+/*以下为屏幕适应改变*/
+
+@media screen and (max-width:767px)
+{
+#TOC
+{
+display: none;
+}
+#header
+{
+margin-bottom: 12px;
+
+border-bottom: 0;
+background-color: #fff;
+}
+h2.author,
+h3.date
+{
+border-top: 0px solid #e1e1e1;
+padding-top: 0em;
+margin-bottom: 1em;
+}
+}
+h1.title
+{
+font-weight: bold;
+
+text-align: left;
+
+color: #000;
+}
+.width50
+{
+width: 100%;
+}
+}
+
+</style>
+</head>
+<h1>党历史自信的最大底气</h1>
+<h6>synbe 20150706 update 20210511</h6>
+<p>百年来，我们党团结带领人民进行的一切奋斗、一切牺牲、一切创造，都是在践行为中国人民谋幸福、为中华民族谋复兴的初心使命</p>
+<img src="./images/343.jpeg"/>
+<p>中国共产党的成就和贡献，不仅是历史性的，也是世界性的</p>
+
+<p>中国共产党人的历史自信，既是对奋斗成就的自信，也是对奋斗精神的自信</p>
+
+<p>从一大会址复原场景到遵义会议复原景观，从开国大典影像到创办经济特区图片，从脱贫攻坚数据图表到火神山、雷神山医院模型……走进中国共产党历史展览馆，一幅幅图片、一件件文物、一个个场景，全方位、全过程、全景式、史诗般展现中国共产党波澜壮阔的百年历程，让参观者从内心深处感受震撼，升腾起昂扬向上的力量。</p>
+
+<p>百年征程波澜壮阔，百年初心历久弥坚。在中央政治局党史学习教育专题民主生活会上，习近平总书记深刻指出：“一百年来，我们党致力于为中国人民谋幸福、为中华民族谋复兴，致力于为人类谋进步、为世界谋大同，天下为公，人间正道，这是我们党具有历史自信的最大底气，是我们党在中国执政并长期执政的历史自信，也是我们党团结带领人民继续前进的历史自信。”正是在百年奋斗中，我们党领导人民深刻改变了近代以后中华民族发展的方向和进程，深刻改变了中国人民和中华民族的前途和命运，深刻改变了世界发展的趋势和格局。学习和总结党的历史，就要从中增强道路自信、理论自信、制度自信、文化自信，咬定青山不放松，风雨无阻向前进。</p>
+
+<p>不忘初心，方得始终。百年来，我们党团结带领人民进行的一切奋斗、一切牺牲、一切创造，都是在践行为中国人民谋幸福、为中华民族谋复兴的初心使命。百年风霜雨雪，我们党团结带领人民在一个有着几千年封建社会历史的国家实现了最广泛的人民民主，人民真正成为国家、社会和自己命运的主人；我们在一穷二白的基础上创造了经济社会快速发展奇迹，用几十年时间走完了发达国家几百年走过的工业化历程，跃升为世界第二大经济体，综合国力、科技实力、国防实力、文化影响力、国际影响力显著提升；我们实现了第一个百年奋斗目标，在中华大地上全面建成了小康社会，历史性地解决了绝对贫困问题，成为世界上中等收入人口最多的国家；我国长期保持社会和谐稳定、人民安居乐业，成为国际社会公认的最有安全感的国家之一。这份令人刮目相看的百年成绩单，是一代又一代中国共产党人用理想和信仰书写的，用鲜血和生命铸就的，用拼搏和奉献赢得的。每一位中国共产党人都有理由为此感到自豪。</p>
+
+<p>循大道，至万里。中国共产党的成就和贡献，不仅是历史性的，也是世界性的。百年来，我们党始终以世界眼光关注人类前途命运，从人类发展大潮流、世界变化大格局、中国发展大历史正确认识和处理同外部世界的关系，领导人民不仅创造了世所罕见的经济快速发展和社会长期稳定两大奇迹，而且成功走出了中国式现代化道路，创造了人类文明新形态，拓展了发展中国家走向现代化的途径，给世界上那些既希望加快发展又希望保持自身独立性的国家和民族提供了全新选择。特别是党的十八大以来，以习近平同志为核心的党中央推动构建人类命运共同体，为解决人类重大问题，建设持久和平、普遍安全、共同繁荣、开放包容、清洁美丽的世界贡献了中国智慧、中国方案、中国力量，成为推动人类发展进步的重要力量。我们信心坚定、豪情满怀，“当今世界，要说哪个政党、哪个国家、哪个民族能够自信的话，那中国共产党、中华人民共和国、中华民族是最有理由自信的。”</p>
+
+<p>中国共产党人的历史自信，既是对奋斗成就的自信，也是对奋斗精神的自信。今天，我们比历史上任何时期都更接近、更有信心和能力实现中华民族伟大复兴的目标。同时也必须清醒认识到，中华民族伟大复兴绝不是轻轻松松、敲锣打鼓就能实现的，容不得喘气歇脚、松劲懈怠。前进道路上，我们要把苦难辉煌的过去、日新月异的现在、光明宏大的未来贯通起来，从历史长河、时代大潮、全球风云中分析演变机理、探究历史规律，始终掌握新时代新征程党和国家事业发展的历史主动，激发为实现中华民族伟大复兴而奋斗的信心和动力，锚定既定奋斗目标，意气风发走向未来，开创属于我们这一代人的历史伟业。始终保持永不懈怠的精神状态和一往无前的奋斗姿态，踔厉奋发、笃行不怠，越是艰险越向前，方能不负历史、不负时代、不负人民。</p>
+
+<p>百转千回，百炼成钢，百年风华正茂；千山万水，千磨万击，千秋伟业在胸。在新的赶考之路上，我们能否继续交出优异答卷，关键在于有没有坚定的历史自信。坚定历史自信、把握历史主动，勿忘昨天的苦难辉煌，无愧今天的使命担当，不负明天的伟大梦想，满怀豪情一起向未来，接续奋斗，勇毅前行，我们一定能够在新时代新征程上赢得更加伟大的胜利和荣光。</p>
+
+<p>《 人民日报 》( 2022年01月19日 05 版)    </p>
+<hr />
