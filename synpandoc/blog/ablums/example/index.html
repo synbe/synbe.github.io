@@ -1,38 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<title>Boomarks</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+<![endif]-->
 <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"id="viewport"name="viewport">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="../../src//jquery/jquery-2.1.4.min.js"></script>
-<script src="../../src//bootstrap/js/bootstrap.min.js"></script>
-<script src="../../src//highlight/highlight.min.js"></script>
+<script src="../../src/jquery/jquery-2.1.4.min.js"></script>
+<script src="../../src/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../src/highlight/highlight.min.js"></script>
 <script >hljs.initHighlightingOnLoad();</script>  
-<script type="text/javascript" src="../../src//jspdf/html2canvas.js"></script>
-<script type="text/javascript" src="../../src//jspdf/jsPdf.debug.js"></script>
-<link href="../../src//bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../../src//bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-<link href="../../src//assets/docs.min.css" rel="stylesheet" media="screen">
-<link href="../../src//assets/style_index.css" rel="stylesheet" media="screen">
-<link href="../../src//fontawesome/css/font-awesome.min.css" rel="stylesheet">
-<link href="../../src//highlight/styles/monokai-sublime.css" rel="stylesheet">
+<script type="text/javascript" src="../../src/jspdf/html2canvas.js"></script>
+<script type="text/javascript" src="../../src/jspdf/jsPdf.debug.js"></script>
+<link href="../../src/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="../../src/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+<link href="../../src/assets/docs.min.css" rel="stylesheet" media="screen">
+<link href="../../src/assets/style_index.css" rel="stylesheet" media="screen">
+<link href="../../src/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="../../src/highlight/styles/monokai-sublime.css" rel="stylesheet">
 <div class="row-fluid  hidden-phone">
 <div class="span2"></div>
 <div class="span8 bg001">
 <br>
-<p class="milky"> synBE</p>
+<p class="milky"> 
+<!--<i class="fa fa-spinner fa-pulse"></i>_____此为fontsome图标___________-->
+&nbsp;synBE
+</p>
 </div>
 <div class="span2"></div>
 </div>
-<!--_____main start !____-->
-<div class="row-fluid main">
-<div class="sidebar span2 hidden-phone bg002 milky"></div>
-<div class="content span8">
-<!--++++++++++++++++++++++++++++++++ add html content start !++++++++++++++++++++++++++++++++ -->
-
-<h1>标题</h1>
-<p>在此添加内容！！</p>
-
-<!--++++++++++++++++++++++++++++++++ add html content end !++++++++++++++++++++++++++++++++++ -->
+<div class="row-fluid main"><!--_____main begin___________-->
+<div class="sidebar span2 hidden-phone bg002  milky">
+<!--__synBE__ -->
 </div>
-<div class="sidebar span1 hidden-phone bg002"></div>
-</div><!--_____main___________-->
+<div class="content span8"><!--__maincontent2 begin_____ -->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Boomarks</h1>
+</header>
+<h6>synbe 20150706 update 20160330</h6>
+<p><base target="_blank"></p>
+<!--_____add 在此添加内容 begin  ！！！！___________-->
+
+
+
+<p>example</p>
+
+
+
+
+<!--_____add 在此添加内容end  ！！！！___________-->
+<div class="row-fluid">
+</div>
+</div><!--__maincontent2  end_____ -->
+<div class="sidebar span1 hidden-phone bg002">
+<!--__<marquee direction="top">Wecome to synBE!</marquee> __ -->
+</div>
+</div><!--_____main end ___________-->
 <div class="row-fluid bg003"><!--_____footer1 ______-->
 <div class="span2 hidden-phone"></div>
 <div class="span2">
@@ -44,12 +81,9 @@
 </a>
 <ul class="dropdown-menu">
 <li data-filter-camera-type="all"><a data-toggle="tab" href="#">扫描二维码分享此页面</a></li>
-<!--_____二维码___________-->
+<!--_____二维码 begin___________-->
 <head>
 <meta charset="utf-8"/>
-<!--
-<base target="_blank">
--->
 <script src="../../src/qrcode/qrcode.js"></script>
 <style>
 #qrcode img {
@@ -68,22 +102,30 @@ qrcode.makeCode(thisURL);
 }
 </script>
 <div id="qrcode"></div>
-<!--_____二维码___________-->
+<!--_____二维码 end___________-->
 </ul>
 </li>
 </ul>
 </div>
+
 <div class="span4 hidden-phone">
-Copyright  © 2015-2025  <a href="http://www.synbe.com" target="_blank">synBE.com</a>  
+<!--_____copyright___________-->
+Copyright  © 2015-2017  <a href="http://www.synbe.com" target="_blank">synBE.com</a>  
 </div>
 <div class="span2 hidden-phone">
+<!--_____note1 begin___________-->
+
 <script type="text/javascript">
+
 var downPdf = document.getElementById("renderPdf");
+
 downPdf.onclick = function() {
 html2canvas(document.body, {
 onrendered:function(canvas) {
+
 var contentWidth = canvas.width;
 var contentHeight = canvas.height;
+
 //一页pdf显示html页面生成的canvas高度;
 var pageHeight = contentWidth / 592.28 * 841.89;
 //未生成pdf的html页面高度
@@ -93,8 +135,11 @@ var position = 0;
 //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
 var imgWidth = 595.28;
 var imgHeight = 592.28/contentWidth * contentHeight;
+
 var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
 var pdf = new jsPDF('', 'pt', 'a4');
+
 //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
 //当内容未超过pdf一页显示的范围，无需分页
 if (leftHeight < pageHeight) {
@@ -110,12 +155,15 @@ pdf.addPage();
 }
 }
 }
+
 pdf.save('content.pdf');
 }
 })
 }
 </script>
-<!--_____note1___________-->
+<!--_____note1 end___________-->
 </div>
 <div class="span2 hidden-phone"></div>
 </div><!--_____footer1 ______-->
+</body>
+</html>
