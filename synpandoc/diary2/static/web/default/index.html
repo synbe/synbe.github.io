@@ -1,0 +1,319 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- <meta http-equiv="refresh" content="3"> -->
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+html
+{
+margin: auto;
+}
+body
+{
+/*    font-family: 'PingFang SC', 'Noto Sans CJK', 'Source Han Sans', 'Microsoft Yahei', source-han-sans-simplified-c, sans-serif;
+font-size: 16px;*/
+line-height: 140%;
+max-width: 1024px;
+margin: auto;
+padding: 1em .5em;
+}
+a 
+{
+color:#0f8050;
+}
+a:visited
+{
+color:#0f8050;
+}
+img
+{
+display: block;
+
+max-width: 100%;
+margin: auto;
+padding-top: 0;
+padding-left: 0;
+border-radius: 4px;
+}
+
+table
+{
+border: 1px solid #ccc;
+margin:1em auto;
+margin-left:0em;
+}
+table tr:nth-child(2n)
+{
+background-color: #d4d7d0;
+}
+thead tr th
+{
+background-color: #d4d7d0;
+text-shadow: 1px 1px 0 #fff;
+}
+caption
+{
+color: #935417 !important;
+border: 1px solid #f2e7ab;
+background: #fcffcf ;
+}
+/*
+table tr:nth-child(2n+1) {
+background-color: #FFF8D4;
+}
+*/
+h1{
+font-size: 1.6em !important;
+color: #4c9ed9;
+font-weight: bold;
+text-shadow: 1px 1px 1px rgb(97, 172, 217);
+}
+h2{
+font-size: 1.5em !important;
+color: #4c9ed9;
+font-weight: bold;
+text-shadow: 1px 1px 1px rgb(97, 172, 217);
+}
+h3{
+font-size: 1.4em !important;
+color: #4c9ed9;
+font-weight: bold;
+text-shadow: 1px 1px 1px rgb(97, 172, 217);
+}
+h4{
+font-size: 1.2em !important;
+color: #4c9ed9;
+font-weight: bold;
+text-shadow: 1px 1px 1px rgb(97, 172, 217);
+}
+h5{
+font-size: 1em !important;
+color: #4c9ed9;
+font-weight: bold;
+text-shadow: 1px 1px 1px rgb(97, 172, 217);
+}
+h6 {
+font-size: 0.9em !important;
+color: #447171 !important;
+border-bottom:#447171 solid 1px;
+padding-bottom:1em;
+font-weight: bold;
+text-shadow: 1px 1px 1px rgb(97, 172, 217);
+}
+pre {
+background-color: #d7e4ee;
+color: rgb(4, 7, 34);
+}
+hr{
+width:100%;
+margin:0 auto;
+border: 0;
+height: 2px;
+background: #333;
+background-image: linear-gradient(to right, red, #333, rgb(9, 206, 91));
+}
+blockquote
+{
+padding: .5em;
+color: #fff;
+border: 2px solid #fff;
+border-radius: 4px;
+font-size:1em;
+line-height:1.1em;
+}
+blockquote
+{
+margin: 10px;
+
+background: #777;
+}
+blockquote blockquote
+{
+margin: -10px;
+
+background: #337ab7;
+}
+blockquote blockquote  blockquote
+{
+margin: -10px;
+
+background: #5cb85c;
+}
+
+blockquote blockquote  blockquote blockquote
+{
+margin: -10px;
+
+background: #f0ad4e;
+}
+
+blockquote blockquote  blockquote blockquote blockquote
+{
+margin: -10px;
+
+background: #f32721;
+}
+
+blockquote blockquote  blockquote blockquote blockquote blockquote
+{
+margin: -10px;
+
+background: #5bc0de;
+}
+.div-a{ 
+float:left;
+width:49%;
+} 
+.div-b{ 
+float:right;
+width:49%;
+} 
+.div-c{ 
+width:95%;
+padding: 1em;
+background:rgb(240, 242, 222);
+border: rgb(170, 162, 44) 1px solid;
+margin-bottom: 2em;
+border-radius:5px;
+box-shadow: 10px 10px 5px #888888;
+position: relative;
+} 
+.div-c h1 {
+color:#fff;
+text-shadow: 1px 1px 2px rgb(16, 11, 75);
+}
+.div-c p {
+text-shadow: 1px 1px 0px #fff;
+}
+.div-c-banner{ 
+width: 101%;
+margin-left: -32px;
+padding-right: 10px;
+font-weight: bold;
+color: rgb(255, 255, 255);
+line-height: 0px;
+border-right-color: transparent !important;
+box-shadow: -5px 11px 8px -5px #110f0f;
+} 
+.div-c-banner-tag{ 
+margin-left: -32px;
+width: 0;
+border: #332317 8px solid;
+border-left-color: transparent;
+border-bottom-color: transparent;
+} 
+.div-c-content{
+margin-top: -4em;
+}
+.div-c-date{ 
+float: left;
+width: 49%;
+text-shadow: 1px 1px 0px #fff;
+} 
+.div-c-icon{ 
+float: right;
+text-align: right;
+width: 49%;
+text-shadow: 1px 1px 0px #fff;
+} 
+.div-c-footer{ 
+border-top: rgb(170, 162, 44) 1px solid;
+color:  rgb(170, 162, 44);
+padding: 1em;
+} 
+/*以下为屏幕适应改变*/
+@media screen and (max-width:767px)
+{
+#TOC
+{
+display: none;
+}
+#header
+{
+margin-bottom: 12px;
+
+border-bottom: 0;
+background-color: #fff;
+}
+h2.author,
+h3.date
+{
+border-top: 0px solid #e1e1e1;
+padding-top: 0em !important;
+margin-bottom: 1em !important;
+}
+}
+h1.title
+{
+font-weight: bold;
+
+text-align: left;
+
+color: #000;
+}
+.width50
+{
+width: 100%;
+}
+}
+</style>
+</head>
+
+<h2>文章列表</h2>
+<hr>lfjeke
+<h1> fjlaejfajlf</h1>kfeeke
+<h3> faejfekj</h3>haafefeafeafleajfelflaejfekfejalfej奥飞起来冯经理hello<p><p><p><p><p><p><p><p><p><p>hwll</p></p></p></p></p></p></p></p></p></p><p>lfjelej</p><p>冷风机</p><p></p><p>hello</p><p>
+<h1> 房间辣EF金额</h1></p><p>lfje</p><p>
+<h1>冯经理飞机</h1></p><p><b>冷风机EF</p><p></p><p></p><p></p><p></p><p></p><p>
+<h1> fejfe</h1></p><p>
+<h1>jflejfa</h1></p><p>
+<h2> fjalefj</h2></p><p><b>fjleajfe</b></p><p>flejfel</p><p>hell</p><p>
+<h1>fjelfje</h1></p><p>lle</p>/p>/p>/p>/p></p><p>lele</p><h1>ekaflje</h1><b>jlfajef</b><i>lfjlefj</i><pre>faefejf</pre><code></code><code>flej</code><blockquote> fejalfje</blockquote></p><blockquote> faljfejae</blockquote></p></p></p></p></p></p></p></p></p></p><blockquote> faeljfe</blockquote></p><h2> fealjfef</h2><pre>ljfeljf</pre><code></code><code></code>fjelfj<code></code><b>feffe</b><i>aefdeef</i><p>jlfjeaf</p><p>ggg</p></p></p><p>fjlaefje</p></p></p></p>
+<li>flajfe</li>
+<p><blockquote>jfljefe</blockquote></p>
+<p><blockquote> faljfe</blockquote></p>
+<p><blockquote> faljfe</blockquote></p>
+<p><blockquote> faljfe</blockquote></p>
+<h1> faefjh</h1>
+<h1> feafeha </h1>
+<h1> feafeha </h1>
+<p><blockquote> faljfe</blockquote></p><code>ljfaelf</code><code>jflajfeafjf</code><pre>f;akfek</pre>
+<h1> faeljfeaf</h1>
+<h1> fealjfefe</h1>
+<h1> fleajfeajfa</h1>
+<p><blockquote> fleajfe</blockquote></p>
+<p><blockquote>ffjelajfe</blockquote></p>
+<li>flaejfejf ea</li>
+<li>flaejfejf ea</li>
+<li>flaejfejf ea</li>
+<h1> feaf </h1>
+<h1> fejfa</h1>
+<p>fafejka</p><b>lfjfea</b>
+<h3> faeljfe</h3>
+<h1> faelfej</h1>
+<h1> faelfej</h1>
+<h1> faelfej</h1>
+<h1> faelfej</h1>
+<p><blockquote>flfjealfe</blockquote></p>
+<p><blockquote>flfjealfe</blockquote></p>
+<h1>fleajfe</h1>fajlfjeaflej
+<p>fjlafjealf</p>
+<h1>falfea</h1>
+<p><blockquote> falfejhaea</blockquote></p>
+<h1></h1>
+<h1>feafleajf</h1>
+<h1>fafej</h1>
+<h1>faljfea</h1>
+<hr>
+<hr>
+<hr>
+<h1> hellow</h1>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<p><blockquote>fjalfjeafjea</blockquote></p>
+<h1>feal;fea</h1>
+<img src="https://pics4.baidu.com/feed/f3d3572c11dfa9ece12017fbdf1d7a09908fc12c.jpeg?token=88401d7d8981c51a4e197e30f4d26231" ></img>
+<a href="falfe;j">链接</a>
+<h1>fjlefje</h1>
