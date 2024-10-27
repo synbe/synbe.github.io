@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+<title>使用jquery.qrcode生成二维码</title>
+<script src="./js/qrcode.js"></script>
+<style type="text/css">
+html {
+background-image: linear-gradient(to bottom, rgb(188, 216, 220) 0em, rgb(223, 215, 207) 7em);
+background-repeat: no-repeat;
+background-size: 100% auto;
+}
+body {
+margin: auto;
+margin-top: 0em;
+margin-bottom: 0.5em;
+padding: 1em 0.5em 1em 0.5em;
+width: auto;
+border: 1px solid  #CED7EA;
+color: black;
+font-family: Verdana, sans-serif;
+font-size: 100%;
+line-height: 140%;
+background-color:#FAFAFA;
+box-shadow: 0px 0px 10px black;
+}
+/*==============-适应手机屏幕==============*/
+@media screen and (max-width: 736px) {
+body {
+width: auto;
+border: none;
+}
+}
+@media screen and (min-width: 737px) and (max-width: 1220px) {
+body {
+width: 97%;
+}
+}
+@media screen and (min-width: 1221px) {
+body {
+width: 1024px;
+}
+}
+</style>
+<style>
+#qrcode{
+border: 2px solid #D3E4E0;
+background: none repeat scroll 0% 0% #E8F3E8;
+padding: 2em;
+}
+img{
+margin:0 auto;
+}
+#getval {
+width:100%;
+height:100px;
+word-break:break-all;
+}
+</style>
+</head>
+<body>
+<p align="center">
+<textarea name="input" "type="text" id="getval"  placeholder="请输入文字或者网址，然后点击生成二维码按钮"/"></textarea>
+</p>
+<p align="center">
+<button id="send">
+生成二维码
+</button></p>
+<div id="qrcode"></div>
+<script>
+window.onload =function(){
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+width : 500,//设置宽高
+height : 500,
+});
+qrcode.makeCode("http://www.synbe.com");
+document.getElementById("send").onclick =function(){
+qrcode.makeCode(document.getElementById("getval").value);
+}
+}
+</script>
+<p>参考:</p>
+</body>
+</html>
