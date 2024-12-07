@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment System</title>
+    <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+    <div class="flex-container">
+        <!-- 评论显示区 -->
+        <div id="comments-display" class="flex-panel display-panel">
+            <!-- 评论内容将在这里显示 -->
+        </div>
+        <!-- 编辑区 -->
+        <div id="comment-editor" class="flex-panel editor-panel">
+            <div id="button-container1">
+                <button id="help-btn">帮助</button>
+                <button id="open-btn" title="打开html">打开</button>
+                <button id="generate-btn" title="保存为:index.html">保存</button>
+                <button id="insertimages-btn" title="可插入多张图片，支持markdown">图片</button>
+                <input type="file" id="file-input"  style="display:none"/>
+                <input type="file" id="images-input" style="display:none"/>
+
+                <!-- 弹窗容器 -->
+                <div id="help-container" class="popup-container" style="display:none;">
+                    <div class="popup-content">
+                    <span class="close-btn">&times;</span>
+                    <h2>帮助</h2>
+                    <p>一个md编辑器</p>
+                    <hr>
+                        <ol>
+                            <li>可直接编辑，也可打开html文件后编辑。</li>
+                            <li>请务必先新建./images目录，并将所需图片放到该目录下。</li>
+                            <li>支持插入多张图片，选择./images目录下的图片后，默认自动添加图片md格式：![](./images/pic.jpg)。</li>
+                            <li>点击保存，即自动下载并保存为:indexout.html。</li>
+                            <li>将indexout.html和./images放到同一目录下，以显示图片。</li>
+                        </ol>
+                    <hr>
+
+                    </div>
+                </div>
+
+            </div>
+            <textarea id="comment-textarea" rows="3" placeholder="在这里输入评论..."></textarea>
+            <div id="button-container2">
+                <button id="submit-btn" title="Ctr+Enter">发表</button>
+            </div>
+        </div>
+    </div>
+    <!-- 拖动分隔条 -->
+    <div id="resize-bar" class="resize-bar"></div>
+    <!-- 引入JavaScript文件 -->
+    <script src="./src/markdown-it.min.js"></script>
+    <script src="./src/FileSaver.min.js"></script>
+    <script src="./src/jspdf.umd.min.js"></script>
+    <script src="./src/app.js"></script>
+</body>
+</html>

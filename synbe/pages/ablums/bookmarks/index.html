@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myBookmarks</title>
+    <style data-style-id="htmlStyle">
+        body {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #seciotn1 a {
+            pointer-events: none;
+        }
+
+        #leftbar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: #4c5455;
+        }
+
+        #sidebar {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            background-color: #4c5455;
+            /* text-align: center; */
+        }
+
+        #sidebar ul {
+            list-style-type: none;
+        }
+
+        #sidebar li a {
+            text-decoration: none;
+            color: #ffffff;
+            line-height: 2em;
+            width: 100%;
+        }
+
+        .sidebarlidiv {
+            line-height: 2em;
+            transition: transform 0.3s ease;
+            transition: background-color 0.3s ease;
+            transform: scale(1);
+            padding-left: 1em;
+            border-radius: 5px;
+        }
+
+        .sidebarlidiv:hover {
+            background-color: gray;
+            transform: scale(1.01) translateX(-0.1px);
+            box-shadow: 0 1px 1px red;
+        }
+
+        #content {
+            padding: 0.5em;
+            padding-left: 270px;
+            display: flex;
+            flex-wrap: wrap;
+            width: 100vw;
+            /* 视口宽度的90% */
+            min-width: 300px;
+            /* 最小宽度限制 */
+        }
+
+        .sectiontitle {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: #4c54551a;
+            margin: 1em 0;
+            padding: 0.5em;
+            border-radius: 5px;
+        }
+
+        .sectiondiv {
+            width: 100%;
+        }
+
+        .linksdiv {
+            display: flex;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 5px;
+        }
+
+        .link {
+            width: 12em;
+            border-radius: 5px;
+            margin: 0.5em;
+            background-color: #4c5455;
+            border: 0.5px solid #4c5455;
+            transition: transform 0.3s ease;
+            transform: scale(1);
+            transition: opacity 0.3s ease;
+            /* 默认不缩放 */
+        }
+
+        .link:hover {
+            opacity: 0.8;
+            box-shadow: 0 1px 1px red;
+            /* transform: scale(1.1); */
+            /* transform: translateX(-50px); */
+            /* transform: translateY(-50px); */
+            /* transform: rotate(180deg); */
+            transform: scale(1.1) translateY(-1px);
+        }
+
+        .link a {
+            text-decoration: none;
+            display: flex;
+            height: 3em;
+            align-items: center;
+            /* justify-content: center; */
+            /* 水平居中 */
+        }
+
+        .linklogodiv {
+            width: 6em;
+            height: 3em;
+            border-radius: 5px;
+            display: flex;
+            border-radius: 5px;
+        }
+
+        .linklogo {
+            height: 3em;
+            width: 100%;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .linknamediv {
+            height: 3em;
+            width: 6em;
+            text-align: center;
+            color: #ffffff;
+            padding-top: 1.5em;
+        }
+
+        h1,
+        h2 {
+            font-family: Arial, sans-serif;
+        }
+
+        .bookmarkeditor {
+            width: 98%;
+            background: #797676;
+            border-radius: 5px;
+            padding: 2px;
+            margin-bottom: 1em;
+        }
+
+        .toolsbar {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 2px;
+            background: #797676;
+        }
+
+        button {
+            background: #353030;
+            border: 0px solid #fff;
+            border-radius: 5px;
+            width: 8em;
+            margin: 2px 1em;
+            padding: 6px 12px;
+            transition: transform 0.1s ease;
+            /* 平滑的过渡效果 */
+            transform: scale(1);
+            color: #fff;
+            /* 默认不缩放 */
+        }
+
+        button:hover {
+            background: #353030a8;
+            color: #ffffff;
+            transform: scale(1.1);
+            /* 鼠标悬停时放大10% */
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            color: #333333;
+        }
+
+        input,
+        .selector {
+            background: #353030;
+            border-radius: 5px;
+            width: 20em;
+            margin: 2px;
+            padding: 6px 12px;
+            color: #fff;
+            border: 0;
+            outline: none;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+            display: flex;
+            height: 10em;
+        }
+
+        .textarea-editor-style {
+            font-family: sans-serif;
+            flex-grow: 1;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 0;
+            overflow-y: scroll;
+            overflow-x: scroll;
+            margin-right: 30px;
+            resize: none;
+            background-color: #353030;
+            color: #fff;
+            white-space: pre;
+            /* 保持内容的格式 */
+            word-wrap: normal;
+            /* 防止自动换行 */
+            outline: none;
+        }
+
+        .textarea-linenumbers-style {
+            font-family: sans-serif;
+            bottom: 0;
+            border: 0;
+            width: 3em;
+            padding-top: 10px;
+            background-color: #353030;
+            color: #807878;
+            overflow-y: scroll;
+            padding-right: 5px;
+            text-align: right;
+            overflow: auto;
+            border-right: 1px solid white;
+            -ms-overflow-style: none;
+            /* Internet Explorer 10+ */
+            scrollbar-width: none;
+
+            /* Firefox */
+            /* 针对WebKit/Blink浏览器 */
+            ::-webkit-scrollbar {
+                width: 0;
+                /* 对于垂直滚动条 */
+                height: 0;
+                /* 对于水平滚动条 */
+            }
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: -1em;
+            right: 0;
+            cursor: pointer;
+            padding: 5px;
+            font-weight: bold;
+            background: red;
+            width: 2em;
+            margin: 0;
+        }
+
+        .delete-btn:hover {
+            background: red;
+            opacity: 0.8;
+        }
+
+        #webarea {
+            width: 98%;
+            border: #353030 1px solid;
+            height: 9em;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="leftbar">
+        <div id="sidebar">
+        </div>
+    </div>
+    <div id="content" data-value="CONTENT">
+        <div id="section2" class="sectiondiv" data-value="综合" style="display: block;">
+            <div class="sectiontitle">综合</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="http://www.hao123.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.hao123.com.png" class="linklogo"></div>
+                        <div class="linknamediv">hao123</div>
+                    </a></div>
+                <div class="link"><a href="http://www.sina.com.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.sina.com.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">新浪</div>
+                    </a></div>
+                <div class="link"><a href="https://weibo.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/weibo.com.png" class="linklogo"></div>
+                        <div class="linknamediv">weibo.com</div>
+                    </a></div>
+                <div class="link"><a href="http://hongdou.gxnews.com.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/hongdou.gxnews.com.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">红豆</div>
+                    </a></div>
+                <div class="link"><a href="http://news.sohu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/news.sohu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">搜狐</div>
+                    </a></div>
+                <div class="link"><a href="http://www.zhihu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.zhihu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">知乎</div>
+                    </a></div>
+                <div class="link"><a href="http://www.163.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.163.com.png" class="linklogo"></div>
+                        <div class="linknamediv">网易</div>
+                    </a></div>
+                <div class="link"><a href="https://www.thepaper.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.thepaper.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">澎湃</div>
+                    </a></div>
+                <div class="link"><a href="http://www.ifeng.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.ifeng.com.png" class="linklogo"></div>
+                        <div class="linknamediv">凤凰网</div>
+                    </a></div>
+                <div class="link"><a href="http://www.douban.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.douban.com.png" class="linklogo"></div>
+                        <div class="linknamediv">豆瓣</div>
+                    </a></div>
+                <div class="link"><a href="http://jandan.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/jandan.net.png" class="linklogo"></div>
+                        <div class="linknamediv">煎蛋</div>
+                    </a></div>
+                <div class="link"><a href="https://www.xiaohongshu.com" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.xiaohongshu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">小红书</div>
+                    </a></div>
+
+                <!-- ADD_BOOKMARK_HERE.end -->
+
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section_search" class="sectiondiv" data-value="搜索" style="display: block;">
+            <div class="sectiontitle">搜索</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="https://www.google.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.google.com.png" class="linklogo"></div>
+                        <div class="linknamediv">google</div>
+                    </a></div>
+                <div class="link"><a href="http://www.baidu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.baidu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">百度</div>
+                    </a></div>
+                <div class="link"><a href="http://www.bing.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.bing.com.png" class="linklogo"></div>
+                        <div class="linknamediv">bing</div>
+                    </a></div>
+                <div class="link"><a href="https://weixin.sogou.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/weixin.sogou.com.png" class="linklogo"></div>
+                        <div class="linknamediv">搜狗微信</div>
+                    </a></div>
+                <div class="link"><a href="https://www.pan131.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.pan131.com.png" class="linklogo"></div>
+                        <div class="linknamediv">盘131</div>
+                    </a></div>
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section_ai" class="sectiondiv" data-value="AI" style="display: block;">
+            <div class="sectiontitle">AI</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="https://kimi.moonshot.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/kimi.moonshot.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">kimi</div>
+                    </a></div>
+                <div class="link"><a href="https://yiyan.baidu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/yiyan.baidu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">文心一言</div>
+                    </a></div>
+                <div class="link"><a href="https://www.doubao.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.doubao.com.png" class="linklogo"></div>
+                        <div class="linknamediv">豆包</div>
+                    </a></div>
+                <div class="link"><a href="https://www.marscode.cn/workbench" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.marscode.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">豆包code</div>
+                    </a></div>
+                <div class="link"><a href="https://www.marscode.cn/dashboard" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.marscode.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">豆包codeweb</div>
+                    </a></div>
+                <div class="link"><a href="https://tongyi.aliyun.com/qianwen/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/tongyi.aliyun.com.png" class="linklogo"></div>
+                        <div class="linknamediv">通义千问</div>
+                    </a></div>
+                <div class="link"><a href="https://metaso.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/metaso.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">秘塔AI</div>
+                    </a></div>
+                <div class="link"><a href="https://ai-bot.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/ai-bot.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">ai-bot.cn</div>
+                    </a></div>
+                <div class="link"><a href="https://lumina.sh/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/lumina.sh.png" class="linklogo"></div>
+                        <div class="linknamediv">lumina</div>
+                    </a></div>
+                <div class="link"><a href="https://so.360.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/so.360.com.png" class="linklogo"></div>
+                        <div class="linknamediv">360AI</div>
+                    </a></div>
+                <div class="link"><a href="https://consensus.app" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/consensus.app.png" class="linklogo"></div>
+                        <div class="linknamediv">consensus</div>
+                    </a></div>
+                <div class="link"><a href="https://www.reddo.cloud/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.reddo.cloud.png" class="linklogo"></div>
+                        <div class="linknamediv">reddo</div>
+                    </a></div>
+                <div class="link"><a href="https://think.baidu.com" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/think.baidu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">百度探索</div>
+                    </a></div>
+                <div class="link"><a href="https://bochaai.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/bochaai.com.png" class="linklogo"></div>
+                        <div class="linknamediv">博查</div>
+                    </a></div>
+                <div class="link"><a href="https://wukong.com" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/wukong.com.png" class="linklogo"></div>
+                        <div class="linknamediv">小悟空</div>
+                    </a></div>
+                <div class="link"><a href="https://yuanbao.tencent.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/yuanbao.tencent.com.png" class="linklogo"></div>
+                        <div class="linknamediv">元宝</div>
+                    </a></div>
+                <div class="link"><a href="https://xinghuo.xfyun.cn" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/xinghuo.xfyun.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">讯飞星火</div>
+                    </a></div>
+                <div class="link"><a href="https://chatglm.cn" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/chatglm.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">智谱清言</div>
+                    </a></div>
+                <div class="link"><a href="https://www.wenxiaobai.com" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.wenxiaobai.com.png" class="linklogo"></div>
+                        <div class="linknamediv">问小白</div>
+                    </a></div>
+
+                <div class="link"><a href="https://www.jiumodiary.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.jiumodiary.com.png" class="linklogo"></div>
+                        <div class="linknamediv">鸠摩</div>
+                    </a></div>
+                <div class="link"><a href="https://zhida.zhihu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/zhida.zhihu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">知乎直达</div>
+                    </a></div>
+                <div class="link"><a href="https://xiaohuanxiong.com/code/playground" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/xiaohuanxiong.com.png" class="linklogo"></div>
+                        <div class="linknamediv">小浣熊</div>
+                    </a></div>
+
+                <div class="link"><a href="https://codegeex.cn/zh-CN" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/codegeex.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">codegeex</div>
+                    </a></div>
+                <div class="link"><a href="https://tongyi.aliyun.com/lingma" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/tongyi.aliyun.com.png" class="linklogo"></div>
+                        <div class="linknamediv">通义灵码</div>
+                    </a></div>
+                <div class="link"><a href="https://aws.amazon.com/q/developer/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/aws.amazon.com.png" class="linklogo"></div>
+                        <div class="linknamediv">amazonQ</div>
+                    </a></div>
+                <div class="link"><a href="https://code.fittentech.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/code.fittentech.com.png" class="linklogo"></div>
+                        <div class="linknamediv">fitten</div>
+                    </a></div>
+                <div class="link"><a href="https://cloud.tencent.com/product/acc" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/cloud.tencent.com.png" class="linklogo"></div>
+                        <div class="linknamediv">腾讯云 AI </div>
+                    </a></div>
+                <div class="link"><a href="https://comate.baidu.com/zh" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/comate.baidu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">文心快码</div>
+                    </a></div>
+
+                <div class="link"><a href="https://www.aippt.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.aippt.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">aippt</div>
+                    </a></div>
+                <div class="link"><a href="https://www.youyan3d.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.youyan3d.com.png" class="linklogo"></div>
+                        <div class="linknamediv">有言3D</div>
+                    </a></div>
+                <div class="link"><a href="https://notebooklm.google/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/notebooklm.google.png" class="linklogo"></div>
+                        <div class="linknamediv">notebooklm</div>
+                    </a></div>
+
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section_tools" class="sectiondiv" data-value="工具" style="display: block;">
+            <div class="sectiontitle">工具</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="https://editor.mdnice.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/editor.mdnice.com.png" class="linklogo"></div>
+                        <div class="linknamediv">mdnice</div>
+                    </a></div>
+                <div class="link"><a href="https://tool.oschina.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/tool.oschina.net.png" class="linklogo"></div>
+                        <div class="linknamediv">tool.oschina</div>
+                    </a></div>
+                <div class="link"><a href="https://tool.lu/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/tool.lu.png" class="linklogo"></div>
+                        <div class="linknamediv">tool.lu</div>
+                    </a></div>
+                <div class="link"><a href="https://zh.snipaste.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/zh.snipaste.com.png" class="linklogo"></div>
+                        <div class="linknamediv">snipaste</div>
+                    </a></div>
+                <div class="link"><a href="https://www.rpt.epson.com.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.rpt.epson.com.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">epson</div>
+                    </a></div>
+                <div class="link"><a href="https://www.canva.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.canva.com.png" class="linklogo"></div>
+                        <div class="linknamediv">canva</div>
+                    </a></div>
+                <div class="link"><a href="https://ssyoutube.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/ssyoutube.org.png" class="linklogo"></div>
+                        <div class="linknamediv">ssyoutube</div>
+                    </a></div>
+                <div class="link"><a href="https://ipinfo.io/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/ipinfo.io.png" class="linklogo"></div>
+                        <div class="linknamediv">ipinfo</div>
+                    </a></div>
+                <div class="link"><a href="https://map.bmcx.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/map.bmcx.com.png" class="linklogo"></div>
+                        <div class="linknamediv">便民地图</div>
+                    </a></div>
+
+                <div class="link"><a href="https://obsidian.md" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/obsidian.md.png" class="linklogo"></div>
+                        <div class="linknamediv">obsidian</div>
+                    </a></div>
+
+                <div class="link"><a href="https://publish.obsidian.md/help-zh" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/publish.obsidian.md.png" class="linklogo"></div>
+                        <div class="linknamediv">obsidianHelp</div>
+                    </a></div>
+
+                <div class="link"><a href="https://aecreations.io" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/aecreations.io.png" class="linklogo"></div>
+                        <div class="linknamediv">aecreations.io</div>
+                    </a></div>
+                <div class="link"><a href="https://www.iconfont.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.iconfont.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">iconfont</div>
+                    </a></div>
+                <div class="link"><a href="https://www.photopea.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.photopea.com.png" class="linklogo"></div>
+                        <div class="linknamediv">photopea</div>
+                    </a></div>
+
+                <div class="link"><a href="https://pikimov.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/pikimov.com.png" class="linklogo"></div>
+                        <div class="linknamediv">pikimov</div>
+                    </a></div>
+                <div class="link"><a href="https://pixlr.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/pixlr.com.png" class="linklogo"></div>
+                        <div class="linknamediv">pixlr</div>
+                    </a></div>
+
+                <div class="link"><a href="https://omnivore.app/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/omnivore.app.png" class="linklogo"></div>
+                        <div class="linknamediv">omnivore</div>
+                    </a></div>
+
+                <div class="link"><a href="https://stackedit.io/app" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/stackedit.io.png" class="linklogo"></div>
+                        <div class="linknamediv">stackedit</div>
+                    </a></div>
+                <div class="link"><a href="https://wallabag.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/wallabag.org.png" class="linklogo"></div>
+                        <div class="linknamediv">wallabag</div>
+                    </a></div>
+                <div class="link"><a href="https://getpocket.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/getpocket.com.png" class="linklogo"></div>
+                        <div class="linknamediv">pocket</div>
+                    </a></div>
+                <div class="link"><a href="https://www.remnote.com" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.remnote.com.png" class="linklogo"></div>
+                        <div class="linknamediv">remnote</div>
+                    </a></div>
+
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+
+
+        <div id="section_bbs" class="sectiondiv" data-value="论坛" style="display: block;">
+            <div class="sectiontitle">论坛</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="https://www.newsmth.net" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.newsmth.net.png" class="linklogo"></div>
+                        <div class="linknamediv">水木社区</div>
+                    </a></div>
+                <div class="link"><a href="https://www.right.com.cn/forum/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.right.com.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">恩山</div>
+                    </a></div>
+                <div class="link"><a href="http://www.crystalradio.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.crystalradio.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">矿石</div>
+                    </a></div>
+                <div class="link"><a href="https://www.feng.com/forum/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.feng.com.png" class="linklogo"></div>
+                        <div class="linknamediv">威锋</div>
+                    </a></div>
+                <div class="link"><a href="https://www.im286.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.im286.net.png" class="linklogo"></div>
+                        <div class="linknamediv">落伍者</div>
+                    </a></div>
+                <div class="link"><a href="https://bbs.csdn.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/bbs.csdn.net.png" class="linklogo"></div>
+                        <div class="linknamediv">bbs.csdn</div>
+                    </a></div>
+                <div class="link"><a href="https://bbs.kafan.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/bbs.kafan.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">卡饭</div>
+                    </a></div>
+                <div class="link"><a href="https://www.chiphell.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.chiphell.com.png" class="linklogo"></div>
+                        <div class="linknamediv">chiphell</div>
+                    </a></div>
+                <div class="link"><a href="https://muchong.com/bbs/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/muchong.com.png" class="linklogo"></div>
+                        <div class="linknamediv">小木虫</div>
+                    </a></div>
+                <div class="link"><a href="http://guoxue.er07.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/guoxue.er07.com.png" class="linklogo"></div>
+                        <div class="linknamediv">爱如生</div>
+                    </a></div>
+                <div class="link"><a href="https://www.80wusun.com/forum.php" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.80wusun.com.png" class="linklogo"></div>
+                        <div class="linknamediv">80无损</div>
+                    </a></div>
+                <div class="link"><a href="https://forum.xitek.com/forum.php" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/forum.xitek.com.png" class="linklogo"></div>
+                        <div class="linknamediv">色影无忌</div>
+                    </a></div>
+                <div class="link"><a href="https://bbs.hupu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/bbs.hupu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">虎扑</div>
+                    </a></div>
+                <div class="link"><a href="https://tianya.my/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/tianya.my.png" class="linklogo"></div>
+                        <div class="linknamediv">天涯</div>
+                    </a></div>
+
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+
+        <div id="section_books" class="sectiondiv" data-value="图书科研" style="display: block;">
+            <div class="sectiontitle">图书科研</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="https://annas-archive.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/annas-archive.org.png" class="linklogo"></div>
+                        <div class="linknamediv">Annas</div>
+                    </a></div>
+                <div class="link"><a href="https://arxiv.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/arxiv.org.png" class="linklogo"></div>
+                        <div class="linknamediv">arxiv</div>
+                    </a></div>
+                <div class="link"><a href="https://opencitations.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/opencitations.net.png" class="linklogo"></div>
+                        <div class="linknamediv">opencitations</div>
+                    </a></div>
+                <div class="link"><a href="https://scitemed.com/index" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/scitemed.com.png" class="linklogo"></div>
+                        <div class="linknamediv">scitemed</div>
+                    </a></div>
+                <div class="link"><a href="https://www.txyz.ai/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.txyz.ai.png" class="linklogo"></div>
+                        <div class="linknamediv">txyz.ai</div>
+                    </a></div>
+                <div class="link"><a href="https://www.pubpeer.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.pubpeer.com.png" class="linklogo"></div>
+                        <div class="linknamediv">pubpeer</div>
+                    </a></div>
+                <div class="link"><a href="https://z-lib.io/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/z-lib.io.png" class="linklogo"></div>
+                        <div class="linknamediv">z-lib</div>
+                    </a></div>
+                <div class="link"><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/pubmed.ncbi.nlm.nih.gov.png" class="linklogo"></div>
+                        <div class="linknamediv">pubmed</div>
+                    </a></div>
+                <div class="link"><a href="https://res.gxlib.org.cn/ermsClient/browse.do" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/res.gxlib.org.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">广西图书馆</div>
+                    </a></div>
+                <div class="link"><a href="https://www.nlc.cn/web/index.shtml" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.nlc.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">国家图书管</div>
+                    </a></div>
+                <div class="link"><a href="https://www.icourse163.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.icourse163.org.png" class="linklogo"></div>
+                        <div class="linknamediv">中国大学慕课</div>
+                    </a></div>
+                <div class="link"><a href="https://open.163.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/open.163.com.png" class="linklogo"></div>
+                        <div class="linknamediv">1网易公开</div>
+                    </a></div>
+                <div class="link"><a href="https://www.cnki.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.cnki.net.png" class="linklogo"></div>
+                        <div class="linknamediv">知网</div>
+                    </a></div>
+                <div class="link"><a href="https://www.manongbook.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.manongbook.com.png" class="linklogo"></div>
+                        <div class="linknamediv"> 码农书籍</div>
+                    </a></div>
+                <div class="link"><a href="https://www.kb199.com/list/6_1.html" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.kb199.com.png" class="linklogo"></div>
+                        <div class="linknamediv">快吧图书</div>
+                    </a></div>
+                <div class="link"><a href="https://www.quanxue.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.quanxue.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">劝学</div>
+                    </a></div>
+                <div class="link"><a href="http://www.guoxue123.com/index.htm" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.guoxue123.com.png" class="linklogo"></div>
+                        <div class="linknamediv">国学导航</div>
+                    </a></div>
+                <div class="link"><a href="http://www.pdfbook.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.pdfbook.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">pdfbook</div>
+                    </a></div>
+                <div class="link"><a href="https://www.sdxco.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.sdxco.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">三典轩书画</div>
+                    </a></div>
+                <div class="link"><a href="https://www.jb51.net/books/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.jb51.net.png" class="linklogo"></div>
+                        <div class="linknamediv">jb51图书</div>
+                    </a></div>
+                <div class="link"><a href="https://www.yuwenmi.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.yuwenmi.com.png" class="linklogo"></div>
+                        <div class="linknamediv">语文迷</div>
+                    </a></div>
+                <div class="link"><a href="https://sentenceswith.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/sentenceswith.net.png" class="linklogo"></div>
+                        <div class="linknamediv">sentenceswith</div>
+                    </a></div>
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section4" class="sectiondiv" data-value="医学" style="display: block;">
+            <div class="sectiontitle">医学</div>
+            <div class="linksdiv">
+                <div class="link"><a href="http://www.dxy.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.dxy.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">丁香园</div>
+                    </a></div>
+                <div class="link"><a href="http://www.handsurgery.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.handsurgery.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">中华手外科网</div>
+                    </a></div>
+                <div class="link"><a href="http://www.allinmd.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.allinmd.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">唯医</div>
+                    </a></div>
+                <div class="link"><a href="http://www.haoyishu.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.haoyishu.org.png" class="linklogo"></div>
+                        <div class="linknamediv">好医术</div>
+                    </a></div>
+                <div class="link"><a href="https://www.ncbi.nlm.nih.gov/pubmed/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/pubmed.ncbi.nlm.nih.gov.png" class="linklogo">
+                        </div>
+                        <div class="linknamediv">pubmed</div>
+                    </a></div>
+                <div class="link"><a href="https://www.ncbi.nlm.nih.gov/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.ncbi.nlm.nih.gov.png" class="linklogo"></div>
+                        <div class="linknamediv">NCBI</div>
+                    </a></div>
+                <div class="link"><a href="http://www.sci-hub.ac.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.sci-hub.ac.cn.png" class="linklogo">
+                        </div>
+                        <div class="linknamediv">sci-hub</div>
+                    </a></div>
+                <div class="link"><a href="http://xy.bioon.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/xy.bioon.com.png" class="linklogo"></div>
+                        <div class="linknamediv">云学院</div>
+                    </a></div>
+                <div class="link"><a href="https://www.medsci.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.medsci.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">梅斯</div>
+                    </a></div>
+                <div class="link"><a href="https://surgeryreference.aofoundation.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/surgeryreference.aofoundation.org.png"
+                                class="linklogo"></div>
+                        <div class="linknamediv">AOSR</div>
+                    </a></div>
+                <div class="link"><a href="https://journals.lww.com/jaaos/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/journalsaaos.lww.com.png" class="linklogo"></div>
+                        <div class="linknamediv">JAAOS</div>
+                    </a></div>
+                <div class="link"><a href="https://deyixueyuan.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/deyixueyuan.com.png" class="linklogo"></div>
+                        <div class="linknamediv">德医学院</div>
+                    </a></div>
+                <div class="link"><a href="https://www.arthrex.com/resources" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.arthrex.com.png" class="linklogo"></div>
+                        <div class="linknamediv">Arthrex</div>
+                    </a></div>
+                <div class="link"><a href="https://www.orthobullets.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.orthobullets.com.png" class="linklogo"></div>
+                        <div class="linknamediv">Orthobullets</div>
+                    </a></div>
+                <div class="link"><a href="http://www.orthacademy.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.orthacademy.com.png" class="linklogo"></div>
+                        <div class="linknamediv">国家骨科运动</div>
+                    </a></div>
+                <div class="link"><a href="https://www.kanyixue.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.kanyixue.com.png" class="linklogo"></div>
+                        <div class="linknamediv">看医学</div>
+                    </a></div>
+                <div class="link"><a href="https://education.ota.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/education.ota.org.png" class="linklogo"></div>
+                        <div class="linknamediv">ota.org</div>
+                    </a></div>
+                <div class="link"><a href="https://www.rrsurg.com/journal/zgxfcjwkzz" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.rrsurg.com.png" class="linklogo"></div>
+                        <div class="linknamediv">中国修复重建</div>
+                    </a></div>
+                <div class="link"><a href="https://www.wheelessonline.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.wheelessonline.com.png" class="linklogo"></div>
+                        <div class="linknamediv">wheelessonline</div>
+                    </a></div>
+                <div class="link"><a href="https://www.kanyixue.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.kanyixue.com.png" class="linklogo"></div>
+                        <div class="linknamediv">看医学</div>
+                    </a></div>
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section_gfw" class="sectiondiv" data-value="科学上网" style="display: block;">
+            <div class="sectiontitle">科学上网</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="http://www.google.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.google.com.png" class="linklogo"></div>
+                        <div class="linknamediv">google</div>
+                    </a></div>
+                <div class="link"><a href="https://www.youtube.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.youtube.com.png" class="linklogo"></div>
+                        <div class="linknamediv">youtube</div>
+                    </a></div>
+                <div class="link"><a href="https://www.facebook.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.facebook.com.png" class="linklogo"></div>
+                        <div class="linknamediv">facebook</div>
+                    </a></div>
+                <div class="link"><a href="https://x.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/x.com.png" class="linklogo"></div>
+                        <div class="linknamediv">twitter</div>
+                    </a></div>
+                <div class="link"><a href="http://www.boxun.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.boxun.com.png" class="linklogo"></div>
+                        <div class="linknamediv">boxun</div>
+                    </a></div>
+                <div class="link"><a href="http://en.savefrom.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/en.savefrom.net.png" class="linklogo"></div>
+                        <div class="linknamediv">savefrom</div>
+                    </a></div>
+                <div class="link"><a href="https://www.instagram.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.instagram.com.png" class="linklogo"></div>
+                        <div class="linknamediv">instagram</div>
+                    </a></div>
+                <div class="link"><a href="https://www.reddit.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.reddit.com.png" class="linklogo"></div>
+                        <div class="linknamediv">reddit</div>
+                    </a></div>
+                <div class="link"><a href="https://web.telegram.org/k/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/web.telegram.org.png" class="linklogo"></div>
+                        <div class="linknamediv">telegram</div>
+                    </a></div>
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section_cloud" class="sectiondiv" data-value="网盘云" style="display: block;">
+            <div class="sectiontitle">网盘云</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="https://www.icloud.com.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.icloud.com.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">icloud</div>
+                    </a></div>
+                <div class="link"><a href="http://pan.baidu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/pan.baidu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">百度盘</div>
+                    </a></div>
+                <div class="link"><a href="https://www.jianguoyun.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.jianguoyun.com.png" class="linklogo"></div>
+                        <div class="linknamediv">坚果云</div>
+                    </a></div>
+                <div class="link"><a href="http://www.weiyun.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.weiyun.com.png" class="linklogo"></div>
+                        <div class="linknamediv">微云</div>
+                    </a></div>
+                <div class="link"><a href="https://cloud.tencent.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/cloud.tencent.com.png" class="linklogo"></div>
+                        <div class="linknamediv">腾讯云</div>
+                    </a></div>
+                <div class="link"><a href="https://www.ilanzou.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.ilanzou.com.png" class="linklogo"></div>
+                        <div class="linknamediv">蓝奏</div>
+                    </a></div>
+                <div class="link"><a href="https://lanzoup.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/lanzoup.com.png" class="linklogo"></div>
+                        <div class="linknamediv">蓝奏</div>
+                    </a></div>
+                <div class="link"><a href="https://pan.quark.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/pan.quark.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">夸克盘</div>
+                    </a></div>
+                <div class="link"><a href="http://www.ctfile.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.ctfile.net.png" class="linklogo"></div>
+                        <div class="linknamediv">ctfile</div>
+                    </a></div>
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section5" class="sectiondiv" data-value="购物" style="display: block;">
+            <div class="sectiontitle">购物</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="http://www.taobao.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.taobao.com.png" class="linklogo"></div>
+                        <div class="linknamediv">淘宝</div>
+                    </a></div>
+                <div class="link"><a href="http://www.jd.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.jd.com.png" class="linklogo"></div>
+                        <div class="linknamediv">京东</div>
+                    </a></div>
+                <div class="link"><a href="http://www.suning.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.suning.com.png" class="linklogo"></div>
+                        <div class="linknamediv">苏宁</div>
+                    </a></div>
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section6" class="sectiondiv" data-value="视频" style="display: block;">
+            <div class="sectiontitle">视频</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="https://www.youtube.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.youtube.com.png" class="linklogo"></div>
+                        <div class="linknamediv">youtube</div>
+                    </a></div>
+                <div class="link"><a href="https://www.bilibili.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.bilibili.com.png" class="linklogo"></div>
+                        <div class="linknamediv">bilibili</div>
+                    </a></div>
+                <div class="link"><a href="http://www.youku.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.youku.com.png" class="linklogo"></div>
+                        <div class="linknamediv">优酷</div>
+                    </a></div>
+                <div class="link"><a href="https://www.iqiyi.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.iqiyi.com.png" class="linklogo"></div>
+                        <div class="linknamediv">爱奇艺</div>
+                    </a></div>
+                <div class="link"><a href="https://www.douyin.com" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.douyin.com.png" class="linklogo"></div>
+                        <div class="linknamediv">抖音</div>
+                    </a></div>
+
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section7" class="sectiondiv" data-value="腾讯系" style="display: block;">
+            <div class="sectiontitle">腾讯系</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="http://www.qq.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.qq.com.png" class="linklogo"></div>
+                        <div class="linknamediv">腾讯</div>
+                    </a></div>
+                <div class="link"><a href="http://wx.qq.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/wx.qq.com.png" class="linklogo"></div>
+                        <div class="linknamediv">网页微信</div>
+                    </a></div>
+                <div class="link"><a href="https://mp.weixin.qq.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/mp.weixin.qq.com.png" class="linklogo"></div>
+                        <div class="linknamediv">微信公众平台</div>
+                    </a></div>
+                <div class="link"><a href="https://mail.qq.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/mail.qq.com.png" class="linklogo"></div>
+                        <div class="linknamediv">QQ邮箱</div>
+                    </a></div>
+                <div class="link"><a href="https://wx.mail.qq.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/mail.qq.com.png" class="linklogo"></div>
+                        <div class="linknamediv">我的QQ邮箱</div>
+                    </a></div>
+                <div class="link"><a href="https://i.qq.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/i.qq.com.png" class="linklogo"></div>
+                        <div class="linknamediv">QQ空间</div>
+                    </a></div>
+                <div class="link"><a href="http://www.weiyun.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.weiyun.com.png" class="linklogo"></div>
+                        <div class="linknamediv">微云</div>
+                    </a></div>
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section_tech" class="sectiondiv" data-value="科技" style="display: block;">
+            <div class="sectiontitle">科技</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="https://github.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/github.com.png" class="linklogo"></div>
+                        <div class="linknamediv">github.com</div>
+                    </a></div>
+                <div class="link"><a href="https://gitee.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/gitee.com.png" class="linklogo"></div>
+                        <div class="linknamediv">gitee.com</div>
+                    </a></div>
+                <div class="link"><a href="https://flathub.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/flathub.org.png" class="linklogo"></div>
+                        <div class="linknamediv">flathub.org</div>
+                    </a></div>
+                <div class="link"><a href="http://www.w3school.com.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.w3school.com.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">w3school</div>
+                    </a></div>
+                <div class="link"><a href="http://www.w3cschool.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.w3cschool.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">w3cschoolcn</div>
+                    </a></div>
+                <div class="link"><a href="http://www.runoob.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.runoob.com.png" class="linklogo"></div>
+                        <div class="linknamediv">菜鸟</div>
+                    </a></div>
+                <div class="link"><a href="http://www.huihoo.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.huihoo.com.png" class="linklogo"></div>
+                        <div class="linknamediv">灰狐</div>
+                    </a></div>
+                <div class="link"><a href="https://www.jianshu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.jianshu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">简书 </div>
+                    </a></div>
+                <div class="link"><a href="http://segmentfault.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/segmentfault.com.png" class="linklogo"></div>
+                        <div class="linknamediv">segmentfault</div>
+                    </a></div>
+                <div class="link"><a href="http://stackoverflow.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/stackoverflow.com.png" class="linklogo"></div>
+                        <div class="linknamediv">stackoverflow</div>
+                    </a></div>
+                <div class="link"><a href="https://www.zybuluo.com/mdeditor" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.zybuluo.com.png" class="linklogo"></div>
+                        <div class="linknamediv">zl-mdeditor</div>
+                    </a></div>
+                <div class="link"><a href="http://www.bootcss.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.bootcss.com.png" class="linklogo"></div>
+                        <div class="linknamediv">bootcss</div>
+                    </a></div>
+                <div class="link"><a href="http://getbootstrap.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/getbootstrap.com.png" class="linklogo"></div>
+                        <div class="linknamediv">getbootstrap</div>
+                    </a></div>
+                <div class="link"><a href="http://fontawesome.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/fontawesome.com.png" class="linklogo"></div>
+                        <div class="linknamediv">fontawesome.io</div>
+                    </a></div>
+                <div class="link"><a href="http://fontawesome.com.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/fontawesome.com.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">fontawesome.cn</div>
+                    </a></div>
+                <div class="link"><a href="http://jquery.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/jquery.com.png" class="linklogo"></div>
+                        <div class="linknamediv">jquery</div>
+                    </a></div>
+                <div class="link"><a href="http://cli.im/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/cli.im.png" class="linklogo"></div>
+                        <div class="linknamediv">cli.im</div>
+                    </a></div>
+                <div class="link"><a href="http://www.net.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.net.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">万网</div>
+                    </a></div>
+                <div class="link"><a href="http://forum.ubuntu.org.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/forum.ubuntu.org.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">ubuntu论坛</div>
+                    </a></div>
+                <div class="link"><a href="http://www.qiniu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.qiniu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">七牛</div>
+                    </a></div>
+                <div class="link"><a href="https://wiki.woodpecker.org.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/wiki.woodpecker.org.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">啄木鸟</div>
+                    </a></div>
+                <div class="link"><a href="http://www.haoxg.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.haoxg.net.png" class="linklogo"></div>
+                        <div class="linknamediv">ediary</div>
+                    </a></div>
+                <div class="link"><a href="http://www.windows93.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.windows93.net.png" class="linklogo"></div>
+                        <div class="linknamediv">windows93</div>
+                    </a></div>
+                <div class="link"><a href="https://www.zerotier.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.zerotier.com.png" class="linklogo"></div>
+                        <div class="linknamediv">zerotier</div>
+                    </a></div>
+                <div class="link"><a href="https://dy.kukutool.com/douyinweb" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/dy.kukutool.com.png" class="linklogo"></div>
+                        <div class="linknamediv">kukutool</div>
+                    </a></div>
+                <div class="link"><a href="https://bigjpg.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/bigjpg.com.png" class="linklogo"></div>
+                        <div class="linknamediv">bigjpg</div>
+                    </a></div>
+                <div class="link"><a href="https://appimage.github.io/apps/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/appimage.github.io.png" class="linklogo"></div>
+                        <div class="linknamediv">appimage.io</div>
+                    </a></div>
+                <div class="link"><a href="https://www.isharepc.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.isharepc.com.png" class="linklogo"></div>
+                        <div class="linknamediv">乐软博客</div>
+                    </a></div>
+                <div class="link"><a href="http://webstack.cc/en/index.html#" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/webstack.cc.png" class="linklogo"></div>
+                        <div class="linknamediv">webstack.cc</div>
+                    </a></div>
+                <div class="link"><a href="https://www.36kr.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.36kr.com.png" class="linklogo"></div>
+                        <div class="linknamediv">36kr</div>
+                    </a></div>
+                <div class="link"><a href="https://www.leiphone.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.leiphone.com.png" class="linklogo"></div>
+                        <div class="linknamediv">雷锋网</div>
+                    </a></div>
+                <div class="link"><a href="https://www.williamlong.info/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.williamlong.info.png" class="linklogo"></div>
+                        <div class="linknamediv">月光博客</div>
+                    </a></div>
+                <div class="link"><a href="https://www.appinn.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.appinn.com.png" class="linklogo"></div>
+                        <div class="linknamediv">小众软件</div>
+                    </a></div>
+                <div class="link"><a href="https://xbeta.info/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/xbeta.info.png" class="linklogo"></div>
+                        <div class="linknamediv">善用佳软</div>
+                    </a></div>
+                <div class="link"><a href="https://www.cnet.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.cnet.com.png" class="linklogo"></div>
+                        <div class="linknamediv">cnet</div>
+                    </a></div>
+                <div class="link"><a href="https://www.howtogeek.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.howtogeek.com.png" class="linklogo"></div>
+                        <div class="linknamediv">howtogeek</div>
+                    </a></div>
+                <div class="link"><a href="https://www.theverge.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.theverge.com.png" class="linklogo"></div>
+                        <div class="linknamediv">heverge</div>
+                    </a></div>
+                <div class="link"><a href="https://mashable.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/mashable.com.png" class="linklogo"></div>
+                        <div class="linknamediv">mashable</div>
+                    </a></div>
+                <div class="link"><a href="https://www.gsmarena.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.gsmarena.com.png" class="linklogo"></div>
+                        <div class="linknamediv">gsmarena</div>
+                    </a></div>
+                <div class="link"><a href="https://www.techradar.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.techradar.com.png" class="linklogo"></div>
+                        <div class="linknamediv">techradar</div>
+                    </a></div>
+                <div class="link"><a href="https://www.ruanyifeng.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.ruanyifeng.com.png" class="linklogo"></div>
+                        <div class="linknamediv">阮一峰</div>
+                    </a></div>
+                <div class="link"><a href="https://www.zhangxinxu.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.zhangxinxu.com.png" class="linklogo"></div>
+                        <div class="linknamediv">张鑫</div>
+                    </a></div>
+                <div class="link"><a href="https://jspang.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/jspang.com.png" class="linklogo"></div>
+                        <div class="linknamediv">技术胖</div>
+                    </a></div>
+                <div class="link"><a href="https://liaoxuefeng.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/liaoxuefeng.com.png" class="linklogo"></div>
+                        <div class="linknamediv"> 廖雪峰</div>
+                    </a></div>
+                <div class="link"><a href="https://juejin.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/juejin.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">掘金</div>
+                    </a></div>
+                <div class="link"><a href="https://www.52pojie.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.52pojie.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">www.52pojie.cn</div>
+                    </a></div>
+                <div class="link"><a href="https://www.cnblogs.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.cnblogs.com.png" class="linklogo"></div>
+                        <div class="linknamediv">博客园</div>
+                    </a></div>
+                <div class="link"><a href="https://www.csdn.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.csdn.net.png" class="linklogo"></div>
+                        <div class="linknamediv">csdn</div>
+                    </a></div>
+                <div class="link"><a href="http://www.alloyteam.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.alloyteam.com.png" class="linklogo"></div>
+                        <div class="linknamediv">alloyteam</div>
+                    </a></div>
+                <div class="link"><a href="https://www.vbird.org/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.vbird.org.png" class="linklogo"></div>
+                        <div class="linknamediv">鸟哥</div>
+                    </a></div>
+                <div class="link"><a href="http://www.cppblog.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.cppblog.com.png" class="linklogo"></div>
+                        <div class="linknamediv">陈硕cpp</div>
+                    </a></div>
+                <div class="link"><a href="https://blog.codingnow.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/blog.codingnow.com.png" class="linklogo"></div>
+                        <div class="linknamediv">云风</div>
+                    </a></div>
+                <div class="link"><a href="http://zyan.cc/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/zyan.cc.png" class="linklogo"></div>
+                        <div class="linknamediv">张宴</div>
+                    </a></div>
+                <div class="link"><a href="https://www.dongwm.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.dongwm.com.png" class="linklogo"></div>
+                        <div class="linknamediv">小明明</div>
+                    </a></div>
+                <div class="link"><a href="https://docs.python.org/3/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.python.org.png" class="linklogo"></div>
+                        <div class="linknamediv">docs.python</div>
+                    </a></div>
+                <div class="link"><a href="https://tech.meituan.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/tech.meituan.com.png" class="linklogo"></div>
+                        <div class="linknamediv">美团技术</div>
+                    </a></div>
+                <div class="link"><a href="http://www.wowotech.net/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.wowotech.net.png" class="linklogo"></div>
+                        <div class="linknamediv">蜗窝科技</div>
+                    </a></div>
+                <div class="link"><a href="https://coolshell.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/coolshell.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">酷壳</div>
+                    </a></div>
+                <div class="link"><a href="https://www.the5fire.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.the5fire.com.png" class="linklogo"></div>
+                        <div class="linknamediv">the5fire</div>
+                    </a></div>
+                <div class="link"><a href="https://cuiqingcai.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/cuiqingcai.com.png" class="linklogo"></div>
+                        <div class="linknamediv">崔庆才</div>
+                    </a></div>
+                <div class="link"><a href="https://fishc.com.cn/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/fishc.com.cn.png" class="linklogo"></div>
+                        <div class="linknamediv">fishc</div>
+                    </a></div>
+                <div class="link"><a href="https://www.codingdict.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.codingdict.com.png" class="linklogo"></div>
+                        <div class="linknamediv">codingdict</div>
+                    </a></div>
+                <div class="link"><a href="https://sspai.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/sspai.com.png" class="linklogo"></div>
+                        <div class="linknamediv">少数派</div>
+                    </a></div>
+                <div class="link"><a href="https://developer.mozilla.org/zh-CN/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/developer.mozilla.org.png" class="linklogo"></div>
+                        <div class="linknamediv">mmdn</div>
+                    </a></div>
+                <div class="link"><a href="https://www.docker.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.docker.com.png" class="linklogo"></div>
+                        <div class="linknamediv">docker</div>
+                    </a></div>
+                <div class="link"><a href="https://www.cpolar.com/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.cpolar.com.png" class="linklogo"></div>
+                        <div class="linknamediv">cpolar</div>
+                    </a></div>
+
+
+                <!-- ADD_BOOKMARK_HERE.end -->
+            </div>
+        </div>
+        <div id="section_local" class="sectiondiv" data-value="本地链接" style="display: block;">
+            <div class="sectiontitle">本地链接</div>
+            <div class="linksdiv">
+                <!-- ADD_BOOKMARK_HERE.begin -->
+                <div class="link"><a href="http://localhost/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/localhost.png" class="linklogo"></div>
+                        <div class="linknamediv">localhost</div>
+                    </a></div>
+
+                <div class="link"><a
+                        href="file:///home/xun/homem/sources/languge/python/axun2024/axun/jswechateditor/axun05a-Markdown2Html2/index.html"
+                        target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.synbe.com.png" class="linklogo"></div>
+                        <div class="linknamediv">mdeditor</div>
+                    </a></div>
+                <div class="link"><a
+                        href="file:///home/xun/homem/sources/languge/python/axun2024/axun/jsaxwebedit/index.html"
+                        target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.synbe.com.png" class="linklogo"></div>
+                        <div class="linknamediv">axwebedit</div>
+                    </a></div>
+                <div class="link"><a
+                        href="file:///home/xun/homem/sources/languge/python/axun2024/axun/jswechat-web2/index.html"
+                        target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.synbe.com.png" class="linklogo"></div>
+                        <div class="linknamediv">wechat-web2</div>
+                    </a></div>
+                <div class="link"><a
+                        href="file:///home/xun/homem/sources/languge/python/axun2024/axun/jswechat-web/wechat.html"
+                        target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.synbe.com.png" class="linklogo"></div>
+                        <div class="linknamediv">wechat-web</div>
+                    </a></div>
+                <div class="link"><a
+                        href="file:///home/xun/homem/sources/languge/python/axun2024/axun/jswin12-main/desktop.html"
+                        target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.synbe.com.png" class="linklogo"></div>
+                        <div class="linknamediv">win12-main</div>
+                    </a></div>
+                <div class="link"><a
+                        href="file:///home/xun/homem/sources/languge/python/axun2024/axun/jsbookmarks2/index.html"
+                        target="_blank">
+                        <div class="linklogodiv"><img src="./logo/www.synbe.com.png" class="linklogo"></div>
+                        <div class="linknamediv">mybookmarks</div>
+                    </a></div>
+                <div class="link"><a href="http://localhost:8888/gui/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/localhost:8888.png" class="linklogo"></div>
+                        <div class="linknamediv">local.resiliosync</div>
+                    </a></div>
+                <div class="link"><a href="http://127.0.0.1:8384" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/127.0.0.1:8384.png" class="linklogo"></div>
+                        <div class="linknamediv">local.syncthing</div>
+                    </a></div>
+                <div class="link"><a href="http://localhost/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/localhost.png" class="linklogo"></div>
+                        <div class="linknamediv">localhost</div>
+                    </a></div>
+                <div class="link"><a href="http://192.168.1.14:8080/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/192.168.1.14:8080.png" class="linklogo">
+                        </div>
+                        <div class="linknamediv">localhost:8080</div>
+                    </a></div>
+                <div class="link"><a href="http://192.168.1.11:80/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/192.168.1.11:80.png" class="linklogo"></div>
+                        <div class="linknamediv">pi.ngin:80</div>
+                    </a></div>
+
+                <div class="link"><a href="http://192.168.1.11:8080/" target="_blank">
+                    <div class="linklogodiv"><img src="./logo/192.168.1.11:8080.png" class="linklogo"></div>
+                    <div class="linknamediv">pi.http:8080</div>
+                </a></div>
+
+                <div class="link"><a href="http://1e14024b.r15.cpolar.top/" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/1e14024b.r15.cpolar.top.png" class="linklogo"></div>
+                        <div class="linknamediv">pi.net.cpolar</div>
+                    </a></div>
+
+                <div class="link"><a href="http://192.168.1.11:8384" target="_blank">
+                        <div class="linklogodiv"><img src="./logo/192.168.1.11:8384.png" class="linklogo"></div>
+                        <div class="linknamediv">pi.syncthing</div>
+                    </a></div>
+            <!-- ADD_BOOKMARK_HERE.end -->
+        </div>
+    </div>
+    <div id="section_untitle" class="sectiondiv" data-value="未分类" style="display: block;">
+        <div class="sectiontitle">未分类</div>
+        <div class="linksdiv">
+            <!-- ADD_BOOKMARK_HERE.begin -->
+            <div class="link"><a href="https://www.langsong.site/" target="_blank">
+                    <div class="linklogodiv"><img src="./logo/www.langsong.site.png" class="linklogo"></div>
+                    <div class="linknamediv">朗诵网</div>
+                </a></div>
+            <!-- ADD_BOOKMARK_HERE.end -->
+        </div>
+    </div>
+    <!-- ++++++++++++++++++++++++分界线：以下是编辑器区代码+++++++++++++++++++++++++++++++ -->
+    <div id="section1" class="sectiondiv" data-value="书签编辑器" style="display: block;">
+        <div class="sectiontitle">新增书签</div>
+        <div class="bookmarkeditor">
+            <div class="toolsbar">
+                <button id="btn-cleartextarea">清空内容</button>
+                <button id="btn-removeEmptyLines">删除空行</button>
+                <button id="btn-copytextarea">复制内容</button>
+                <button id="btn-addsection">新增分类</button>
+                <button id="btn-save">保存</button>
+            </div>
+            <div class="textarea-wrapper">
+                <textarea class="textarea-linenumbers-style" id="textarea-linenumbers" disabled="true"></textarea>
+                <textarea class="textarea-editor-style" id="textarea-editor" rows="10"></textarea>
+            </div>
+            <div class="toolsbar">
+                <select class="selector" id="sectionSelector"></select>
+                <input type="text" id="input-urllogo" placeholder="输入logo名称(如:baidu.png)">
+                <input type="text" id="input-urlname" placeholder="输入网站名称">
+                <input type="text" id="input-urlsite" placeholder="输入网址">
+                <button id="btn-addbookmark">添加链接</button>
+            </div>
+
+        </div>
+        <!-- <div id="webarea">这里是显示网页的内容</div> -->
+        <div class="linksdiv">
+        </div>
+    </div>
+    </div>
+    <script>
+        //  显示所选section内容
+        function showContent(sectionId) {
+            // 隐藏所有section
+            document.querySelectorAll('#content > div').forEach(section => {
+                section.style.display = 'none';
+            });
+            // 显示对应ID的section
+            const sectionToShow = document.getElementById(sectionId);
+            if (sectionToShow) {
+                sectionToShow.style.display = 'block';
+                // 滚动到指定的section
+                sectionToShow.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        //定位:滚动到所选section内容
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' }); // 平滑滚动到指定的section
+            }
+        }
+        // 添加激活的类到选中的链接
+        function updateSidebarActive(selectedLink) {
+            // 移除所有激活的类
+            const sidebarLinks = document.querySelectorAll('#sidebar ul li a');
+            sidebarLinks.forEach(link => link.classList.remove('active'));
+            // 添加激活的类到选中的链接
+            selectedLink.classList.add('active');
+        }
+        // ==========================  书签编辑器.begin=====================//
+        // 插入文本到光标位置的函数
+        function insertAtCursor(element, value) {
+            if (document.selection) { // IE
+                element.focus();
+                document.selection.createRange().text = value;
+            } else if (typeof element.selectionStart == "number" && typeof element.selectionEnd == "number") {
+                let startPos = element.selectionStart;
+                let endPos = element.selectionEnd;
+                element.value = element.value.substring(0, startPos) + value + element.value.substring(endPos, element.value.length);
+                element.selectionStart = startPos + value.length;
+                element.selectionEnd = startPos + value.length;
+            } else {
+                element.value += value;
+            }
+        }
+        /// 打开网址,加载网页
+        function loadWebContent() {
+            // 获取输入的网址
+            const url = document.getElementById('input-urlsite').value;
+            // 获取显示网页内容的 div
+            const webArea = document.getElementById('webarea');
+            // 移除之前可能加载的内容
+            webArea.innerHTML = '';
+            // 创建一个 iframe 并设置其 src 属性为输入的网址
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.style.width = '100%';
+            iframe.style.height = '9em'; // 设置合适的高度或通过 CSS 设置
+            iframe.style.border = 'none'; // 根据需要设置样式
+            // 将 iframe 添加到 div 中
+            webArea.appendChild(iframe);
+        };
+        /// 截图
+        function capture2Image(sectionId, imageName) {
+            const capturearea = document.getElementById(sectionId); // 使用变量sectionId而不是字符串'sectionId'
+            if (!capturearea) {
+                console.error('Element with id ' + sectionId + ' not found.');
+                return;
+            }
+            // 使用HTML2Canvas库将指定元素的内容转换为canvas
+            html2canvas(capturearea).then(function (canvas) {
+                // canvas.toDataURL() 获取canvas图片的Base64编码
+                const image = canvas.toDataURL("image/png");
+                // 创建一个a标签用于下载
+                const link = document.createElement('a');
+                link.download = imageName; // 设置下载文件名
+                link.href = image; // 设置图片链接
+                document.body.appendChild(link); // 将链接添加到文档中
+                link.click(); // 触发下载
+                document.body.removeChild(link); // 下载后移除链接
+            }).catch(function (error) {
+                console.error('Error capturing element as image: ', error);
+            });
+        }
+        /// 添加右上角的删除按钮
+        function addDeleteButtonToLinks() {
+            // 获取 #section1 中的 .linksdiv 元素
+            const linksDiv = document.querySelector('#section1 .linksdiv');
+            if (!linksDiv) return;
+            // 获取 .linksdiv 中的所有 .link 元素
+            const links = linksDiv.querySelectorAll('.link');
+            // 为每个 .link 元素添加删除按钮
+            links.forEach(function (link) {
+                // 创建删除按钮
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'X'; // 使用 '×' 符号作为删除按钮的文本
+                deleteButton.className = 'delete-btn'; // 可以为删除按钮添加样式
+                // 将删除按钮添加到 .link 元素的右上角
+                link.appendChild(deleteButton);
+                // 为删除按钮添加点击事件监听器
+                deleteButton.addEventListener('click', function () {
+                    // 删除对应的 .link 元素
+                    link.remove();
+                    const textareaEditor = document.getElementById('textarea-editor');
+                    textareaEditor.value = "";
+                    textareaEditor.value = linksDiv.innerHTML;
+                    cleanTextareaContent();
+                });
+            });
+        }
+        //删除所有 `<button class="delete-btn">X</button>` 标签
+        function cleanTextareaContent() {
+            const textarea = document.getElementById('textarea-editor');
+            let content = textarea.value;
+            // 检查并删除所有 `<button class="delete-btn">X</button>` 标签
+            const buttonRegex = /<button class="delete-btn">X<\/button>/g;
+            if (buttonRegex.test(content)) {
+                content = content.replace(buttonRegex, '');
+            }
+            // 更新 `<textarea>` 的内容
+            textarea.value = content;
+        }
+        /// 禁止#sectionID内所有a默认功能
+        function disableLinksInSection(sectionId) {
+            const links = document.querySelectorAll(`#${sectionId} a`);
+            links.forEach(function (link) {
+                link.style.pointerEvents = 'none';
+                link.style.color = 'inherit';
+                link.style.textDecoration = 'none';
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                });
+            });
+        }
+        function removeEmptyLines() {
+            // 获取textarea元素
+            var textarea = document.getElementById('textarea-editor');
+            // 获取textarea的值
+            var value = textarea.value;
+            // 替换连续的换行符为单个换行符
+            var newValue = value.replace(/(\r\n|\r|\n)+/g, '\n');
+            // 设置更新后的值回textarea
+            textarea.value = newValue;
+        }
+        // 监听输入框的变化
+        function listenInputOfUrlSite() {
+            // 监听输入框的变化
+            document.getElementById('input-urlsite').addEventListener('input', function () {
+                var url = this.value;
+                // 检查网址是否以http://、https://或file:///开头
+                if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('file:///')) {
+                    alert('请正确输入！');
+                    this.value = ''; // 清空输入框
+                } else {
+                    // 找到第三个斜杠的位置
+                    var thirdSlashIndex = url.indexOf('/', 10); // 从索引10开始查找，以跳过协议部分
+                    if (thirdSlashIndex !== -1) {
+                        // 删除第三个斜杠及其后面的所有内容
+                        var domain = url.substring(0, thirdSlashIndex);
+                        domain = domain.replace(/^https?:\/\/|file:\/\/\/?/, '');
+                        document.getElementById('input-urllogo').value = domain + '.png';
+                        document.getElementById('input-urlname').value = domain;
+                    } else {
+                        // 如果没有找到第三个斜杠，使用整个URL（不包括协议部分）
+                        var domain = url.replace(/^https?:\/\/|file:\/\/\/?/, '');
+                        document.getElementById('input-urllogo').value = domain + '.png';
+                        document.getElementById('input-urlname').value = domain;
+                    }
+                }
+            });
+        }
+        // 监听textarea内容变化,每当textarea 内容变化时，更新linksDiv的内容
+        function listenTextAreaToLinksDiv() {
+            const textArea = document.getElementById('textarea-editor');
+            const linksDiv = document.getElementById('section1').querySelector('.linksdiv');
+            // 监听textarea内容变化
+            textArea.addEventListener('input', function () {
+                // 每当textarea内容变化时，更新linksDiv的内容
+                cleanTextareaContent();
+                linksDiv.innerHTML = textArea.value;
+            });
+        }
+        // 创建section选择列表
+        function creatSecitonSelector() {
+            const selectElement = document.getElementById('sectionSelector');
+            const sections = document.querySelectorAll('#content .sectiondiv');
+            const textareaEditor = document.getElementById('textarea-editor');
+            const section1LinksDiv = document.querySelector('#section1 .linksdiv'); // 确保这个元素存在  
+            // 清空并重新生成选项  
+            function populateSelect() {
+                selectElement.innerHTML = '';
+                // 添加section选项  
+                sections.forEach(section => {
+                    const option = document.createElement('option');
+                    option.value = section.id;
+                    option.textContent = section.getAttribute('data-value') || section.id;
+                    selectElement.appendChild(option);
+                });
+                // 添加空白选项  
+                const blankOption = document.createElement('option');
+                blankOption.value = '';
+                blankOption.textContent = '__空白__';
+                selectElement.appendChild(blankOption);
+                // 添加html选项（注意：这可能会导致性能问题）  
+                // const htmlOption = document.createElement('option');
+                // htmlOption.value = 'html'; // 更改value以更清晰地表示这个选项  
+                // htmlOption.textContent = '<html>';
+                // selectElement.appendChild(htmlOption);
+                // 添加"新增分类"选项  
+                const sectionOption = document.createElement('option');
+                sectionOption.value = 'addSection_';
+                sectionOption.textContent = '新增分类'; // 更改显示的文本以更清晰地表示这个选项  
+                selectElement.appendChild(sectionOption);
+            }
+            populateSelect(); // 初次加载时生成选项  
+            // 为select元素添加变化事件监听器  
+            selectElement.addEventListener('change', function () {
+                const selectedSectionId = this.value;
+                textareaEditor.value = '';
+                section1LinksDiv.innerHTML = '';
+                if (selectedSectionId) {
+                    let content;
+                    if (selectedSectionId === 'content') {
+                        content = document.getElementById('content').innerHTML;
+                    } else if (selectedSectionId === 'body') {
+                        content = document.body.outerHTML;
+                    } else {
+                        const selectedSection = document.getElementById(selectedSectionId);
+                        if (selectedSection) {
+                            const linksDiv = selectedSection.querySelector('.linksdiv');
+                            content = linksDiv ? linksDiv.innerHTML : '';
+                        }
+                    }
+                    textareaEditor.value = content;
+                    section1LinksDiv.innerHTML = content;
+                    cursorPosition()
+                    addDeleteButtonToLinks();
+                    disableLinksInSection('section1');
+                }
+            });
+            // 设置默认选中值（如果需要）  
+            // selectElement.value = "section1";  
+        }
+        function addlineNumbersToTextArea() {
+            const textarea = document.getElementById('textarea-editor');
+            const lineNumbers = document.getElementById('textarea-linenumbers');
+            function updateLineNumbers() {
+                lineNumbers.value = '';
+                const lines = textarea.value.split('\n');
+                lines.forEach((line, index) => {
+                    // const lineNum = document.createElement('div');
+                    // lineNum.textContent = index + 1; // 行号从1开始
+                    // lineNumbers.appendChild(lineNum);
+                    lineNumbers.value += index + 1;
+                    lineNumbers.value += "\n";
+                });
+            }
+            updateLineNumbers(); // 初始化行号
+            textarea.addEventListener('input', updateLineNumbers); // 监听 textarea 变化
+            // 监听滚动事件并同步行号滚动位置
+            textarea.addEventListener('scroll', function () {
+                lineNumbers.scrollTop = textarea.scrollTop;
+            });
+        }
+        function genrateSideBarListContent() {
+            const sidebar = document.getElementById('sidebar');
+            const sections = document.querySelectorAll('#content .sectiondiv'); // 获取所有section
+            // 清空现有的列表
+            const sidebarList = sidebar.querySelector('ul') || document.createElement('ul');
+            sidebar.appendChild(sidebarList);
+            sidebarList.innerHTML = ''; // 清空现有的列表
+            sections.forEach(section => {
+                let li = document.createElement('li');
+                let a = document.createElement('a');
+                a.setAttribute('href', '#' + section.id);
+                a.addEventListener('click', function (e) {
+                    e.preventDefault(); // 阻止默认的锚点跳转行为
+                    showContent(section.id);
+                });
+                // 创建一个<div>并设置类名和文本内容
+                let sidebarLiDiv = document.createElement('div');
+                sidebarLiDiv.className = 'sidebarlidiv';
+                sidebarLiDiv.textContent = section.getAttribute('data-value') || section.id;
+                // 将<div>添加到<a>标签中
+                a.appendChild(sidebarLiDiv);
+                // 将<a>标签添加到<li>标签中
+                li.appendChild(a);
+                // 将<li>标签添加到sidebar列表中
+                sidebarList.appendChild(li);
+            });
+        }
+        ///  光标定位到:ADD_BOOKMARK_HERE
+        function cursorPosition() {
+            const textArea = document.getElementById('textarea-editor');
+            // 获取<textarea>中的文本
+            const text = textArea.value;
+            // 查找"ADD_BOOKMARK_HEREA"的位置
+            const index = text.indexOf("<!-- ADD_BOOKMARK_HERE.end -->");
+            // 检查是否找到了"ADD_BOOKMARK_HEREA"
+            if (index !== -1) {
+                // 找到"ADD_BOOKMARK_HEREA"所在行的行首位置
+                // 从"ADD_BOOKMARK_HEREA"的位置开始向前查找换行符
+                let lineStartIndex = text.lastIndexOf("\n", index - 1) + 1;
+                // 如果"ADD_BOOKMARK_HEREA"是第一行，则lineStartIndex应该是0
+                if (lineStartIndex < 0) {
+                    lineStartIndex = 0;
+                }
+                // 在"ADD_BOOKMARK_HEREA"的行首插入一个空行
+                const newText = text.substring(0, lineStartIndex) + "\n" + text.substring(lineStartIndex);
+                // 更新<textarea>的值
+                textArea.value = newText;
+                // 将光标移动到新插入的空行的行首
+                textArea.selectionStart = lineStartIndex;
+                textArea.selectionEnd = lineStartIndex;
+                textArea.focus(); // 确保textarea获得焦点
+            }
+        }
+        function showTemporaryAlert(message, duration) {
+            // 创建一个div来作为自定义的alert框
+            var alertDiv = document.createElement('div');
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20%';
+            alertDiv.style.left = '50%';
+            alertDiv.style.transform = 'translate(-50%, -50%)';
+            alertDiv.style.padding = '20px';
+            alertDiv.style.backgroundColor = 'green'; // 红色背景
+            alertDiv.style.color = 'white';
+            alertDiv.style.zIndex = '1000';
+            alertDiv.style.borderRadius = '5px';
+            alertDiv.innerText = message;
+            // 添加到body中
+            document.body.appendChild(alertDiv);
+            // 设置定时器，一段时间后移除alertDiv
+            setTimeout(function () {
+                document.body.removeChild(alertDiv);
+            }, duration);
+        }
+        function disableButtonID(btnID) {
+            var disableButton = document.getElementById(btnID);
+            disableButton.disabled = true;
+        }
+        function enableButtonID(btnID) {
+            var enableButton = document.getElementById(btnID);
+            enableButton.disabled = false;
+        }
+        function saveBookmarks() {
+            const styleSheet = document.querySelector('style[data-style-id="htmlStyle"]').outerHTML;
+            const headContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>myBookmarks</title>\n`
+                + styleSheet + "\n</head>\n"
+            const currentSectionID = sectionSelector.value;
+            const contentIDContent = document.getElementById(currentSectionID).querySelector('.linksdiv').innerHTML;
+            // alert(contentIDContent);
+            const bodyContent = document.body.outerHTML;
+            const textArea = document.getElementById('textarea-editor');
+            const textAreaContent = textArea.value;
+            // 构造allHtmlContent
+            const allHtmlContent = headContent + "\n" + bodyContent + "\n" + "</html>";
+            // 转义contentIDContent中的特殊字符
+            const escapedcontentIDContent = contentIDContent.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            // 直接使用字符串replace方法替换contentIDContent
+            const section1LinksDiv = document.getElementById("section1").querySelector('.linksdiv').innerHTML;
+            const newallHtmlContent = allHtmlContent.replace(contentIDContent, textAreaContent).replace(section1LinksDiv, "\n").replace(/style=\"display: none;\"/g, "style=\"display: block;\"");
+            // 创建一个Blob对象，包含textarea的内容
+            const blob = new Blob([newallHtmlContent], { type: 'text/html' }); // 注意这里应该是 'text/html'
+            // 创建一个指向该Blob的URL
+            const url = URL.createObjectURL(blob);
+            // 创建一个<a>标签用于下载
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            // 模拟点击<a>标签以下载文件
+            a.click();
+            // 清理：移除<a>标签并释放URL对象
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+        function saveSection() {
+            const styleSheet = document.querySelector('style[data-style-id="htmlStyle"]').outerHTML;
+            const headContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>myBookmarks</title>\n`
+                + styleSheet + "\n</head>\n"
+            const bodyContent = document.body.outerHTML;
+            const textArea = document.getElementById('textarea-editor');
+            const textAreaContent = textArea.value;
+            const contentIDContent0 = document.getElementById("content").innerHTML;
+            // 转义contentIDContent中的特殊字符
+            const escapedcontentIDContent = contentIDContent0.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            const section1LinksDiv = document.getElementById("section1").querySelector('.linksdiv').innerHTML;
+            const contentIDContent1 = contentIDContent0.replace(section1LinksDiv, "\n");
+            const newContentIDContent = contentIDContent1 + "\n" + textAreaContent;
+            // 构造allHtmlContent
+            const allHtmlContent = headContent + "\n" + bodyContent + "\n</html>";
+            // 直接使用字符串replace方法替换contentIDContent
+            const newAllHtmlContent = allHtmlContent.replace(contentIDContent0, newContentIDContent).replace(/style=\"display: none;\"/g, "style=\"display: block;\"");
+            // 创建一个Blob对象，包含textarea的内容
+            const blob = new Blob([newAllHtmlContent], { type: 'text/html' }); // 注意这里应该是 'text/html'
+            // 创建一个指向该Blob的URL
+            const url = URL.createObjectURL(blob);
+            // 创建一个<a>标签用于下载
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            // 模拟点击<a>标签以下载文件
+            a.click();
+            // 清理：移除<a>标签并释放URL对象
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+        /////////////////以上是函数fuciton////////////////////////
+        document.getElementById('btn-addbookmark').addEventListener('click', function () {
+            const currentSection = document.getElementById('section1');
+            if (currentSection) {
+                const linksDiv = currentSection.querySelector('.linksdiv');
+                const urlLogo = document.getElementById('input-urllogo').value;
+                const urlName = document.getElementById('input-urlname').value;
+                const urlSite = document.getElementById('input-urlsite').value;
+                if (urlLogo && urlName && urlSite) {
+                    // 创建包含的div结构
+                    const newLink = document.createElement('div');
+                    newLink.className = 'link';
+                    // 创建一个新的a标签，用于存放链接内容
+                    const alinkContent = document.createElement('a');
+                    alinkContent.href = urlSite;
+                    alinkContent.target = "_blank";
+                    const logoDiv = document.createElement('div');
+                    logoDiv.className = 'linklogodiv';
+                    const logoImg = document.createElement('img');
+                    logoImg.src = `./logo/${urlLogo}`;
+                    logoImg.className = 'linklogo';
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'linknamediv';
+                    nameDiv.textContent = urlName;
+                    logoDiv.appendChild(logoImg);
+                    alinkContent.appendChild(logoDiv);
+                    alinkContent.appendChild(nameDiv);
+                    newLink.appendChild(alinkContent);
+                    // 获取textarea元素
+                    const textArea = document.getElementById('textarea-editor');
+                    // 将newLink.outerHTML插入到textarea的光标位置
+                    insertAtCursor(textArea, newLink.outerHTML);
+                    insertAtCursor(textArea, "\n");
+                    // loadWebContent();
+                    // 清空输入框
+                    document.getElementById('input-urllogo').value = '';
+                    document.getElementById('input-urlname').value = '';
+                    document.getElementById('input-urlsite').value = '';
+                    // 如果 .linksdiv 存在，则清空其内容
+                    if (linksDiv) {
+                        linksDiv.innerHTML = '';
+                    }
+                    // 将textarea的内容添加到linksDiv中
+                    linksDiv.innerHTML += textArea.value;
+                    addDeleteButtonToLinks();
+                    disableLinksInSection('section1');
+                };
+            }
+        });
+        document.getElementById('btn-copytextarea').addEventListener('click', function () {
+            // 获取textarea元素
+            const textArea = document.getElementById('textarea-editor');
+            // 获取textarea的值
+            const textToCopy = textArea.value;
+            // 使用navigator.clipboard.writeText()将文本复制到剪贴板
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    console.log('Text copied to clipboard');
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            showTemporaryAlert("已复制到剪贴版!", 500);
+        });
+        document.getElementById('btn-cleartextarea').addEventListener('click', function () {
+            // 获取textarea元素
+            const textArea = document.getElementById('textarea-editor');
+            textArea.value = "";
+            // 获取当前显示的section
+            const currentSection = document.getElementById('section1');
+            // 获取 .linksdiv 元素
+            const linksDiv = currentSection.querySelector('.linksdiv');
+            // 如果 .linksdiv 存在，则清空其内容
+            if (linksDiv) {
+                linksDiv.innerHTML = '';
+            }
+            const selectElement = document.getElementById('sectionSelector');
+            // 设置选中空白选项
+            selectElement.value = '';
+        });
+        document.getElementById('btn-removeEmptyLines').addEventListener('click', function () {
+            removeEmptyLines();
+        });
+        document.getElementById('btn-addsection').addEventListener('click', function () {
+            // 获取div的innerHTML，即其内部的HTML内容
+            var divContent = `     
+            <div id="section?" class="sectiondiv" data-value="新分类" style="display: block;">
+                <div class="sectiontitle">新分类</div>
+                <div class="linksdiv">
+                    <!-- ADD_BOOKMARK_HERE.begin -->
+                    <!-- ADD_BOOKMARK_HERE.end -->
+                </div>
+            </div>
+            `
+            // 获取textarea元素
+            const textArea = document.getElementById('textarea-editor');
+            // 将div的内容设置为textarea的值
+            textArea.value = divContent;
+            cursorPosition();
+            // 设置select值
+            const selectElement = document.getElementById('sectionSelector');
+            selectElement.value = "addSection_";
+        });
+        document.getElementById('btn-save').addEventListener('click', function () {
+            var textarea = document.getElementById('textarea-editor');
+            // 检查textarea中是否包含特定的字符串
+            if (textarea.value.includes('<div id="section')) {
+                saveSection();
+            } else {
+                saveBookmarks();
+            }
+        });
+        // 调用的函数
+        document.addEventListener('DOMContentLoaded', function () {
+            genrateSideBarListContent();
+            creatSecitonSelector();
+            listenInputOfUrlSite();
+            addlineNumbersToTextArea();
+            disableLinksInSection('section1');
+            removeEmptyLines();
+            cleanTextareaContent();
+            addDeleteButtonToLinks();
+        })
+    </script>
+</body>
+
+</html>

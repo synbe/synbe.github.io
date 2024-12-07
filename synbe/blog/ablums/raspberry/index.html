@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>树莓派</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"id="viewport"name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../../src/jquery/jquery-2.1.4.min.js"></script>
+  <script src="../../src/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../../src/highlight/highlight.min.js"></script>
+  <script >hljs.initHighlightingOnLoad();</script>  
+  <script type="text/javascript" src="../../src/jspdf/html2canvas.js"></script>
+  <script type="text/javascript" src="../../src/jspdf/jsPdf.debug.js"></script>
+  <link href="../../src/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/docs.min.css" rel="stylesheet" media="screen">
+  <link href="../../src/assets/style_index.css" rel="stylesheet" media="screen">
+  <link href="../../src/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../../src/highlight/styles/monokai-sublime.css" rel="stylesheet">
+  <div class="row-fluid  hidden-phone">
+  <div class="span2"></div>
+  <div class="span8 bg001">
+  <br>
+  <p class="milky"> 
+        <!--<i class="fa fa-spinner fa-pulse"></i>_____此为fontsome图标___________-->
+        &nbsp;synBE
+   </p>
+  </div>
+  <div class="span2"></div>
+  </div>
+
+  <div class="row-fluid main"><!--_____main___________-->
+  <div class="sidebar span2 hidden-phone bg002  milky">
+  <!--__synBE__ -->
+  </div>
+  <div class="content span8"><!--__maincontent2_____ -->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">树莓派</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#raspbian在linux下烧录系统">raspbian在Linux下烧录系统</a></li>
+<li><a href="#树莓派没有声音的解决方案">1. 树莓派没有声音的解决方案</a></li>
+<li><a href="#树莓派---修改pi账号密码开启root账号">2. 树莓派 - 修改pi账号密码,开启root账号</a></li>
+<li><a href="#手动来安装中文字体">3. 手动来安装中文字体。</a></li>
+<li><a href="#lcd和hdmi相互切换">LCD和HDMI相互切换</a></li>
+<li><a href="#树莓派上安装archlinux">树莓派上安装ArchLinux</a></li>
+<li><a href="#树莓派上的软件安装和卸载命令汇总">树莓派上的软件安装和卸载命令汇总</a>
+<ul>
+<li><a href="#aptitude-命令">aptitude 命令</a></li>
+</ul></li>
+<li><a href="#用树莓派搭建git私有服务器">用树莓派搭建Git私有服务器</a>
+<ul>
+<li><a href="#passwd-git">passwd git</a></li>
+</ul></li>
+<li><a href="#在树莓派安装ftp服务器">在树莓派安装ftp服务器</a></li>
+<li><a href="#linux-下-apache启动停止重启命令">linux 下 apache启动、停止、重启命令</a></li>
+<li><a href="#用树莓派搭建git私有服务器-1">用树莓派搭建Git私有服务器</a></li>
+<li><a href="#基于-samba-实现-nas-系统">基于 Samba 实现 NAS 系统</a></li>
+<li><a href="#在树莓派上安装firefox浏览器">在树莓派上安装firefox浏览器</a></li>
+<li><a href="#树莓派安装xfce-桌面系统">树莓派安装xfce 桌面系统</a></li>
+<li><a href="#树莓派设置键盘">树莓派设置键盘</a></li>
+<li><a href="#lcd-3.5驱动">LCD 3.5驱动：</a></li>
+<li><a href="#显示管理器display-manager">显示管理器（Display Manager）</a></li>
+<li><a href="#start-lightdm">start lightdm</a></li>
+<li><a href="#中文支持">中文支持</a></li>
+<li><a href="#startx">startx</a></li>
+<li><a href="#windows下-通过ssh使用树莓派">windows下 通过SSH使用树莓派</a></li>
+<li><a href="#windows下-用vnc图形界面远程控制树莓派">windows下 用VNC图形界面远程控制树莓派</a></li>
+<li><a href="#realvnctightvncultravnc">realVNC、tightVNC、ultraVNC</a></li>
+<li><a href="#vnc-comparison-and-review-tightvnc-vs-ultravnc-vs-realvnc">VNC Comparison and Review: TightVNC Vs UltraVNC Vs RealVNC</a></li>
+<li><a href="#ultravnc-介绍">UltraVNC 介绍</a></li>
+<li><a href="#树莓派手动指定静态ip和dns-终极解决大法">树莓派手动指定静态IP和DNS 终极解决大法</a></li>
+<li><a href="#使用静态-ip-地址">使用静态 IP 地址</a></li>
+<li><a href="#设置树莓派3-b的静态ip">设置树莓派3 B+的静态IP</a></li>
+<li><a href="#树莓派2网线直连电脑ssh">树莓派2——网线直连电脑SSH</a></li>
+<li><a href="#更简单的方法实现远程桌面">更简单的方法实现远程桌面</a></li>
+<li><a href="#树莓派-raspberry-pi-设置无线上网">树莓派 Raspberry Pi 设置无线上网</a></li>
+<li><a href="#树莓派3如何使用蓝牙">树莓派3如何使用蓝牙</a></li>
+<li><a href="#session-setup-failed-nt_status_logon_failure">session setup failed: NT_STATUS_LOGON_FAILURE (</a>
+<ul>
+<li><a href="#smbclient命令-网络服务器">smbclient命令 网络服务器</a></li>
+<li><a href="#smbclient使用方法及常见问题">smbclient使用方法及常见问题</a></li>
+<li><a href="#inux挂载samba文件系统的方法">inux挂载samba文件系统的方法</a></li>
+<li><a href="#linux-mount-unknown-filesystem-type-smbfs解决方法记录">linux-mount: unknown filesystem type ’smbfs’解决方法记录</a></li>
+<li><a href="#网络文件系统-nfs">网络文件系统 (NFS)</a></li>
+</ul></li>
+</ul>
+</nav>
+<h2 id="raspbian在linux下烧录系统">raspbian在Linux下烧录系统</h2>
+<p>下载完成后，我们打开终端，找到下载的文件。使用“unzip 2016-xx-xx-xxxxx.zip”(替换为您自己的文件名)命令解压文件。然后得到2016-xx-xx-xxxxx.img文件，此文件就是我们要的镜像。</p>
+<p>得到镜像文件后，我们要将此镜像文件写入事先准备的TF卡内。</p>
+<p>将TF卡放入读卡器，然后接入电脑。使用“sudo fdisk -l”命令查看此设备的名称，在我的电脑上是/dev/sdc（因为我的电脑已经有两个硬盘了）。</p>
+<p>写镜像到sd卡， if= 是你下载的镜像的文件（默认下载是zip文件，需要先解压出来）地址， of= 是你要写入的地址，就是一开始让你记录的sd卡的设备地址。一定要明确，是sd卡整个的地址，不是某个分区的地址。</p>
+<pre><code>dd bs=4M if=2017-04-10-raspbian-jessie.img  of=/dev/sdc</code></pre>
+<p>块大小设置成 4M 一般没有问题，如果失败了，设置1M试试，当然会更慢。</p>
+<p>回车，执行命令等它执行完毕。这个步骤时间比较长，要耐心等待。</p>
+<p>最后不要忘了运行 sync ，确保cache中的数据都被写到了sd卡上。</p>
+<p>在使用dd命令时，不要中断，一定要等到如上图所显示的写入成功再拔出读卡器。</p>
+<p>移除sd卡，插到pi.</p>
+<h2 id="树莓派没有声音的解决方案">1. 树莓派没有声音的解决方案</h2>
+<pre><code>pi@raspberrypi:~ $ sudo amixer cset numid=3 1
+
+pi@raspberrypi:~ $ sudo amixer cset numid=3 2</code></pre>
+<p>Raspberry Pi(树莓派)声音输出可以设置为自动，耳机输出，从HDMI输出三种，默认为自动 values取不同的值分别代表： 0=auto(自动), 1=headphones(耳机), 2=hdmi</p>
+<pre><code>    pi@raspberrypi:~ $ sudo amixer cset numid=3 1
+    numid=3,iface=MIXER,name=PCM Playback Route
+    ; type=INTEGER,access=rw------,values=1,min=0,max=2,step=0
+    : values=1
+    pi@raspberrypi:~ $</code></pre>
+<h2 id="树莓派---修改pi账号密码开启root账号">2. 树莓派 - 修改pi账号密码,开启root账号</h2>
+<p>1、修改PI账号的密码</p>
+<p>view plain copy print?在CODE上查看代码片派生到我的代码片</p>
+<pre><code>password pi </code></pre>
+<p>2、开启root账号</p>
+<p>树莓派使用的linux是debian系统，所以树莓派启用root和debian是相同的。</p>
+<p>debian里root账户默认没有密码，但账户锁定。’</p>
+<p>当需要root权限时，由默认账户经由sudo执行，Raspberry pi 系统中的Raspbian</p>
+<p>默认用户是pi 密码为<code>raspberry</code></p>
+<p>重新开启root账号，可由pi用户登录后，在命令行下执行</p>
+<p>view plain copy print?在CODE上查看代码片派生到我的</p>
+<pre><code>sudo passwd root </code></pre>
+<p>执行此命令后系统会提示输入两遍的root密码，输入你想设的密码即可，然后在执行</p>
+<p>view plain copy print?在CODE上查看代码片派生到我的代码片</p>
+<pre><code>sudo passwd --unlock root </code></pre>
+<p>这样就可以解锁root账户了。</p>
+<h2 id="手动来安装中文字体">3. 手动来安装中文字体。</h2>
+<p>树莓派默认是采用英文字库的，而且系统里没有预装中文字库，所以即使你在locale中改成中文，也不会显示中文，只会显示一堆方块。因此需要我们手动来安装中文字体。</p>
+<p>好在有一个中文字体是免费开源使用的。ssh中输入以下命令：</p>
+<pre><code>sudo apt-get install ttf-wqy-zenhei</code></pre>
+<p>安装过程中如果碰到(Y/n)，都选择y 中文字库安装完成之后，还需要安装一个中文输入法。输入如下命令</p>
+<pre><code>sudo apt-get install scim-pinyin</code></pre>
+<p>一样的安装过程，安装完毕后输入</p>
+<pre><code>sudo raspi-config</code></pre>
+<p>然后选择change_locale，在Default locale for the system environment:中选择zh_CN.UTF-8,配置完成之后，输入命令</p>
+<pre><code>sudo reboot</code></pre>
+<p>重启完成好就可以在VNC连接上去后使用中文显示和中文输入法了，切换中文输入法一样也是ctrl+space。</p>
+<h2 id="lcd和hdmi相互切换">LCD和HDMI相互切换</h2>
+<p>使用上面两种方法在正常使用LCD的情况下，外接HDMI是没有显示的，如需启用HDMI输出，需执行以下命令，树莓派会自动重启。再等待约30秒，HDMI显示屏开始显示。</p>
+<pre><code>cd LCD-show/
+./LCD-hdmi</code></pre>
+<p>如需切换回LCD显示方式，则需执行以下命令：</p>
+<pre><code>cd LCD-show/
+./LCD35-show</code></pre>
+<h2 id="树莓派上安装archlinux">树莓派上安装ArchLinux</h2>
+<p>树莓派有2种含义：那块集成电路板（硬件），还有一种就是“树莓派”操作系统（软件，基于Linux内核）。</p>
+<p>现在居于Linux 内核的系统很多，五花八门，各有侧重。</p>
+<p>我挑了一种还算比较流行，精简的Linux： ArchLinux ARM版本</p>
+<p>下载地址：http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz</p>
+<p>安装说明：http://archlinuxarm.org/platforms/armv7/broadcom/raspberry-pi-2</p>
+<p>我把这2个打包放在： http://yunpan.cn/cVNnEqCA6EFft 访问密码 83d8</p>
+<p>一般的树莓派系统都提供的是一个img文件（系统镜像文件），然后用Win32DiskImager软件烧录到TF卡上，再插到树莓派上，即可上电运行！</p>
+<p>但是这个ArchLinuxARM-rpi-2-latest.tar.gz不是镜像文件，而是一个目录树的压缩包，</p>
+<p><strong>安装说明是在Linux环境下进行的（TF卡的制作步骤）：</strong></p>
+<p>将TF卡放入读卡器，然后接入电脑。使用“sudo fdisk -l”命令查看此设备的名称:比如sdc</p>
+<p>SD Card Creation</p>
+<p>Replace sdX in the following instructions with the device name for the SD card as it appears on your computer.</p>
+<p>Start fdisk to partition the SD card:</p>
+<pre><code>fdisk /dev/sdX</code></pre>
+<p>At the fdisk prompt, delete old partitions and create a new one:</p>
+<p>Type o. This will clear out any partitions on the drive.</p>
+<p>Type p to list partitions. There should be no partitions left.</p>
+<p>Type n, then p for primary, 1 for the first partition on the drive, press ENTER to accept the default first sector, then type +100M for the last sector.</p>
+<p>Type t, then c to set the first partition to type W95 FAT32 (LBA).</p>
+<p>Type n, then p for primary, 2 for the second partition on the drive, and then press ENTER twice to accept the default first and last sector.</p>
+<p>Write the partition table and exit by typing w.</p>
+<p>Create and mount the FAT filesystem:</p>
+<pre><code>sudo mkfs.vfat /dev/sdc1 
+mkdir boot 
+ sudo mount /dev/sdc1 boot</code></pre>
+<p>Create and mount the ext4 filesystem:</p>
+<pre><code>sudo mkfs.ext4 /dev/sdc2
+mkdir root 
+sudo mount /dev/sdc2 root</code></pre>
+<p>Download and extract the root filesystem (as root, not via sudo):</p>
+<pre><code>wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz 
+bsdtar -xpf ArchLinuxARM-rpi-2-latest.tar.gz -C root 
+sync</code></pre>
+<p>Move boot files to the first partition: sudo mount /dev/sdc2 root</p>
+<pre><code>mv root/boot/* boot</code></pre>
+<p>Unmount the two partitions:</p>
+<pre><code>umount boot root</code></pre>
+<p>Insert the SD card into the Raspberry Pi, connect ethernet, and apply 5V power.</p>
+<p>Use the serial console or SSH to the IP address given to the board by your router. The default root password is ‘root’.</p>
+<p>装完以后的系统的用户名、密码都是：root</p>
+<p>##安装错误</p>
+<p>##速度与激情</p>
+<p>电影名：速度与激情8 观看链接：http://18x8.cn/x/8/cynew878/</p>
+<p>电影名：速度与激情7 观看链接：http://18x8.cn/x/8/m%7CgqToZxH1R0r2SB/</p>
+<p>电影名：速度与激情7 国语 观看链接：http://18x8.cn/x/8/m%7ChafiZhH2Q0X3SR/</p>
+<p>电影名：速度与激情1 观看链接：http://18x8.cn/x/8/m%7CgqniZkj6Qnr3SB/</p>
+<p>电影名：速度与激情6 观看链接：http://18x8.cn/x/8/m%7CgariY0f7R0X3Sh/</p>
+<p>电影名：速度与激情5 观看链接：http://18x8.cn/x/8/m%7CfaflYUX6SHr1Tx/</p>
+<p>电影名：速度与激情2 观看链接：http://18x8.cn/x/8/m%7CfaPqZkT5SHbAUB/</p>
+<p>电影名：速度与激情4 观看链接：http://18x8.cn/x/8/m%7CgqLnZUT6Qnr1UB/</p>
+<p>电影名：速度与激情3 观看链接：http://18x8.cn/x/8/m%7Cg6XnYUT6Qnr0Th/</p>
+<h2 id="树莓派上的软件安装和卸载命令汇总">树莓派上的软件安装和卸载命令汇总</h2>
+<p>###基础命令</p>
+<pre><code>    安装软件 apt-get install softname1 softname2 softname3……
+    卸载软件 apt-get remove softname1 softname2 softname3……
+    卸载并清除配置 apt-get remove –purge softname1
+    更新软件信息数据库 apt-get update
+    进行系统升级 apt-get upgrade
+    搜索软件包 apt-cache search softname1 softname2 softname3……</code></pre>
+<p>如果使用 apt-get 遇到速度慢或者源不存在等错误，可能需要更换源，请参考此处。</p>
+<pre><code>    安装deb软件包 dpkg -i xxx.deb
+    删除软件包 dpkg -r xxx.deb
+    连同配置文件一起删除 dpkg -r –purge xxx.deb
+    查看软件包信息 dpkg -info xxx.deb
+    查看文件拷贝详情 dpkg -L xxx.deb
+    查看系统中已安装软件包信息 dpkg -l
+    重新配置软件包 dpkg-reconfigure xxx</code></pre>
+<p>清除所有已删除包的残馀配置文件</p>
+<pre><code>    dpkg -l |grep ^rc|awk &#39;{print $2}&#39; |sudo xargs dpkg -P</code></pre>
+<p>如果报如下错误，证明你的系统中没有残留配置文件了，无须担心。</p>
+<pre><code>    dpkg: –purge needs at least one package name argument</code></pre>
+<p>dpkg安裝的可以用apt卸載，反之亦可。</p>
+<h3 id="aptitude-命令">aptitude 命令</h3>
+<p>aptitude 与 apt-get 一样，是 Debian 及其衍生系统中功能极其强大的包管理工具。与 apt-get 不同的是，aptitude 在处理依赖问题上更佳一些。举例来说，aptitude 在删除一个包时，会同时删除本身所依赖的包。这样，系统中不会残留无用的包，整个系统更为干净。以下是笔者总结的一些常用 aptitude 命令，仅供参考。</p>
+<pre><code>    aptitude update 更新可用的包列表
+    aptitude upgrade 升级可用的包
+    aptitude dist-upgrade 将系统升级到新的发行版
+    aptitude install pkgname 安装包
+    aptitude remove pkgname 删除包
+    aptitude purge pkgname 删除包及其配置文件
+    aptitude search string 搜索包
+    aptitude show pkgname 显示包的详细信息
+    aptitude clean 删除下载的包文件
+    aptitude autoclean 仅删除过期的包文件</code></pre>
+<p>当然，你也可以在文本界面模式中使用 aptitude。</p>
+<p><strong>常用apt命令列表</strong></p>
+<pre><code>    apt-cache search # ------(package 搜索包)
+    apt-cache show #------(package 获取包的相关信息，如说明、大小、版本等)
+    sudo apt-get install # ------(package 安装包)
+    sudo apt-get install # -----(package - - reinstall 重新安装包)
+    sudo apt-get -f install # -----(强制安装?#&quot;-f = --fix-missing&quot;当是修复安装吧...)
+    sudo apt-get remove #-----(package 删除包)
+    sudo apt-get remove - - purge # ------(package 删除包，包括删除配置文件等)
+    sudo apt-get autoremove --purge # ----(package 删除包及其依赖的软件包+配置文件等（只对6.10有效，强烈推荐）)
+    sudo apt-get update #------更新源
+    sudo apt-get upgrade #------更新已安装的包
+    sudo apt-get dist-upgrade # ---------升级系统
+    sudo apt-get dselect-upgrade #------使用 dselect 升级
+    apt-cache depends #-------(package 了解使用依赖)
+    apt-cache rdepends # ------(package 了解某个具体的依赖?#当是查看该包被哪些包依赖吧...)
+    sudo apt-get build-dep # ------(package 安装相关的编译环境)
+    apt-get source #------(package 下载该包的源代码)
+    sudo apt-get clean &amp;&amp; sudo apt-get autoclean # --------清理下载文件的存档 &amp;&amp; 只清理过时的包
+    sudo apt-get check #-------检查是否有损坏的依赖</code></pre>
+<h2 id="用树莓派搭建git私有服务器">用树莓派搭建Git私有服务器</h2>
+<pre><code>sudo adduser --system --shell /bin/bash --gecos &#39;git version control by pi&#39; --group --home /home/gitrep git</code></pre>
+<h3 id="passwd-git">passwd git</h3>
+<pre><code>    raspberry</code></pre>
+<h2 id="在树莓派安装ftp服务器">在树莓派安装ftp服务器</h2>
+<p>vsftpd是开源的轻量级的常用ftp服务器．</p>
+<p>1,安装vsftpd服务器 (约400KB)</p>
+<pre><code>sudo apt-get install vsftpd</code></pre>
+<p>2,启动ftp服务</p>
+<pre><code>sudo service vsftpd start</code></pre>
+<p>3,编辑vsftdp的配置文件</p>
+<pre><code>sudo nano /etc/vsftpd.conf</code></pre>
+<p>找到以下行，定义一下</p>
+<pre><code>anonymous_enable=NO  </code></pre>
+<p>表示：不允许匿名访问</p>
+<pre><code>local_enable=YES  </code></pre>
+<p>设定本地用户可以访问。</p>
+<pre><code>write_enable=YES</code></pre>
+<p>设定可以进行写操作</p>
+<pre><code>local_umask=022</code></pre>
+<p>设定上传后文件的权限掩码。</p>
+<p>存盘退出</p>
+<p>4, 重启vsftpd服务</p>
+<pre><code>sudo service vsftpd restart</code></pre>
+<p>5, 测试一下, OK</p>
+<p>通过ftp连接树莓派系统， 以用户名pi登录，密码是raspberry ftp的根目录是/home/pi，即pi用户的HOME目录 可上传或下载文件了</p>
+<h2 id="linux-下-apache启动停止重启命令">linux 下 apache启动、停止、重启命令</h2>
+<p>一、Start Apache 2 Server /启动apache服务</p>
+<pre><code>sudo /etc/init.d/apache2 start</code></pre>
+<p>二、 Restart Apache 2 Server /重启apache服务</p>
+<pre><code>sudo /etc/init.d/apache2 restart</code></pre>
+<p>三、Stop Apache 2 Server /停止apache服务</p>
+<pre><code>sudo /etc/init.d/apache2 stop</code></pre>
+<h2 id="用树莓派搭建git私有服务器-1">用树莓派搭建Git私有服务器</h2>
+<p>话说当年linux内核开发者林纳斯·托瓦兹（Linus Torvalds）为了更好的管理Linux内核开发创下git以来，时至今日，当下最流行的『版本管理系统』已非git莫属了！ 笔者私下认为，git相比其他的版本管理系统（csv, svn等）来，最大的方便莫过于分支（branch）的操作十分便捷，但项目开发分支如何管理，萝卜白菜各有所爱，见仁见智。笔者因工作需要，经常要参与国际化团队的协作开发，git乃是必不可缺之利器之一。</p>
+<p>最近我利用树莓派为我所有的Git仓库创建了一个Git私有服务器。我花费了一些时间来使每件事情正确工作，但现在它已经能跑起来了。</p>
+<p>安装Git</p>
+<p>首先你需要在树莓派上安装Git.</p>
+<pre><code>sudo apt-get install wget git-core</code></pre>
+<p>这将会安装Git服务器和必要的客户端软件。</p>
+<p>安装SSH</p>
+<p>如果你还没有安装SSH，通过以下命令安装它：</p>
+<pre><code>sudo apt-get install ssh</code></pre>
+<p>通过以下命令启动它：</p>
+<pre><code>sudo /etc/init.d/ssh start</code></pre>
+<p>现在ssh已经运行起来了，但是一旦你重启树莓派，你还需要重新执行一遍上面命令。你可以通过执行一次下面的命令来解决这个问题：</p>
+<pre><code>sudo update-rc.d ssh defaults</code></pre>
+<p>当你重启树莓派，SSH应该能够自动启动了。你可以看看能不能通过SSH连接到树莓派，在你的Windows机器上使用Putty(Mac用户需要寻找替代的SSH客户端)。</p>
+<p>在HostName文本框里输入树莓派的IP地址。通过以下命令找到你的树莓派IP:</p>
+<pre><code>/sbin/ifconfig</code></pre>
+<p>找到inet addr:后面的就是IP。</p>
+<p>改变主机名</p>
+<p>这步不是必须的，但是我强烈推荐如果你正在，计划使用多台树莓派设备。</p>
+<pre><code>sudo leafpad /etc/hostname</code></pre>
+<p>输入你想要的主机名，然后保存文件。我的主机名是”gitpi”。 接着，输入下面的命令：</p>
+<pre><code>sudo leafpad /etc/hosts</code></pre>
+<p>替换所有”raspberrypi”为你上一步输入的新主机名。然后，重启你的树莓派。</p>
+<p>添加一个”Git”用户和组</p>
+<p>接着我们来创建一个”Git”用户和用户组。注意/home/git是这个例子里我使用的文件夹。如果你想使用别的路径，替换下面命令里的”/home/git”。</p>
+<pre><code>adduser --system --shell /bin/bash --gecos &#39;git version control by pi&#39; --group --home /home/git git</code></pre>
+<p>接着是更改密码：</p>
+<pre><code>passwd git</code></pre>
+<p>你的”git”用户现在有了一个新密码。现在尝试切换用户，你将会看到现在的终端提示用户名和主机为”git@gitpi”。你可以通过下面的命令切换用户：</p>
+<pre><code>su git</code></pre>
+<p>增加一个空的Git仓库(Git Repository)</p>
+<p>我们现在来增加一个空的Git仓库. 首先更改目录到你存储git的路径下。</p>
+<pre><code>cd /home/git</code></pre>
+<p>为你的仓库创建一个文件夹，并移动进去，然后初始化并清空仓库。 注意我现在使用的是”git”用户。这个用户具有/home/git目录的控制权。</p>
+<pre><code>mkdir test.git
+cd test.git
+git --bare init</code></pre>
+<p>Push你的代码到Pi上</p>
+<p>最终，我们会把代码push到树莓派上。首先，更改路径到你之前初始化的git仓库(或初始化一个新的)。</p>
+<p>加入一个新的远程主机(*你的IP地址没有中括号)</p>
+<p>1 git remote add pi git@[your IP]:/home/git/test.git 现在你要做的就是add你的代码，commit然后push。</p>
+<pre><code>git add .
+git commit -am &quot;Initial&quot;
+git push pi master</code></pre>
+<p>如果你得到了一个类似这样的消息”authenticity of host …”只需要输入”yes”然后继续就可以了。 理想情况下，如果一切正常，你的Git仓库已经搭建在你的树莓派上了。</p>
+<p>如果你想要测试一下，试着clone你的仓库到你的Windows机器上。首先更改路径到你希望存储clone的地方(一个空文件夹)，然后通过命令行(或git bash)，运行：</p>
+<pre><code>git clone git@[your IP]:/home/git/test.git</code></pre>
+<h2 id="基于-samba-实现-nas-系统">基于 Samba 实现 NAS 系统</h2>
+<p>摆弄了几天Raspberry Pi，在搞定了无线网络、FTP服务之后，打算更进一步，通过Samba实现NAS系统与PC共享文件。 需要安装的软件：</p>
+<pre><code>sudo apt-get install samba samba-common-bin
+sudo apt-get install netatalk （可选，用于支持AFP）
+sudo apt-get install avahi-daemon（可选，用于支持网内的计算机自动发现）</code></pre>
+<p>接下来就是配置了：</p>
+<p>[Samba 配置]</p>
+<p>/etc/samba/smb.conf 文件尾部增加/etc/samba/smb.conf</p>
+<pre><code>[public]
+comment = Public Storage
+path = /home/pi
+read only = no  #任何人都具有了访问修改的权限</code></pre>
+<p>因为是公共文件夹，所以给了所有用户全部权限，可以自定义</p>
+<pre><code>create mask = 0777   #新创建文件的默认属性
+directory mask = 0777   #新创建文件夹的默认属性
+guest ok = yes   #默认的访问用户名为guest
+browseable = yes</code></pre>
+<p>然后就可以 <strong>smbd restart </strong>了。</p>
+<p>这时候已经可以通过网上邻居看到共享文件目录，只是进不去。 提示需要输入口令，尝试用本地帐户也无法进入。</p>
+<p>查了资料原来因为 Samba 使用了自己一套用户帐号资料库。要登录的话还需要向该库添加帐号信息，方法有两种：</p>
+<p>1.直接用 mksmbpasswd.sh 将系统用户转换成 Samba 用户：</p>
+<pre><code>cat /etc/passwd | mksmbpasswd.sh &gt;/etc/samba/smbpasswd</code></pre>
+<p>2.用 smbpasswd 命令直接设置，需要首先要添加系统用户然后用 smbpasswd -a 用户名 添加 Samba 用户；smbpasswd -e 用户名 激活用户。</p>
+<p>[Netatalk 配置]</p>
+<pre><code>/etc/netatalk/AppleVolumes.default 方法参考资料3。</code></pre>
+<p>最后就是挂载USB移动硬盘了：</p>
+<pre><code>mount /dev/sda1 /home/shares/public/</code></pre>
+<p>有时候卸载USB移动硬盘的时候会提示设备忙(Device is busy)，只需要加上 –l 参数就行了：</p>
+<h2 id="在树莓派上安装firefox浏览器">在树莓派上安装firefox浏览器</h2>
+<p>在树莓派上Firefox浏览器叫作iceweasel，所以可以使用下面的命令在树莓派上安装Firefox</p>
+<pre><code>sudo apt-get install iceweasel</code></pre>
+<h2 id="树莓派安装xfce-桌面系统">树莓派安装xfce 桌面系统</h2>
+<p>lxde桌面用着很不爽，直接换xfce4</p>
+<p>首先卸载lxde</p>
+<pre><code>sudo apt-get autoremove --purge lxde lxde-common lxde-core lxde-icon-theme galculator leafpad lxappearance lxappearance-obconf lxrandr</code></pre>
+<p>安装xfce4</p>
+<pre><code>sudo apt-get install xfce4 xfce4-goodies</code></pre>
+<p>查看默认的窗口管理器</p>
+<pre><code>sudo update-alternatives --display x-window-manager
+
+x-window-manager - 自动模式 链接目前指向 /usr/bin/openbox
+/usr/bin/openbox - 优先级 90  次要 x-window-manager.1.gz：/usr/share/man/man1/openbox.1.gz
+/usr/bin/xfwm4 - 优先级 60  次要 x-window-manager.1.gz：/usr/share/man/man1/xfwm4.1.gz
+目前“最佳”的版本为 /usr/bin/openbox。</code></pre>
+<p>更改窗口管理器为xfwm4</p>
+<pre><code>sudo update-alternatives --config x-window-manager</code></pre>
+<p>有 2 个候选项可用于替换 x-window-manager (提供 /usr/bin/x-window-manager)。</p>
+<pre><code>  选择       路径            优先级  状态
+------------------------------------------------------------
+* 0            /usr/bin/openbox   90        自动模式
+  1            /usr/bin/openbox   90        手动模式
+  2            /usr/bin/xfwm4     60        手动模式</code></pre>
+<p>要维持当前值[*]请按回车键，或者键入选择的编号：2 #这里选择2 xfce的xfwm4</p>
+<pre><code>update-alternatives: 使用 /usr/bin/xfwm4 来在手动模式中提供 /usr/bin/x-window-manager (x-window-manager)</code></pre>
+<p>vnc远程桌面改成xfce4， 修改当前vnc用户家目录的vnc文件</p>
+<pre><code>vim ~/.vnc/xstartup</code></pre>
+<p>如下:</p>
+<pre><code>#!/bin/sh
+xrdb $HOME/.Xresources
+xsetroot -solid grey
+#x-terminal-emulator -geometry 80x24+10+10 -ls -title &quot;$VNCDESKTOP Desktop&quot; &amp;
+#x-window-manager &amp;
+# Fix to make GNOME work
+#export XKL_XMODMAP_DISABLE=1
+#/etc/X11/Xsession
+#以下是启动xfce4桌面
+unset SESSION_MANAGER
+startxfce4 &amp;</code></pre>
+<p>后面的自己配置的， 原来lxde的东西可以再删一些</p>
+<p>下面介绍下怎么安装slim</p>
+<pre><code>sudo apt-get install slim</code></pre>
+<p>然后打y，安装过程中会出现一个蓝底窗口，先回车，然后键盘按方向下，选择slim，回车</p>
+<p>重启后，按f1选择startxfce4</p>
+<h2 id="树莓派设置键盘">树莓派设置键盘</h2>
+<pre><code>sudo raspi-config</code></pre>
+<p>%树莓派</p>
+<blockquote>
+<p>不要使用没有电源供电的HDMI转VGA线！</p>
+</blockquote>
+<h2 id="lcd-3.5驱动">LCD 3.5驱动：</h2>
+<p>把树莓派驱动<code>3.5inch RPi LCD (A)</code> ，复制到/boot目录下， 执行以下操作：</p>
+<pre><code>tar xzvf /boot/LCD-show-*.tar.gz 
+cd LCD-show/
+chmod +x LCD35-show
+./LCD35-show</code></pre>
+<p>LCD和HDMI相互切换</p>
+<p>使用上面两种方法在正常使用LCD的情况下，外接HDMI是没有显示的，如需启用HDMI输出，需执行以下命令，树莓派会自动重启。再等待约30秒，HDMI显示屏开始显示。</p>
+<pre><code>cd LCD-show/
+./LCD-hdmi</code></pre>
+<p>如需切换回LCD显示方式，则需执行以下命令：</p>
+<pre><code>cd LCD-show/
+./LCD35-show</code></pre>
+<h2 id="显示管理器display-manager">显示管理器（Display Manager）</h2>
+<ul>
+<li><strong>slim</strong>：SLiM 是一个独立的图形化X11登录管理器.它目标在于提供一个轻型、简洁但是可完全配置主题和文件的登录窗口管理器。可以替代GDM。它原本搭载在LXDE/openbox桌面环境上。</li>
+<li><strong>lightdm</strong>：LightDM（Light Display Manager）是一个全新的轻量级 Linux 桌面显示管理器，而传统的 Ubuntu 是使用 GNOME 桌面标准的 GDM。LightDM 是一个跨桌面显示管理器，其目的是成为 X org 的 X Server 的标准显示管理器。是2010 年开始的新项目，且被设计为轻量、小巧、快速。相较于 GDM-GTK， KDM-Qt，LightDM 实际上与界面无关，它仅支持本地图形界面获得最好兼容性</li>
+<li><strong>kdm</strong></li>
+<li><strong>gdm</strong></li>
+</ul>
+<p>几个设置文件：</p>
+<pre><code>/etc/inittab
+/etc/init/slim.conf
+/etc/lightdm/lightdm.conf
+~/.xinitrc</code></pre>
+<h2 id="start-lightdm">start lightdm</h2>
+<p>Enter console mode by press Ctrl-Alt-F3 (F2~F8 is also good), and login. Do NOT try to change display manager in GUI, as the behavior is unpredictable.</p>
+<pre><code>sudo systemctl disable gdm
+sudo systemctl enable lightdm
+Stop gdm with sudo systemctl stop gdm
+Start lightdm with sudo systemctl start lightdm</code></pre>
+<h2 id="中文支持">中文支持</h2>
+<p>树莓派默认是采用英文字库的，而且系统里没有预装中文字库，所以即使你在locale中改成中文，也不会显示中文，只会显示一堆方块。因此需要我们手动来安装中文字体。</p>
+<p>好在有一个中文字体是免费开源使用的。ssh中输入以下命令：</p>
+<pre><code>sudo apt-get install ttf-wqy-zenhei</code></pre>
+<p>安装过程中如果碰到(Y/n)，都选择y 中文字库安装完成之后，还需要安装一个中文输入法。输入如下命令</p>
+<pre><code>sudo apt-get install scim-pinyin</code></pre>
+<p>一样的安装过程，安装完毕后输入</p>
+<pre><code>sudo raspi-config</code></pre>
+<p>然后选择change_locale，在Default locale for the system environment:中选择（空格键选择）zh_CN.UTF-8,配置完成之后，输入命令重启树莓派reboot</p>
+<p>重启完成好就可以在VNC连接上去后使用中文显示和中文输入法了，切换中文输入法一样也是ctrl+space。</p>
+<h2 id="startx">startx</h2>
+<p>安装有图形界面的情况下，启动linux在终端下输入: startx 即可进入X11的图形操作界面。 如果希望每次都自动进入xwindos。。 修改inittab文件。 vi /etc/inittab 找到id:3:initdefault:这行 按i进入编辑模式，将3改为5。 按esc退出编辑。 输入 ：qw —输入包括“：” 如果希望每次都自动进入多用户模式</p>
+<p>改为:</p>
+<pre><code>id:3:initdefault:   </code></pre>
+<p>有下几种模式:</p>
+<pre><code>#   0 - halt (Do NOT set initdefault to this)
+#   1 - Single user mode   //单用户模式
+#   2 - Multiuser, without NFS (The same as 3, if you do not have networking) //多用户模式,没有网络文件系统
+#   3 - Full multiuser mode /完全多用户模式
+#   4 - unused
+#   5 - X11        //窗口模式
+#   6 - reboot (Do NOT set initdefault to this)   </code></pre>
+<h2 id="windows下-通过ssh使用树莓派">windows下 通过SSH使用树莓派</h2>
+<ol type="1">
+<li><p>打开树莓派，设置开启ssh 和 vnc。</p></li>
+<li><p>在window下载安装putty后，打开，只需输入树莓派的IP地址，默认端口号22，默认选择SSH,点击Open</p></li>
+<li><p>字符界面输入用户名和密码（一般用户名为Pi，密码raspberry），至此在Windows的PC端通过SSH连接到了树莓派。</p></li>
+</ol>
+<h2 id="windows下-用vnc图形界面远程控制树莓派">windows下 用VNC图形界面远程控制树莓派</h2>
+<ol type="1">
+<li><p>打开树莓派，设置开启ssh 和 vnc：</p>
+<pre><code> sudo raspi-config</code></pre></li>
+<li><p>树莓派安装tightvncserver</p>
+<pre><code> sudo apt-get install tightvncserver</code></pre>
+<p>安装完成后，运行tightvncserver,提示输入密码.</p>
+<pre><code> tightvncserver</code></pre>
+<p>输入两个密码，一个控制桌面，一个view only,我一般都设置成一样，比如******。然后就会在当下目录生成一个.vnc的隐藏目录。ps.如果想重置密码，只需rm .vnc -r 然后再次输入tightvncserver即可。</p>
+<p>设置完密码之后，树莓派需要运行vnc服务：</p>
+<pre><code> tightvncserver</code></pre></li>
+<li><p>windows端：</p>
+<p>打开http://www.tightvnc.com/download.php下载windows需要安装的VNC-Viewer 解压之后一路next安装.</p>
+<p>运行填写Remote Host:<code>192.168.11.7:1</code>（使用:ifconfig命令）点击connect，输入之前设置好的vcn密码，点击ok。</p></li>
+<li><p><strong>注意事项</strong></p>
+<ul>
+<li>一定要在PC端vnc-viewer运行之前，在树莓派用tightvncserver启动服务。否则提示远端计算机积极拒绝</li>
+<li>PC端vnc-viewer软件填写ip地址比如<code>192.168.1.1:1</code>后面的英文冒号和1一定不要忘记！</li>
+<li>键盘同时按组合键<code>Ctrl+Alt+Shift+F</code>即可退出全屏.</li>
+</ul></li>
+<li><p>设置开机自动启动</p></li>
+</ol>
+<p>设置开机启动，需要在/etc/init.d/中创建一个文件。例如tightvncserver（建议养成启动脚本的名称和程序名一致的习惯）：</p>
+<pre><code>sudo nano /etc/init.d/tightvncserver</code></pre>
+<p>内容如下（putty窗口中按右键=粘贴）：</p>
+<pre><code>#!/bin/sh
+### BEGIN INIT INFO
+# Provides: tightvncserver
+# Required-Start: $local_fs
+# Required-Stop: $local_fs
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Start/stop tightvncserver
+### END INIT INFO
+
+# More details see:
+# http://www.penguintutor.com/linux/tightvnc
+
+### Customize this entry
+# Set the USER variable to the name of the user to start tightvncserver under
+export USER=&#39;pi&#39;
+### End customization required
+
+eval cd ~$USER
+
+case &quot;$1&quot; in
+start)
+# 启动命令行。此处自定义分辨率、控制台号码或其它参数。
+su $USER -c &#39;/usr/bin/tightvncserver -depth 16 -geometry 800x600 :1&#39;
+echo &quot;Starting TightVNC server for $USER &quot;
+;;
+stop)
+# 终止命令行。此处控制台号码与启动一致。
+su $USER -c &#39;/usr/bin/tightvncserver -kill :1&#39;
+echo &quot;Tightvncserver stopped&quot;
+;;
+*)
+echo &quot;Usage: /etc/init.d/tightvncserver {start|stop}&quot;
+exit 1
+;;
+esac
+exit 0</code></pre>
+<p>注：少数玩家默认用户不是pi的请自行更改USER变量</p>
+<p>按Ctrl+X，回答Y（存盘）退出nano编辑器。</p>
+<p>然后给tightvncserver文件加执行权限，并更新开机启动列表:</p>
+<pre><code>sudo chmod 755 /etc/init.d/tightvncserver sudo update-rc.d tightvncserver defaults</code></pre>
+<h2 id="realvnctightvncultravnc">realVNC、tightVNC、ultraVNC</h2>
+<p>VNC由Olivetti &amp; Oracle研究室所開發，此研究室在1999年併入美國電話電報公司（AT&amp;T）。AT&amp;T於2002年中止了此研究室的運作，並把VNC以GPL釋出。</p>
+<p>由於VNC以GPL授權，衍生出了幾個VNC軟體：</p>
+<p>RealVNC：由VNC團隊部份成員開發，分為全功能商業版及免費版。</p>
+<p>TightVNC：強調節省頻寬使用。</p>
+<p>UltraVNC：加入了TightVNC的部份程式及加強效能的圖型映射驅動程式，並結合Active Directory及NTLM的帳號密碼認證，但僅有Windows版本。</p>
+<p>Vine Viewer：MacOSX的VNC用戶端。</p>
+<p>這些軟體各有所長，例如UltraVNC支援檔案傳輸以及全螢幕模式。而這些軟體間大多遵循基本的VNC協定，因此大多可互通使用。</p>
+<pre><code>    http://www.realvnc.com/   REALVNC
+
+    http://www.tightvnc.com/   TIGHTVNC
+
+    http://ultravnc.com/        ULTRAVNC</code></pre>
+<h2 id="vnc-comparison-and-review-tightvnc-vs-ultravnc-vs-realvnc">VNC Comparison and Review: TightVNC Vs UltraVNC Vs RealVNC</h2>
+<blockquote>
+<p>milly 9:51 pm on December 1, 2009 | Answers: 1</p>
+</blockquote>
+<p>Virtual Network Computing (VNC) requires a client (viewer) to connect to the remote computer. There are mainly three popular candidates for clients: RealVNC, TightVNC, and UltraVNC. We’ll do a simple comparison here and choose the best one.</p>
+<p>RealVNC</p>
+<ul>
+<li>The original developers. Out in the market the longest.</li>
+<li>The free version lacks a lot of features which are included in other VNC clients and it not being actively developed. Not a good thing.</li>
+</ul>
+<p>RealVNC provides remote control software which lets you see and interact with desktop applications across any network.</p>
+<p>The software has a widespread user base from individuals to the largest multi-national companies. Founded by the original developers of VNC to promote, enhance and commercialise VNC.</p>
+<p>TightVNC</p>
+<p>Const Kaplinsky’s project to improve VNC’s compression between server and viewer. Good replacement for RealVNC, but graphic and performance is sluggish sometimes. Does not allow remote copy and paste The project is being actively maintain, which is a plus.</p>
+<p>TightVNC is a free remote control software package. With TightVNC, you can see the desktop of a remote machine and control it with your local mouse and keyboard, just like you would do it sitting in the front of that computer. TightVNC is:</p>
+<ul>
+<li>free for both personal and commercial usage, with full source code available (GPL-licensed);</li>
+<li>useful in remote administration, remote customer support, education, and for many other purposes;</li>
+<li>cross-platform, available for Windows and Unix, compatible with other VNC software.</li>
+</ul>
+<p>UltraVNC</p>
+<ul>
+<li>A project to add in file transfer, chat messaging and NTLM authentication to VNC.</li>
+<li>Based on experience, UltraVNC runs faster than the other two and has better graphics.</li>
+<li>Has file transfer, faster connections, chat interface, etc</li>
+<li>Allows you to copy and paste from your local computer to remote computer and vice versa</li>
+</ul>
+<p>UltraVNC is a powerful, easy to use and free software that can display the screen of another computer (via internet or network) on your own screen. The program allows you to use your mouse and keyboard to control the other PC remotely. It means that you can work on a remote computer, as if you were sitting in front of it, right from your current location. If you provide computer support, you can quickly access your customer’s computers from anywhere in the world and resolve helpdesk issues remotely! With addons like SingleClick your customers don’t even have to pre-install software or execute complex procedures to get remote helpdesk support.</p>
+<p>My recommendation: UltraVNC So far UltraVNC combines the best of both worlds. Speed, graphic, feature … you name it. It is a clear winner! However, things might be different in 5 years. We shall re-exam again at later time! :)</p>
+<h2 id="ultravnc-介绍">UltraVNC 介绍</h2>
+<p>UltraVNC 是客户端/服务器软件，允许你经由 TCP/IP 连线，控制远端的电脑。这个版本的开发以 RealVNC 为基础，加上了 TightVNC 的鼠标控制与编码，以及在 eSVNC 和 Vdacc-VNC 找到的特殊功能，以及更多。它是自由软件，可在 GNU General Public License 的条款下散布。</p>
+<p>与 VNC 各版本不同的地方，还有:</p>
+<ol type="1">
+<li><p>自动组态/快速选项。</p></li>
+<li><p>「工具列」显示，让你快速存取。无论是早期的 winvnc 或是后来的 RealVNC 都缺少这个东西。</p></li>
+<li><p>内建「图形介面」的「文件传送」功能。允许在客户端和服务器之间，做简易的文件复制。</p></li>
+<li><p>提供 Windows 2000 / XP 高速的「视讯挂钩驱动程序」 (核心模式) ，成功地改进效能，并降低网路连线时的 CPU 活动量。速度简直就是超快。只是「视讯挂钩驱动程序」并非 GPL 方式散布，但仍然是免费的就是了</p></li>
+</ol>
+<p>UltraVNC既是一个客户端也是一个服务器，可以用TCP/IP连接来控制另一台电脑。它可以在W9x/NT/2K/XP在使用，拥有包括自动设置，友好用户界面，全局热键，内部文件传输等功能。除此之外，它还是免费的，速度也非常不错。UltraVNC可能是我见过的最快的远程控制软件。你可以在旅行的时候访问你家里的计算机，处理发现的故障或者一般的网络连接.</p>
+<p>远程控制(Remote Control)是指在网络上由一台电脑（主控端Remote/客户端）远距离去控制另一台电脑（被控端Host/服务器端）的技术。大多数人平常接触最多的就是QQ的远程协助了，然后就是办公或黑客们必备的工具。</p>
+<h2 id="树莓派手动指定静态ip和dns-终极解决大法">树莓派手动指定静态IP和DNS 终极解决大法</h2>
+<p>在把玩树莓派的过程中，往往需要手动给它设定一个静态的IP地址，一来可以防范DHCP自动分配的IP来回变动，导致远程SSH时常无法连接；二来还可以提高树莓派的网络连接速度。</p>
+<p>对此菲菲君在网上查了很多资料，大多数方法都是修改 /etc/network/interfaces 配置文件，增加静态IP的设定。的确对于 Debian 系的 Linux 系统来说，不都是这样修改滴嘛？</p>
+<p>不过马上就发现了一个问题，那就是通过修改 interfaces 设置静态IP的方法，并不完美，即便取得了静态IP，DHCP 服务依然会自动为树莓派分配动态 IP 和 DNS 地址，导致路由表默认网关出现冲突，以及手动给定的默认 DNS 不生效的情况。</p>
+<p>解决树莓派静态IP和DNS难题的终极方法</p>
+<p>其实解决起来特别简单，人家已经在 interfaces 文件的开头注释里告诉我们了要修改静态IP地址，需要修改的是 /etc/dhcpcd.conf 也就是 DHCP 的配置文件。</p>
+<p>查看官方文档 man dhcpcd.conf 可知，需要配置 static IP 的话，只需修改以下参数：</p>
+<pre><code>    vi /etc/dhcpcd.conf
+    # 使用 vi 编辑文件，增加下列配置项</code></pre>
+<p>如下：</p>
+<pre><code>    # 指定接口 eth0
+    interface eth0
+    # 指定静态IP，/24表示子网掩码为 255.255.255.0
+    static ip_address=192.168.1.20/24
+    # 路由器/网关IP地址
+    static routers=192.168.1.1
+    # 手动自定义DNS服务器
+    static domain_name_servers=114.114.114.114</code></pre>
+<p>修改完成后，按esc键后输入 :wq 保存。重启树莓派就生效了</p>
+<pre><code>    重启电脑
+    sudo reboot
+    #或者重启网络
+    sudo /etc/init.d/networking restart</code></pre>
+<p>另外注意配置时，你的静态IP一定要和你的路由器网段一致，比如：假设你的路由器的IP为 192.168.0.x 网段，则上面的 static ip_address 就要对应的修改为 192.168.0.x/24 。还有一点就是你的手动静态IP要注意不能跟路由器 DHCP 所自动分配的 IP 冲突，否则树莓派就有可能无法正常联网。</p>
+<h2 id="使用静态-ip-地址">使用静态 IP 地址</h2>
+<pre><code>    cd /etc/network
+    sudo nano interfaces</code></pre>
+<p>把iface eth0 inet dhcp中的dhcp换成static也就是以下文本</p>
+<pre><code>    iface eth0 inet static
+    address 192.168.1.10
+    netmask 255.255.255.0
+    gateway 192.168.1.1</code></pre>
+<p>最后重启一下就行了。</p>
+<h2 id="设置树莓派3-b的静态ip">设置树莓派3 B+的静态IP</h2>
+<p>修改/etc/dhcpcd.conf 文件</p>
+<pre><code>    sudo vim /etc/dhcpcd.conf</code></pre>
+<p>如下：</p>
+<pre><code>    interface eth0
+    static ip_address=192.168.0.10/24
+    static routers=192.168.0.1
+    static domain_name_servers=192.168.0.1
+    interface wlan0 
+    static ip_address=192.168.0.200/24
+    static routers=192.168.0.1
+    static domain_name_servers=192.168.0.1</code></pre>
+<p>上面的配置文件中 , eth0是有线的配置 , wlan0是无线配置</p>
+<p>ip_address就是静态IP , 后面要接/24</p>
+<p>routers是网关</p>
+<p>static domain_name_servers是DNS</p>
+<h2 id="树莓派2网线直连电脑ssh">树莓派2——网线直连电脑SSH</h2>
+<p>最近听说了好多不靠谱的言论，说是网线直连电脑不能动态分配IP地址，让我都想开喷了，但是为了共和国的团结和谐，今天就开一贴啪啪啪打脸那些所谓的技术达人。</p>
+<p>首先，我们需要准备的是已经配好ssh开机自启动的树莓派和一根普通网线，然后把这两个连起来，但是问题又来了，ip地址从哪看？其实很简单：</p>
+<p>右击这个“网络”图标，点开“打开网络和共享中心”</p>
+<p>网络和共享中心</p>
+<p>找到本地连接以后单击，本地连接</p>
+<p>再点击详细信息，记下IPv4地址，我这里是 192.168.137.1</p>
+<p>IPv4地址</p>
+<p>打开命令行，输入arp -a查看与你电脑相关的连接</p>
+<p>注意看192.168.137.97就是树莓派的IP地址，然后打开putty，输入就可以正常的连接了.</p>
+<h2 id="更简单的方法实现远程桌面">更简单的方法实现远程桌面</h2>
+<p>1.安装xdrp</p>
+<pre><code>sudo apt-get install xdrp</code></pre>
+<p>2.使用window 程序附件的“远程桌面连接”，输入树莓派ip，以及用户密码，就OK！！！</p>
+<h2 id="树莓派-raspberry-pi-设置无线上网">树莓派 Raspberry Pi 设置无线上网</h2>
+<p>一、查看网卡状态是否正常</p>
+<p>把无线网卡插到树莓派上，输入命令ifconfig -a查看是否有wlan0的信息，如果有说明网卡状态正常，可以跳过第二步，直接配置无线网络。如果查不到wlan0的信息，则需要安装无线网卡的驱动。</p>
+<p>二、查看无线网卡的信息</p>
+<p>输入命令dmesg | grep usb查看无线网卡的信息，主要是看制造厂家（Manufacturer）。比如，我的网卡信息是</p>
+<p>usb 1-1.3: Manufacturer: Realtek</p>
+<p>以Realtek为例，安装无线网卡驱动。 如果现在你的树莓派能联网，输入安装命令就可以安装Realtek的驱动了。</p>
+<p>首先搜索Realtek驱动：</p>
+<pre><code>apt-cache search realtek</code></pre>
+<p>看到下面信息：</p>
+<p>firmware-realtek – Binary firmware for Realtek wired and wireless network adapters</p>
+<p>安装Realtek驱动：</p>
+<pre><code>sudo apt-get install firmware-realtek</code></pre>
+<p>如果你的树莓派现在不能上网，那么你可以去镜像站点中下载相关驱动。我推荐阿里云的镜像站点，速度比较快。http://mirrors.aliyun.com/raspbian/raspbian/pool/non-free/f/firmware-nonfree</p>
+<p>下载firmware-realtek_0.43_all.deb，用winscp上传到树莓派的/tmp目录中。输入命令安装：</p>
+<pre><code>sudo dpkg -i /tmp/firmware-realtek_0.43_all.deb</code></pre>
+<p>三、配置无线网络</p>
+<p>用编辑器nano打开interfaces文件</p>
+<pre><code>sudo nano /etc/network/interfaces</code></pre>
+<p>我的interfaces文件是这样的：</p>
+<pre><code>auto lo
+
+iface lo inet loopback
+iface eth0 inet dhcp
+
+allow-hotplug wlan0
+iface wlan0 inet manual
+wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp</code></pre>
+<p>我们把无线网卡部分全部用#注释掉，然后添加自己的配置信息，最终结果如下：</p>
+<pre><code>auto lo
+
+iface lo inet loopback
+iface eth0 inet dhcp
+
+auto wlan0
+#allow-hotplug wlan0
+#iface wlan0 inet manual
+iface wlan0 inet dhcp
+wpa-conf /etc/wpa.conf
+#wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp</code></pre>
+<p>使用nano编辑器，ctrl+o保存，ctrl+x退出。</p>
+<p>用编辑器nano创建 /etc/wpa.conf 文件：</p>
+<p>sudo nano /etc/wpa.conf</p>
+<p>如果你的wifi没有密码</p>
+<pre><code>network={
+[Tab] ssid=&quot;你的无线网络名称（ssid）&quot;
+[Tab] key_mgmt=NONE
+}</code></pre>
+<p>如果你的wifi使用WEP加密</p>
+<pre><code>network={
+[Tab] ssid=&quot;你的无线网络名称（ssid）&quot;
+[Tab] key_mgmt=NONE
+[Tab] wep_key0=&quot;你的wifi密码&quot;
+}</code></pre>
+<p>如果你的wifi使用WPA/WPA2加密</p>
+<pre><code>network={
+[Tab] ssid=&quot;你的无线网络名称（ssid）&quot;
+[Tab] key_mgmt=WPA-PSK
+[Tab] psk=&quot;你的wifi密码&quot;
+}</code></pre>
+<p>注1：所有符号都是半角符号（英文状态下的符号），“[Tab]”表示按一次Tab键</p>
+<p>注2：如果你不清楚wifi的加密模式，可以在安卓手机上用root explorer打开 /data/misc/wifi/wpa/wpa_supplicant.conf，查看wifi的信息。</p>
+<p>比如，我的wpa.conf文件是这样的：</p>
+<pre><code>network={
+ssid=&quot;1234&quot;
+key_mgmt=WPA-PSK
+psk=&quot;MTIzNA1234&quot;
+}</code></pre>
+<p>最后输入命令启用无线网卡：</p>
+<pre><code>sudo ifup wlan0</code></pre>
+<p>可以连无线网了。</p>
+<h2 id="树莓派3如何使用蓝牙">树莓派3如何使用蓝牙</h2>
+<p>一、升级安装蓝牙相关软件包</p>
+<pre><code>sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get dist-upgrade -y
+sudo apt-get install pi-bluetooth bluez bluez-firmware blueman</code></pre>
+<p>二、最关键一点：添加pi用户到蓝牙组</p>
+<pre><code>sudo usermod -G bluetooth -a pi</code></pre>
+<p>三、重启</p>
+<pre><code>sudo reboot</code></pre>
+<p>之后就可以按照各种教程正确使用蓝牙了</p>
+<h1 id="session-setup-failed-nt_status_logon_failure">session setup failed: NT_STATUS_LOGON_FAILURE (</h1>
+<p>samba服务器出现“session setup failed: NT_STATUS_LOGON_FAILURE”的解决办法：</p>
+<pre><code>$ smbclient -L \\127.0.0.1 -U wuhaoshu
+Enter berbiey&#39;s password:
+session setup failed: NT_STATUS_LOGON_FAILURE</code></pre>
+<p>wuhaoshu是fedora 13中的一个普通用户，启动smb服务后，在本机上测试，就出现了上面的错误。这是由于wuhaoshu仅仅只是系统用户，而没有将它加入到samba账户中来，换言之，用来登录samba服务器的账户，首先是一个系统账户，同时还应是samba账户。找到了问题的症结所在，解决就简单了。方法如下：</p>
+<pre><code># smbpasswd -a wuhaoshu</code></pre>
+<p>为安全起见，这个密码应与wuhaoshu作为系统账户登录系统时所用的密码不一样。</p>
+<pre><code>$ smbclient -L \\127.0.0.1 -U wuhaoshu</code></pre>
+<p>现在就正常了。</p>
+<h3 id="smbclient命令-网络服务器">smbclient命令 网络服务器</h3>
+<p>《Linux就该这么学》是一本基于最新Linux系统编写的入门必读书籍，内容面向零基础读者，由浅入深渐进式教学，销量保持国内第一，年销售量超过10万本。点此免费在线阅读。</p>
+<p>smbclient命令属于samba套件，它提供一种命令行使用交互式方式访问samba服务器的共享资源。</p>
+<p>语法</p>
+<pre><code>smbclient(选项)(参数)</code></pre>
+<p>选项</p>
+<pre><code>-B&lt;ip地址&gt;：传送广播数据包时所用的IP地址；
+-d&lt;排错层级&gt;：指定记录文件所记载事件的详细程度；
+-E：将信息送到标准错误输出设备；
+-h：显示帮助；
+-i&lt;范围&gt;：设置NetBIOS名称范围；
+-I&lt;IP地址&gt;：指定服务器的IP地址；
+-l&lt;记录文件&gt;：指定记录文件的名称；
+-L：显示服务器端所分享出来的所有资源；
+-M&lt;NetBIOS名称&gt;：可利用WinPopup协议，将信息送给选项中所指定的主机；
+-n&lt;NetBIOS名称&gt;：指定用户端所要使用的NetBIOS名称；
+-N：不用询问密码；
+-O&lt;连接槽选项&gt;：设置用户端TCP连接槽的选项；
+-p&lt;TCP连接端口&gt;：指定服务器端TCP连接端口编号；
+-R&lt;名称解析顺序&gt;：设置NetBIOS名称解析的顺序；
+-s&lt;目录&gt;：指定smb.conf所在的目录；
+-t&lt;服务器字码&gt;：设置用何种字符码来解析服务器端的文件名称；
+-T&lt;tar选项&gt;：备份服务器端分享的全部文件，并打包成tar格式的文件；
+-U&lt;用户名称&gt;：指定用户名称；
+-w&lt;工作群组&gt;：指定工作群组名称。</code></pre>
+<p>参数</p>
+<pre><code>smb服务器：指定要连接的smb服务器。</code></pre>
+<p>实例</p>
+<p>列出某个IP地址所提供的共享文件夹</p>
+<pre><code>smbclient -L 198.168.0.1 -U username%password</code></pre>
+<p>像ftp客户端一样使用smbclient</p>
+<pre><code>smbclient //192.168.0.1/tmp  -U username%password</code></pre>
+<p>执行smbclient命令成功后，进入smbclient环境，出现提示符：smb:/&gt;</p>
+<p>这里有许多命令和ftp命令相似，如cd 、lcd、get、megt、put、mput等。通过这些命令，我们可以访问远程主机的共享资源。</p>
+<p>直接一次性使用smbclient命令</p>
+<pre><code>smbclient -c &quot;ls&quot;  //192.168.0.1/tmp  -U username%password</code></pre>
+<p>和</p>
+<pre><code>smbclient //192.168.0.1/tmp  -U username%password
+smb:/&gt;ls</code></pre>
+<p>功能一样的。</p>
+<p>创建一个共享文件夹</p>
+<pre><code>smbclient -c &quot;mkdir share1&quot; //192.168.0.1/tmp -U username%password</code></pre>
+<p>如果用户共享//192.168.0.1/tmp的方式是只读的，会提示NT_STATUS_ACCESS_DENIED making remote directory /share1</p>
+<h3 id="smbclient使用方法及常见问题">smbclient使用方法及常见问题</h3>
+<p>假如我现在在虚拟机中的linux中，使用smbclient连接windows中的共享文件夹。</p>
+<p>windows的IP地址是192.168.0.4,登录的用户名叫Jack</p>
+<p>在E盘下有个共享文件夹叫tmp,</p>
+<pre><code>smbclient -U Jack  //192.168.0.4/tmp</code></pre>
+<p>然后会提示你输入密码：</p>
+<pre><code>Enter Jack&#39;s password:</code></pre>
+<p>输入正确的密码后，如果成功就会看到提示符啦</p>
+<pre><code>smb: \&gt;</code></pre>
+<p>之后使用get，put，ls……就不说啦</p>
+<p>还可以使用下面的命令列出共享的文件夹</p>
+<pre><code>smbclient -U Jack -L 192.168.0.4</code></pre>
+<p>下面主要说一下失败的情况。</p>
+<pre><code>1.tree connect failed: NT_STATUS_BAD_NETWORK_NAME</code></pre>
+<p>先检查指定的文件件是否共享了，然后检查共享目录的路径是否正确。</p>
+<pre><code>2.session setup failed: NT_STATUS_LOGON_FAILURE</code></pre>
+<p>检查用-U指定的用户名是否正确；</p>
+<p>在Windows的开始菜单中，运行secpol.msc，打开安全设置，本地策略–&gt;安全选项–&gt;网络访问：本地账户的共享和安全模型，选择“经典 - 对本地用户进行身份验证，不改变其本来身份”；</p>
+<pre><code>3.session setup failed: NT_STATUS_LOGON_TYPE_NOT_GRANTED</code></pre>
+<p>在Windows的开始菜单中，运行secpol.msc，打开安全设置，本地策略–&gt;用户权限分配–&gt;</p>
+<p>从网络访问此计算机，确认一下是否包含指定的用户；</p>
+<h3 id="inux挂载samba文件系统的方法">inux挂载samba文件系统的方法</h3>
+<p>1 手工挂载</p>
+<p>有两个命令可以用来手工挂载samba文件系统，一个是mount，一个是smbmount。</p>
+<p>1.1 使用mount命令挂载</p>
+<p>mount就是用于挂载文件系统的，SMB做为网络文件系统的一种，也能用mount挂载 一般挂载的用法为：</p>
+<pre><code>mount -t smbfs -o codepage=cp936,username=用户名,password=密码 , -l //ip地址/共享文件夹名 挂载点</code></pre>
+<p>或</p>
+<pre><code>mount -t smbfs -o codepage=cp936,username=用户名,password=密码 , -l //计算机名/共享文件夹名 挂载点</code></pre>
+<p>若没有设置用户名和密码，则可以简化为:</p>
+<pre><code>  mount -t smbfs -o codepage=cp936 //ip地址或计算机名/共享文件夹名 挂载点</code></pre>
+<p>1.2 使用smbmount命令挂载</p>
+<p>smbmount说到底也是用mount的一个变种,因此，类似于mount命令，smbmount的用法为：</p>
+<pre><code>smbmount -o username=用户名,password=密码 , -l //ip地址/共享文件夹名 挂载点
+smbmount -o username=用户名,password=密码 , -l //计算机名/共享文件夹名 挂载点
+smbmount //ip地址或计算机名/共享文件夹名 挂载点</code></pre>
+<p>2 自动挂载</p>
+<p>要让linux在启动时自动挂载samba文件系统，就需要用root用户编辑/etc/fstab文件，在其中加入一行</p>
+<pre><code>//ip地址或计算机名/共享文件夹名 挂载点  smbfs   username=用户名,password=密码       0     0</code></pre>
+<h3 id="linux-mount-unknown-filesystem-type-smbfs解决方法记录">linux-mount: unknown filesystem type ’smbfs’解决方法记录</h3>
+<p>今天在使用CentOS release 5.2 (Final)，mount其它服务器的文件目录</p>
+<pre><code># mount -t smbfs -o username=&quot;administrator&quot;,password=&quot;&quot; //192.168.1.100/cp /mnt/ntfs</code></pre>
+<p>提示出错：</p>
+<pre><code>mount: unknown filesystem type &#39;smbfs&#39;</code></pre>
+<p>查资料后，说smbfs改为cifs了，所以要用下面的方法：</p>
+<pre><code># mount -t cifs -o username=&quot;administrator&quot;,password=&quot;&quot; //192.168.1.101/cp /mnt/ntfs</code></pre>
+<p>成功！！</p>
+<h2 id="网络文件系统-nfs">网络文件系统 (NFS)</h2>
+<p>NFS 允许系统将其目录和文件共享给网络上的其他系统。通过 NFS，用户和应用程序可以访问远程系统上的文件，就象它们是本地文件一样。</p>
+<p>NFS 最值得注意的优点有：</p>
+<pre><code>            本地工作站可以使用更少的磁盘空间，因为常用数据可以被保存在一台机器上，并让网络上的其他机器可以访问它。
+            不需要为用户在每台网络机器上放一个用户目录。用户目录可以在 NFS 服务器上设置并使其在整个网络上可用。
+            存储设备如软盘、光驱及 USB 设备可以被网络上其它机器使用。这可能可以减少网络上移动设备的数量。</code></pre>
+<p>4.6.1. 安装</p>
+<p>在终端提示符后键入以下命令安装 NFS 服务器：</p>
+<pre><code>sudo apt-get install nfs-kernel-server</code></pre>
+<p>4.6.2. 配置</p>
+<p>您可以配置要输出的目录，您可以在 /etc/exports 文件中添加该目录。例如：</p>
+<pre><code>/ubuntu *(ro,sync,no_root_squash)
+/home *(rw,sync,no_root_squash)</code></pre>
+<p>您可以用主机名来代替 *。尽量指定主机名以便使那些不想其访问的系统访问 NFS 挂载的资源。</p>
+<p>您可以在终端提示符后运行以下命令来启动 NFS 服务器：</p>
+<pre><code>sudo /etc/init.d/nfs-kernel-server start</code></pre>
+<p>4.6.3. NFS 客户端配置</p>
+<p>使用 mount 命令来挂载其他机器共享的 NFS 目录。可以在终端提示符后输入以下类似的命令：</p>
+<pre><code>sudo mount example.hostname.com:/ubuntu /local/ubuntu</code></pre>
+<p>挂载点 /local/ubuntu 目录必须已经存在。而且在 /local/ubuntu 目录中没有文件或子目录。</p>
+<p>另一个挂载其他机器的 NFS 共享的方式就是在 /etc/fstab 文件中添加一行。该行必须指明 NFS 服务器的主机名、服务器输出的目录名以及挂载 NFS 共享的本机目录。</p>
+<p>以下是在 /etc/fstab 中的常用语法：</p>
+<pre><code>example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,intr</code></pre>
+
+
+
+<div class="row-fluid">
+<!--_____分享按钮___________
+<hr class="bg003">
+<div class="bshare-custom icon-medium"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/button.js#style=-1&amp;uuid=&amp;pophcol=3&amp;lang=zh"></script><a class="bshareDiv" onclick="javascript:return false;"></a><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+-_____分享按钮___________-->
+</div>
+
+</div><!--__maincontent2_____ -->
+<div class="sidebar span1 hidden-phone bg002">
+<!--__<marquee direction="top">Wecome to synBE!</marquee> __ -->
+</div>
+</div><!--_____main___________-->
+
+
+
+<div class="row-fluid bg003"><!--_____footer1 ______-->
+<div class="span2 hidden-phone"></div>
+<div class="span2">
+<ul class="nav nav-pills">
+    <li class="dropdown all-camera-dropdown dropup">
+           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              查看二维码<!--<i class="fa fa-qrcode fa-2x"></i>_____此为fontsome二维码图标___________-->
+               <b class="caret"></b>
+           </a>
+<ul class="dropdown-menu">
+<li data-filter-camera-type="all"><a data-toggle="tab" href="#">扫描二维码分享此页面</a></li>
+<!--_____二维码___________-->
+<head>
+    <meta charset="utf-8"/>
+   <!--
+   <base target="_blank">
+   -->
+    <script src="../../src/qrcode/qrcode.js"></script>
+    <style>
+      #qrcode img {
+        margin:0.5em auto;
+      }
+    </style>
+</head>
+<script>
+                thisURL = document.URL;
+window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 160,//设置宽高
+            height : 160,
+        });
+qrcode.makeCode(thisURL);
+    }
+</script>
+<div id="qrcode"></div>
+<!--_____二维码___________-->
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="span4 hidden-phone">
+<!--_____copyright___________-->
+ Copyright  © 2015-2017  <a href="http://www.synbe.com" target="_blank">synBE.com</a>  
+</div>
+<div class="span2 hidden-phone">
+<!--_____note1___________-->
+
+ <script type="text/javascript">
+
+      var downPdf = document.getElementById("renderPdf");
+
+      downPdf.onclick = function() {
+          html2canvas(document.body, {
+              onrendered:function(canvas) {
+
+                  var contentWidth = canvas.width;
+                  var contentHeight = canvas.height;
+
+                  //一页pdf显示html页面生成的canvas高度;
+                  var pageHeight = contentWidth / 592.28 * 841.89;
+                  //未生成pdf的html页面高度
+                  var leftHeight = contentHeight;
+                  //pdf页面偏移
+                  var position = 0;
+                  //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                  var imgWidth = 595.28;
+                  var imgHeight = 592.28/contentWidth * contentHeight;
+
+                  var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+                  var pdf = new jsPDF('', 'pt', 'a4');
+
+                  //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                  //当内容未超过pdf一页显示的范围，无需分页
+                  if (leftHeight < pageHeight) {
+                      pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+                  } else {
+                      while(leftHeight > 0) {
+                          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                          leftHeight -= pageHeight;
+                          position -= 841.89;
+                          //避免添加空白页
+                          if(leftHeight > 0) {
+                              pdf.addPage();
+                          }
+                      }
+                  }
+
+                  pdf.save('content.pdf');
+              }
+          })
+      }
+    </script>
+<!--_____note1___________-->
+</div>
+<div class="span2 hidden-phone"></div>
+</div><!--_____footer1 ______-->
+
+
+
+
+<!--_____返回顶部______
+<head>
+<style type="text/css">
+</style>
+<script type="text/javascript" src="../../../src/gototop/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../../../src/gototop/gotoTop.js"></script>
+<script type="text/javascript">
+$(function(){
+    $(".backToTop").goToTop();
+    $(window).bind('scroll resize',function(){
+        $(".backToTop").goToTop();
+    });
+});
+</script>
+</head>
+<a href="javascript:;" class="backToTop hidden-phone" title="返回顶部"></a>
+_____返回顶部______-->
+</body>
+</html>
