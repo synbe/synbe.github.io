@@ -1,0 +1,483 @@
+/* 容器样式 */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 工具栏样式 */
+.toolbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+/* 编辑器容器样式 */
+.editor-preview-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* 编辑器样式 */
+.editor {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 编辑器样式 */
+.tox-tinymce {
+    border: 1px solid #dee2e6 !important;
+    border-radius: 4px !important;
+}
+
+/* 按钮样式 */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.save-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #218838;
+}
+
+.copy-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.copy-btn:hover {
+    background-color: #138496;
+}
+
+/* Toast 提示样式 */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast.error {
+    background: rgba(220, 53, 69, 0.9);
+}
+
+.toast.success {
+    background: rgba(40, 167, 69, 0.9);
+}
+
+/* 按钮组样式 */
+.button-group {
+    display: flex;
+    gap: 5px;
+}
+
+/* 新增按钮样式 */
+.pdf-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.pdf-btn:hover {
+    background-color: #c82333;
+}
+
+.img-btn {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.img-btn:hover {
+    background-color: #e96b02;
+}
+
+/* 编辑器控制区样式 */
+.editor-controls {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.markdown-btn {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.markdown-btn:hover {
+    background-color: #5a32a3;
+}
+
+.markdown-btn.active {
+    background-color: #fff8dc !important;
+    border-color: #deb887 !important;
+    color: #000 !important;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 编辑器容器样式 */
+#richEditorContainer,
+#markdownEditorContainer {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Markdown 编辑器和预览区布局 */
+.markdown-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.markdown-edit,
+.markdown-preview {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Markdown 编辑器样式 */
+#markdownEditor {
+    width: 100%;
+    height: 300px;
+    padding: 20px;
+    font-family: "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #2c3e50;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    resize: vertical;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+#markdownEditor:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+/* Markdown 预览区样式 */
+#markdownPreview {
+    width: 100%;
+    min-height: 200px;
+    max-height: 500px;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow-y: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+/* 预览区内容样式 */
+#markdownPreview h1,
+#markdownPreview h2,
+#markdownPreview h3,
+#markdownPreview h4,
+#markdownPreview h5,
+#markdownPreview h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #1a202c;
+}
+
+#markdownPreview h1 { font-size: 2em; border-bottom: 2px solid #edf2f7; padding-bottom: 0.3em; }
+#markdownPreview h2 { font-size: 1.5em; border-bottom: 1px solid #edf2f7; padding-bottom: 0.3em; }
+#markdownPreview h3 { font-size: 1.25em; }
+#markdownPreview h4 { font-size: 1em; }
+#markdownPreview h5 { font-size: 0.875em; }
+#markdownPreview h6 { font-size: 0.85em; color: #4a5568; }
+
+#markdownPreview p {
+    margin: 1em 0;
+    line-height: 1.7;
+    color: #2d3748;
+}
+
+#markdownPreview a {
+    color: #3182ce;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+#markdownPreview a:hover {
+    border-bottom-color: #3182ce;
+}
+
+#markdownPreview code {
+    background-color: #f7fafc;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: "JetBrains Mono", "Fira Code", Consolas, Monaco, monospace;
+    font-size: 0.9em;
+    color: #e53e3e;
+}
+
+#markdownPreview pre {
+    background-color: #f7fafc;
+    padding: 1em;
+    border-radius: 6px;
+    overflow-x: auto;
+    border: 1px solid #edf2f7;
+}
+
+#markdownPreview pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #2d3748;
+    font-size: 0.9em;
+    line-height: 1.7;
+}
+
+#markdownPreview blockquote {
+    margin: 1em 0;
+    padding: 0.5em 1em;
+    border-left: 4px solid #3182ce;
+    background-color: #ebf8ff;
+    color: #2c5282;
+    border-radius: 0 4px 4px 0;
+}
+
+#markdownPreview ul,
+#markdownPreview ol {
+    margin: 1em 0;
+    padding-left: 2em;
+    color: #2d3748;
+}
+
+#markdownPreview li {
+    margin: 0.5em 0;
+}
+
+#markdownPreview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1em 0;
+}
+
+#markdownPreview hr {
+    margin: 2em 0;
+    border: none;
+    border-top: 2px solid #edf2f7;
+}
+
+#markdownPreview table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+
+#markdownPreview th,
+#markdownPreview td {
+    padding: 0.75em;
+    border: 1px solid #e2e8f0;
+}
+
+#markdownPreview th {
+    background-color: #f7fafc;
+    font-weight: 600;
+}
+
+#markdownPreview tr:nth-child(even) {
+    background-color: #f7fafc;
+}
+
+/* 自定义滚动条 */
+#markdownEditor::-webkit-scrollbar,
+#markdownPreview::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+#markdownEditor::-webkit-scrollbar-track,
+#markdownPreview::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#markdownEditor::-webkit-scrollbar-thumb,
+#markdownPreview::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+#markdownEditor::-webkit-scrollbar-thumb:hover,
+#markdownPreview::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* 工具栏样式 */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-group {
+    display: flex;
+    gap: 1px;
+}
+
+/* 按钮基础样式 */
+.tool-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background-color: white;
+    color: #495057;
+}
+
+.tool-btn:hover {
+    background-color: #e9ecef;
+}
+
+.tool-btn .btn-icon {
+    font-size: 16px;
+}
+
+/* 按钮组样式 */
+.btn-group .tool-btn {
+    border-radius: 0;
+    border: 1px solid #dee2e6;
+    margin: 0;
+}
+
+.btn-group .tool-btn:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.btn-group .tool-btn:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* 特定按钮样式 */
+.mode-btn {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.mode-btn:hover {
+    background-color: #5a32a3;
+}
+
+.mode-btn.active {
+    background-color: #fff8dc;
+    border-color: #deb887;
+    color: #000;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.save-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #218838;
+}
+
+.pdf-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.pdf-btn:hover {
+    background-color: #c82333;
+}
+
+.img-btn {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.img-btn:hover {
+    background-color: #e96b02;
+}
+
+.copy-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.copy-btn:hover {
+    background-color: #138496;
+}
+
+/* 编辑器容器样式 */
+.editor-preview-container {
+    margin-top: 20px;
+} 

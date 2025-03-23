@@ -1,0 +1,12 @@
+{
+  "name": "multi-editor",
+  "version": "1.0.0",
+  "description": "多功能编辑器",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+} 

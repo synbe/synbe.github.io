@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- 自适应屏幕设置 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一个功能丰富的静态评论系统</title>
+    <style>
+        /* 定义键值的 CSS 样式 */
+        body {
+            width: 900px;
+            margin: 0px auto;
+        }
+
+        .bannerarea {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .alltags {
+            text-align: right;
+        }
+
+        .mainarea {
+            margin-bottom: 40px;
+        }
+
+        .foldeditorarea {
+            width: 900px;
+            margin: 0px auto;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .editorareabtn {
+            padding: 8px 15px;
+            background-color: #efefef;
+            color: gray;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 8em;
+            margin-right: 5px;
+        }
+
+        .editorareabtn:hover {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .editorarea {
+            width: 99%;
+            margin: 10px auto;
+            padding: 0px;
+            display: none;
+            background: #f9f9f9;
+            border: gray 1px solid;
+            border-radius: 5px;
+            padding-top: 10px;
+        }
+
+        #content,
+        #contentpreview {
+            width: 99%;
+            height: 10em;
+            padding: 5px;
+            overflow-y: auto;
+        }
+
+        #contentcode {
+            width: 99%;
+            height: 5em;
+            padding: 5px;
+            color: #4e0d0d;
+            font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+            font-size: 0.9em;
+        }
+
+        .content img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .commentsarea {
+            width: 100%;
+            margin: 10px auto;
+            padding: 0px;
+        }
+
+        /* 定义每个数据项的边框和间距 */
+        .comment {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        /* 定义作者和标题输入框的样式 */
+        .input-group {
+            margin-bottom: 10px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0em 5px;
+            border-radius: 5px;
+            border: 0px solid #ccc;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 99%;
+            padding: 5px;
+            border: 0px solid #ccc;
+            margin-right: 5px;
+            margin-bottom: 2px;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border: 0px solid transparent;
+        }
+
+        .editorinput {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        #imageFile {
+            width: 20em;
+        }
+
+        .editorbtn-group {
+            margin-bottom: 10px;
+        }
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: #ccc 1px solid;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+        }
+
+        .time-author {
+            display: flex;
+            align-items: center;
+            font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+        }
+
+        .action {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0;
+            width: 50%;
+            padding: 0;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        /* 删除和修改按钮样式 */
+        .action-btn {
+            /* width: auto; */
+            line-height: 1.5em;
+            padding: 1px;
+            margin-right: 0px;
+            background-color: #f9f9f9;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            transition: opacity 0.2s ease-in-out;
+            background-repeat: no-repeat;
+            background-size: 20px;
+            color: transparent;
+            opacity: 0;
+        }
+
+        .comment:hover .action-btn,
+        .comment:hover .copy-pre-btn {
+            opacity: 1.0;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .title {
+            margin-left: 0.5em;
+            font-family: 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', 'STXihei', '华文细黑', 'SimSun', '宋体', 'Heiti', '黑体', 'Droid Sans Fallback';
+            font-size: 1.2em;
+
+        }
+
+        .title p,
+        .time-author p {
+            margin: 0;
+            font-size: 0.9em;
+            color: gray;
+            padding: 1px 5px;
+
+        }
+
+        .contentcontainer,
+        .contentcodecontainer {
+            padding: 5px;
+            border-radius: 5px;
+            position: relative;
+            border: transparent 1px solid;
+        }
+
+        .contentcontainer:hover,
+        .contentcodecontainer:hover {
+            border: #ccc 1px solid;
+        }
+
+        .content {
+            /* 让内容自动扩展填充剩余空间 */
+            flex-grow: 1;
+            padding: 2px 10px;
+            border-radius: 5px;
+            /* white-space: pre-wrap; */
+            font-family: 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', 'STXihei', '华文细黑', 'SimSun', '宋体', 'Heiti', '黑体', 'Droid Sans Fallback';
+        }
+
+        .contentcode {
+            /* 让内容自动扩展填充剩余空间 */
+            flex-grow: 1;
+            padding: 2px 10px;
+            color: #810b0b;
+            white-space: pre-wrap;
+            font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+            overflow: auto;
+            word-wrap: break-word;
+            border-left: 3px gray solid;
+        }
+
+        .tag-container {
+            margin-top: 5px;
+            border-top: 1px solid #ccc;
+            padding: 5px 8px 0px;
+        }
+
+        .existingtagsdiv {
+            margin-bottom: 10px;
+        }
+
+        .tag,
+        .existingtag,
+        .allcommentsbtn,
+        .sortbtn {
+            background-color: #efefef;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-right: 0.5em;
+            color: black;
+            font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+
+        }
+
+        .existingtag:hover,
+        .tag:hover,
+        .allcommentsbtn:hover,
+        .sortbtn:hover {
+            background-color: gray;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 1px 1px 1px 1px;
+        }
+
+
+
+        /* 状态栏样式 */
+        #statusBar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: gray;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+
+        /* 复制成功提示弹窗样式 */
+        .copy-success-popup {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            /* 水平居中 */
+            align-items: center;
+            /* 垂直居中 */
+            top: 0;
+            background-color: rgba(255, 241, 119, 0.8);
+            color: #000;
+            text-align: center;
+            line-height: 2em;
+            display: none;
+            width: 99%;
+            border-radius: 5px;
+            opacity: 0.3;
+            height: 100%;
+            vertical-align: middle;
+        }
+
+        .popup-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: #fff;
+            padding: 1em 2em;
+            border-radius: 5px;
+            width: 900px;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            float: right;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        /* 二维码 */
+        /* 弹窗背景样式 */
+        .qrcode-container {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 弹窗内容样式 */
+        .qrcode-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        /* 关闭按钮样式 */
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 放大后的二维码样式 */
+        .enlarged {
+            transform: scale(2);
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible {
+            background-color: #efefef;
+            color: gray;
+            cursor: pointer;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            width: 100%;
+            border-radius: 5px;
+            height: 2em;
+            text-align: center;
+        }
+
+        .collapsible:hover {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .star-container {
+            display: inline-block;
+            user-select: none;
+            /* 禁止容器内文本选择 */
+            width: 99%;
+            text-align: right;
+        }
+
+        .star-icon {
+            color: gray;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+        }
+
+        .star-icon.selected {
+            color: #000;
+        }
+
+        .star-div {
+            color: gray;
+            font-size: 0.8em;
+            margin-right: 2em;
+        }
+    </style>
+    <style id="insertimgsstyle">
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #555;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 输入区域 */
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .input-section input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        /* 预览区域 */
+        .preview-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            min-height: 122px;
+            padding: 10px;
+        }
+
+        .preview-item {
+            position: relative;
+            user-select: none;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin: 0;
+        }
+
+        .preview-item:hover {
+            transform: scale(1.05);
+        }
+
+        .delete-btn-img {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn-img:hover {
+            background-color: #c82333;
+        }
+
+        .move-btn {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            background-color: rgba(239, 239, 239, 0.61);
+            color: red;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .preview-item:hover .move-btn {
+            opacity: 1.0;
+        }
+
+        .move-left-btn {
+            left: 0;
+        }
+
+        .move-right-btn {
+            right: 0;
+        }
+
+        .copy-pre-btn-div {
+            position: absolute;
+            /* 设置按钮所在的 div 为绝对定位 */
+            top: 5px;
+            /* 距离 pre 元素顶部 10px */
+            right: 10px;
+            /* 距离 pre 元素右侧 10px */
+        }
+
+        .copy-pre-btn {
+            background-color: transparent;
+            color: transparent;
+            border: none;
+            padding: 0;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            background-repeat: no-repeat;
+            transition: opacity 0.2s ease-in-out;
+            opacity: 0;
+        }
+
+        .copy-pre-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+    <style id="svg-icon">
+        .icon {
+            width: 200px;
+            height: 200px;
+        }
+
+        .copy-btn,
+        .copy-code-btn {
+            background-image: url("data:image/svg+xml;utf8,<svg class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'><path d='M884.693333 268.074667h-127.616V138.112a32 32 0 0 0-32-32H139.306667a32 32 0 0 0-32 32v585.770667a32 32 0 0 0 32 32h127.616v129.962666a32 32 0 0 0 32 32h585.770666a32 32 0 0 0 32-32V300.074667a32 32 0 0 0-32-32z m-713.386666-98.133334h521.770666v521.770667H171.306667z m681.386666 683.733334H330.922667v-98.133334h394.24a32 32 0 0 0 32-32V331.733333h95.616z'></path></svg>");
+        }
+
+        .copy-pre-btn {
+            background-image: url("data:image/svg+xml;utf8,<svg class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'><path fill='white' d='M884.693333 268.074667h-127.616V138.112a32 32 0 0 0-32-32H139.306667a32 32 0 0 0-32 32v585.770667a32 32 0 0 0 32 32h127.616v129.962666a32 32 0 0 0 32 32h585.770666a32 32 0 0 0 32-32V300.074667a32 32 0 0 0-32-32z m-713.386666-98.133334h521.770666v521.770667H171.306667z m681.386666 683.733334H330.922667v-98.133334h394.24a32 32 0 0 0 32-32V331.733333h95.616z'></path></svg>");
+        }
+
+        .qr-code-btn,
+        .qr-code-code-btn {
+            background-image: url("data:image/svg+xml;utf8,<svg class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'><path d='M92.48 483.52h384v-384h-384z m64-320h256v256h-256zM924.48 99.52h-384v384h384z m-64 320h-256v-256h256zM92.48 931.52h384v-384h-384z m64-320h256v256h-256z'></path><path d='M236.48 691.52h96v96h-96zM236.48 243.52h96v96h-96zM684.48 243.52h96v96h-96zM764.48 547.52h160v96h-160zM924.48 931.52V745.6h-99.2v89.92h-92.8v96h192zM764.48 739.52v-96h-96v-96h-128v128h128v64h-32v64h-96v128h96v-96h96v-96h32z'></path></svg>");
+        }
+
+        .export-one-comment-image-btn {
+            background-image: url("data:image/svg+xml;utf8,<svg class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'><path d='M896 96H128c-35.2 0-64 28.8-64 64v704c0 35.2 28.8 64 64 64h768c35.2 0 64-28.8 64-64V160c0-35.2-28.8-64-64-64z m-767.9 64h767.8l0.1 0.1v154L509.8 640 353.5 536.4c-20.3-13.4-46-14.3-67.1-2.2L128 624.8V160.1l0.1-0.1z m767.8 704H128.1l-0.1-0.1V698.5l190.1-108.7 156.3 103.6c23.5 15.6 55 13.8 76.6-4.4l345-291.1v466l-0.1 0.1z'></path><path d='M320 416c52.9 0 96-43.1 96-96s-43.1-96-96-96-96 43.1-96 96 43.1 96 96 96z m0-128c17.6 0 32 14.4 32 32s-14.4 32-32 32-32-14.4-32-32 14.4-32 32-32z'></path></svg>");
+        }
+
+        .delete-btn {
+            background-image: url("data:image/svg+xml;utf8,<svg class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'><path d='M419.84 762.88c-25.6 0-46.08-20.48-46.08-46.08V419.84c0-25.6 20.48-46.08 46.08-46.08s46.08 20.48 46.08 46.08V716.8c0 25.6-20.48 46.08-46.08 46.08zM604.16 762.88c-25.6 0-46.08-20.48-46.08-46.08V419.84c0-25.6 20.48-46.08 46.08-46.08s46.08 20.48 46.08 46.08V716.8c0 25.6-20.48 46.08-46.08 46.08z'></path><path d='M967.68 148.48H721.92L660.48 35.84c-10.24-15.36-25.6-25.6-40.96-25.6H404.48c-15.36 0-30.72 10.24-40.96 25.6L302.08 148.48H56.32c-25.6 0-46.08 20.48-46.08 46.08s20.48 46.08 46.08 46.08h66.56v634.88c0 76.8 61.44 138.24 138.24 138.24h496.64c76.8 0 138.24-61.44 138.24-138.24V240.64h66.56c25.6 0 46.08-20.48 46.08-46.08s-20.48-46.08-40.96-46.08zM430.08 102.4h158.72l25.6 46.08H409.6l20.48-46.08z m378.88 773.12c0 25.6-20.48 46.08-46.08 46.08H261.12c-25.6 0-46.08-20.48-46.08-46.08V240.64h588.8v634.88z'></path></svg>");
+        }
+
+        .edit-btn {
+            background-image: url("data:image/svg+xml;utf8,<svg class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'><path d='M340.5 529.8l-82.8 206.7c-6.3 15.8 5.9 31.5 21.2 31.5 2.8 0 5.7-0.5 8.6-1.7l206.9-82.7c4-1.6 7.5-3.9 10.6-7l445.8-446c12.3-12.3 12.3-32.1 0-44.4l-113-113c-6.1-6.1-14.2-9.2-22.2-9.2s-16.1 3.1-22.2 9.2l-446 446.1c-3 3-5.4 6.6-6.9 10.5z m475.1-388.3l66.9 67-32.9 32.9-67-67 33-32.9zM397.4 559.8l340-340.1 67 67-339.9 340-111.7 44.6 44.6-111.5z'></path><path d='M928 351.8c-17.7 0-32 14.3-32 32V864c0 17.6-14.4 32-32 32H160c-17.6 0-32-14.4-32-32V160c0-17.6 14.4-32 32-32h481c17.7 0 32-14.3 32-32s-14.3-32-32-32H160c-52.9 0-96 43.1-96 96v704c0 52.9 43.1 96 96 96h704c52.9 0 96-43.1 96-96V383.8c0-17.7-14.3-32-32-32z'></path></svg>");
+        }
+
+        .export-one-comment-html-btn {
+            background-image: url("data:image/svg+xml;utf8,<svg class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'><path d='M220.55936 317.10208h187.98592V100.6592h394.81344v300.95872h49.4592V51.2H372.5568L171.20256 283.10528v118.51264h49.3568zM114.46272 440.77568v322.176h56.72448v209.1776l681.63072 0.67072v-209.82784h56.71936V440.77568H114.46272z m451.69664 77.63968l30.1312 122.37312 30.15168-122.37312h50.2784v166.92224h-32.72192V570.9824l-31.11936 114.3552h-34.67776l-30.8992-113.82784v113.82784h-32.4096l-0.01024-166.92224h51.2768z m-206.38208 0h135.71072v29.16352h-50.51392v137.76384H410.0608v-137.76384h-50.28352v-29.16352z m-153.81504 0h34.89792v62.85824h65.14688v-62.85824h35.12832v166.92224h-35.12832v-74.9056H240.85504v74.9056h-34.89792v-166.92224z m597.39648 404.89984l-582.80448-0.5632v-159.77984h582.80448v160.34304z m14.78144-237.97248h-117.632v-166.93248h34.90816v136.48384h82.71872v30.44864z'></path></svg>");
+        }
+    </style>
+    <style id="markdowncss-highlight">
+        /* ///// MARKDOWN CSS/////////// */
+        h1 {
+            font-size: 1.25em;
+            color: #fff;
+            font-weight: bold;
+            margin: 16px 0;
+            padding: 10px;
+            background: #6114a8;
+            border-radius: 0px;
+        }
+
+        h2 {
+            font-size: 1.25em;
+            color: #6114a8;
+            font-weight: bold;
+            margin: 12px 0;
+            padding: 10px;
+            border-bottom: 2px solid #6114a8;
+        }
+
+        h3 {
+            font-size: 1.15em;
+            color: #6114a8;
+            font-weight: bold;
+            margin: 12px 0;
+            border-radius: 5px;
+        }
+
+        h4 {
+            font-size: 1.05em;
+            color: #6114a8;
+            font-weight: bold;
+            margin: 14px 0;
+            padding: 8px 0;
+            border-radius: 5px;
+        }
+
+        h5 {
+            font-size: 1.25em;
+            text-align: center;
+            font-weight: bold;
+            color: #6114a8;
+            background: #deaef9;
+            padding: 10px;
+            border-radius: 0px;
+        }
+
+        h6 {
+            font-size: 1.25em;
+            color: #fff;
+            text-align: center;
+            background: red;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 10px 0;
+            border-radius: 0px;
+        }
+
+        h2::before,
+        h3::before {
+            color: #6114a8;
+            content: "❏";
+        }
+
+        /* 强调文本样式 */
+        strong {
+            color: #6114a8;
+            font-weight: bold;
+        }
+
+        /* 列表样式 */
+        ul,
+        ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        li {
+            margin: 8px 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            margin: 16px 0;
+            border-radius: 0px;
+            background-color: #e5e4e4;
+            box-shadow: #fff 2px 2px 10px;
+        }
+
+        thead {
+            background-color: #dba6ff;
+        }
+
+        th {
+            padding: 8px;
+            text-align: center;
+            background-color: #e5e4e4;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 8px;
+            border: 0px solid #6114a8;
+            border-radius: 0px;
+            background: #fff;
+            text-align: left;
+        }
+
+        /* 图片样式 */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0px;
+            margin: 1em auto;
+            display: block;
+        }
+
+        /* 水平线样式 */
+        hr {
+            height: 1px;
+            background: #6114a8;
+            border-radius: 0px;
+        }
+
+        /* 代码样式 */
+        code {
+            padding: 2px 4px;
+            border-radius: 3px;
+            background: #f6e9ff;
+            font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+        }
+
+
+        pre {
+            position: relative;
+            border-radius: 5px;
+            font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+            position: relative;
+            overflow-x: auto;
+            max-width: 100%;
+            padding-top: 1.8em;
+            border-radius: 5px;
+            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0px' y='0px' width='450px' height='130px'><ellipse cx='65' cy='65' rx='50' ry='52' stroke='rgb(220,60,54)' stroke-width='2' fill='rgb(237,108,96)'/><ellipse cx='225' cy='65' rx='50' ry='52'  stroke='rgb(218,151,33)' stroke-width='2' fill='rgb(247,193,81)'/><ellipse cx='385' cy='65' rx='50' ry='52'  stroke='rgb(27,161,37)' stroke-width='2' fill='rgb(100,200,86)'/></svg>") 10px 10px / 60px no-repeat rgb(40, 44, 52);
+        }
+
+        pre code {
+            display: block;
+            padding: 0.5em;
+            color: #fff;
+            background: #363636;
+        }
+
+        blockquote {
+            background: #deaef9;
+            border-left: 4px solid #6114a8;
+            padding: 5px;
+            margin: 0.5em;
+        }
+
+        blockquote blockquote {
+            margin: -5px -5px -5px -9px;
+            border-left: 4px solid #6114a8;
+            background: #ecfbec;
+        }
+
+        blockquote blockquote blockquote {
+            border-left: 4px solid #6114a8;
+            background: #ffdede;
+        }
+
+        blockquote blockquote blockquote blockquote {
+            border-left: 4px solid #6114a8;
+            background: #d5d5f7;
+        }
+
+        blockquote blockquote blockquote blockquote blockquote {
+            border-left: 4px solid #6114a8;
+            background: #fbfad2;
+        }
+
+        blockquote blockquote blockquote blockquote blockquote blockquote {
+            border-left: 4px solid #6114a8;
+            background: #c4c4c4;
+        }
+
+        blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+            border-left: 4px solid #6114a8;
+            background: #c4f9f1;
+        }
+
+        blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+            border-left: 4px solid #6114a8;
+            background: red;
+            color: #fff;
+        }
+
+        /* 代码高亮monika 主题 */
+        pre code.hljs {
+            display: block;
+            overflow-x: auto;
+            padding: 1em
+        }
+
+        code.hljs {
+            padding: 3px 5px
+        }
+
+        .hljs {
+            color: #ddd
+        }
+
+        .hljs-keyword,
+        .hljs-literal,
+        .hljs-name,
+        .hljs-selector-tag,
+        .hljs-strong,
+        .hljs-tag {
+            color: #f92672
+        }
+
+        .hljs-code {
+            color: #66d9ef
+        }
+
+        .hljs-attribute,
+        .hljs-link,
+        .hljs-regexp,
+        .hljs-symbol {
+            color: #bf79db
+        }
+
+        .hljs-addition,
+        .hljs-built_in,
+        .hljs-bullet,
+        .hljs-emphasis,
+        .hljs-section,
+        .hljs-selector-attr,
+        .hljs-selector-pseudo,
+        .hljs-string,
+        .hljs-subst,
+        .hljs-template-tag,
+        .hljs-template-variable,
+        .hljs-title,
+        .hljs-type,
+        .hljs-variable {
+            color: #a6e22e
+        }
+
+        .hljs-class .hljs-title,
+        .hljs-title.class_ {
+            color: #fff
+        }
+
+        .hljs-comment,
+        .hljs-deletion,
+        .hljs-meta,
+        .hljs-quote {
+            color: #75715e
+        }
+
+        .hljs-doctag,
+        .hljs-keyword,
+        .hljs-literal,
+        .hljs-section,
+        .hljs-selector-id,
+        .hljs-selector-tag,
+        .hljs-title,
+        .hljs-type {
+            font-weight: 700
+        }
+    </style>
+
+    <script src="src/html2canvas.min.js"></script>
+    <script src="src/marked.min.js"></script>
+    <script src="src/highlight.min.js"></script>
+    <script src="src/showdown.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css"> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script> -->
+</head>
+
+<body>
+    <div id="bannerArea" class="bannerarea">
+        <button id="sortBtn" class="sortbtn">按日期评分排序</button>
+        <div id="banner" class="banner">
+            <button id="allCommentsBtn" class="allcommentsbtn"></button>
+        </div>
+        <div id="allTags" class="alltags">
+        </div>
+    </div>
+    <div id="mainArea" class="mainarea">
+        <div id='commentsArea' class="commentsarea"></div>
+
+        <div id="editorArea" class="editorarea">
+            <div class="input-group">
+
+                <input class="editorinput" type="text" id="author" placeholder="输入作者姓名" value="axun"
+                    style="display: none;">
+                <input class="editorinput" type="text" id="title" placeholder="输入评论标题" value="untitled">
+            </div>
+            <div class="star-container" id="star-container">
+                <span class="star-icon">☆</span>
+                <span class="star-icon">☆</span>
+                <span class="star-icon">☆</span>
+                <span class="star-icon">☆</span>
+                <span class="star-icon">☆</span>
+                <span class="star-icon">☆</span>
+            </div>
+            <div class="input-group">
+                <div id="contentpreview"></div>
+                <textarea id="content" placeholder="输入评论内容"></textarea>
+                <textarea id="contentcode" placeholder="输入代码内容"></textarea>
+                <input class="editorinput" type="text" id="tag" placeholder="输入标签,逗号(,)隔开">
+                <input class="editorinput" type="text" id="star" placeholder="星标等级1~10" value="1" pattern="[0-9]*"
+                    title="请输入数字" style="display: none;">
+                <div id="existingtagsdiv" class="existingtagsdiv"></div>
+                <input class="editorinput" type="text" id="imageBase64" placeholder="图片Base64" style="display: none;">
+            </div>
+
+            <div class="editorbtn-group">
+                <button class="editorareabtn" id="helpBtn">帮助</button>
+                <button class="editorareabtn" id="clearBtn">清空</button>
+                <button class="editorareabtn" id="insertimgsBtn">图片</button>
+                <button class="editorareabtn" id="insertCodeBtn" style="display: none;">插入代码</button>
+                <button class="editorareabtn" id="exportBtn">导出到json</button>
+                <button class="editorareabtn" id="exportAllCommentsToHtmlBtn">导出到html</button>
+                <button class="editorareabtn" id="sendBtn">发送</button>
+            </div>
+
+        </div>
+
+        <!-- 状态栏 -->
+        <!-- <div id="statusBar" class="statusbar"></div> -->
+
+        <!-- 二维码弹窗容器 -->
+        <div id="qrcode-container" class="qrcode-container" style="display:none;">
+            <div class="qrcode-content">
+                <span class="close" id="qrcode-close-btn">&times;</span>
+                <div id="qrcode"></div>
+            </div>
+        </div>
+
+        <!-- 弹窗容器 -->
+        <div id="help-container" class="popup-container" style="display:none;">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>帮助</h2>
+                <p>json数据编辑器</p>
+                <hr>
+                <ol>
+                    <li>index.html读取./data.json的数据,并渲染显示在页面中。</li>
+                    <li>编辑器中的内容，点击发送后，数据以json格式临时保存。</li>
+                    <li style="color: red;">编辑完成后务必导出,否则页面刷新后数据会消失!</li>
+                    <li>导出文件后(data.json 或export.html),将data.json放到与index.html相同目录下。</li>
+                    <li>编辑框1支持html标记语言,编辑框2用于插入代码块。</li>
+                    <li>支持插入多张本地图片和网络图片，多张图片网址用逗号(,)隔开,所有图片均转换为base64编码,并压缩至2M下。</li>
+                    <li>支持重新编辑和删除,支持区块内容生成二维码。</li>
+                </ol>
+                <hr>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- // 图片弹窗 -->
+    <div id="my-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="input-section">
+                <input type="text" id="local-image-names" placeholder="本地图片名称，逗号分隔"></input>
+                <button class="editorareabtn" id="local-images-btn">
+                    本地图片
+                </button>
+                <input type="file" id="local-images-input" multiple accept="image/*,.jpg,.jpeg,.png,.gif,.bmp,.tiff"
+                    style="display: none;">
+            </div>
+            <div class="input-section">
+                <input type="text" id="image-urls" placeholder="输入多个网络图片 URL，用逗号分隔">
+                <button class="editorareabtn" id="url-images-btn">确认</button>
+            </div>
+            <div class="preview-section" id="preview-container"></div>
+            <div class="input-section">
+                <input type="text" id="image-base64" placeholder="图片Base64编码">
+                <button class="editorareabtn" id="confirm-btn">插入图片</button>
+            </div>
+         
+
+        </div>
+
+    </div>
+    </div>
+
+    <div id="foldeditorArea" class="foldeditorarea"><button id="foldeditorAreaBtn" type="button"
+            class="collapsible">编辑器</button></div>
+    <script src="./data.js"></script>
+    <script>
+        // 获取输出容器
+        const comments = document.getElementById('commentsArea');
+        const authorInput = document.getElementById('author');
+        const titleInput = document.getElementById('title');
+        const tagInput = document.getElementById('tag');
+        const starInput = document.getElementById('star');
+        const contentPreview = document.getElementById('contentpreview');
+        const contentInput = document.getElementById('content');
+        const contentCodeInput = document.getElementById('contentcode');
+        const clearBtn = document.getElementById('clearBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const statusBar = document.getElementById('statusBar');
+        const exportAllCommentsToHtmlBtn = document.getElementById('exportAllCommentsToHtmlBtn');
+        const imageBase64Input = document.getElementById('imageBase64');
+        const imageBase64 = document.getElementById('image-base64');
+        const insertImageBtn = document.getElementById('insertImageBtn');
+
+        // 渲染评论数据
+
+        function renderComments(commentsdata) {
+            comments.innerHTML = '';
+            commentsdata.forEach((item, index) => {
+                // 创建一个包含整个评论数据项的 div
+                const commentDiv = document.createElement('div');
+                commentDiv.classList.add('comment');
+
+
+                // 创建一个header的 div
+                const headerDiv = document.createElement('div');
+                headerDiv.classList.add('header');
+
+                // 创建一个包含修改复制按钮的 div
+                const headerActionsDiv = document.createElement('div');
+                headerActionsDiv.classList.add('action');
+
+                // 创建一个包含时间和作者的 div
+                const timeAuthorDiv = document.createElement('div');
+                timeAuthorDiv.classList.add('time-author');
+
+                // 创建一个包含标题的 div
+                const titleDiv = document.createElement('div');
+                titleDiv.classList.add('title');
+
+                // 显示作者
+                const authorP = document.createElement('p');
+                authorP.classList.add('value');
+                authorP.style.fontSize = '0.9em';
+                authorP.style.color = '#888';
+                authorP.textContent = `${item.author}`;
+
+                // 显示时间
+                const timeP = document.createElement('p');
+                timeP.classList.add('value');
+                timeP.style.fontSize = '0.8em';
+                timeP.style.color = '#888';
+                if (item.modified) {
+                    timeP.textContent = `${item.time}*`;
+                } else {
+                    timeP.textContent = item.time;
+                }
+
+                // 创建一个包含所有标签的父级 div
+                const tagContainer = document.createElement('div');
+                tagContainer.classList.add('tag-container');
+                tagContainer.style.display = 'flex';
+                tagContainer.style.flexWrap = 'wrap';
+
+                // 遍历 tag 数组，为每个标签创建一个 div
+                for (let i = 0; i < item.tag.length; i++) {
+                    const tagElement = document.createElement('button');
+                    tagElement.classList.add('tag');
+                    tagElement.textContent = item.tag[i];
+                    // 将每个标签 div 添加到父级 div 中
+                    tagContainer.appendChild(tagElement);
+                }
+
+                // 创建一个包含星标的 div
+                function createStarDiv(starCount) {
+                    const starDiv = document.createElement('div');
+                    starDiv.classList.add('star-div');
+                    starDiv.style.display = 'flex';
+                    starDiv.style.gap = '5px';
+
+                    for (let i = 0; i < starCount; i++) {
+                        const starSpan = document.createElement('span');
+                        starSpan.textContent = '★';
+                        starDiv.appendChild(starSpan);
+                    }
+
+                    for (let i = 0; i < 6 - starCount; i++) {
+                        const starSpan = document.createElement('span');
+                        starSpan.textContent = '☆';
+                        starDiv.appendChild(starSpan);
+                    }
+                    return starDiv;
+                }
+
+                // 创建一个包含星标的 div
+                const starDiv = createStarDiv(item.star);
+
+
+                // 显示标题
+                const titleP = document.createElement('p');
+                titleP.classList.add('value');
+                titleP.style.fontWeight = 'bold';
+                titleP.textContent = item.title;
+
+                // 显示内容
+                const contentContainertDiv = document.createElement('div'); // 改为 div 元素
+                contentContainertDiv.classList.add('contentcontainer');
+
+                const contentDiv = document.createElement('div'); // 改为 div 元素
+                contentDiv.classList.add('content');
+                contentDiv.innerHTML = item.content; // 使用 innerHTML 解析 HTML 内容
+
+                const contentActionsDiv = document.createElement('div'); // 改为 div 元素
+                contentActionsDiv.classList.add('action');
+
+                // 显示代码内容
+                const contentCodeContainertDiv = document.createElement('div'); // 改为 div 元素
+                contentCodeContainertDiv.classList.add('contentcodecontainer');
+
+                const contentCodeDiv = document.createElement('div'); // 改为 div 元素
+                contentCodeDiv.classList.add('contentcode');
+                contentCodeDiv.textContent = item.contentcode; // 使用 innerHTML 解析 HTML 内容
+
+                const contentCodeActionsDiv = document.createElement('div'); // 改为 div 元素
+                contentCodeActionsDiv.classList.add('action');
+
+                //如果<内容为空>则不显示
+
+                if (item.contentcode === '') {
+                    contentCodeContainertDiv.style.display = 'none';
+                }
+
+                // 添加复制content按钮
+                const copyBtn = document.createElement('button');
+                copyBtn.classList.add('action-btn');
+                copyBtn.classList.add('copy-btn');
+                copyBtn.textContent = '复制';
+
+                copyBtn.addEventListener('click', async () => {
+                    copyBtnTextAndShowStatus(parseHtmlText(item.content));
+                    const successPopup = copyBtn.closest('.contentcontainer').querySelector('.copy-success-popup');
+                    successPopup.style.display = 'block';
+                    setTimeout(() => {
+                        successPopup.style.display = 'none';
+                        contentContainertDiv.style.border = '';
+                    }, 1000);
+                });
+
+                // 添加复制contentcode按钮
+                const copyCodeBtn = document.createElement('button');
+                copyCodeBtn.classList.add('action-btn');
+                copyCodeBtn.classList.add('copy-code-btn');
+                copyCodeBtn.textContent = '复制';
+
+                copyCodeBtn.addEventListener('click', async () => {
+                    copyBtnTextAndShowStatus(item.contentcode);
+                    const successCodePopup = copyCodeBtn.closest('.contentcodecontainer').querySelector('.copy-success-popup');
+                    successCodePopup.style.display = 'block';
+                    setTimeout(() => {
+                        successCodePopup.style.display = 'none';
+                        contentCodeContainertDiv.style.border = '';
+                    }, 1000);
+
+                });
+
+                //添加<div class="copy-success-popup">复制成功</div>
+                const copySuccessPopup = document.createElement('div');
+                copySuccessPopup.classList.add('copy-success-popup');
+                copySuccessPopup.textContent = '复制成功';
+                copySuccessPopup.style.display = 'none';
+
+                const copyCodeSuccessPopup = document.createElement('div');
+                copyCodeSuccessPopup.classList.add('copy-success-popup');
+                copyCodeSuccessPopup.textContent = '复制成功';
+                copyCodeSuccessPopup.style.display = 'none';
+
+                // 添加删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('action-btn');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.textContent = '删除';
+                deleteBtn.addEventListener('click', () => {
+                    commentsdata.splice(index, 1);
+                    renderComments(commentsdata);
+                });
+
+                // 添加导出到html按钮
+                const exportOneCommentHtmlBtn = document.createElement('button');
+                exportOneCommentHtmlBtn.classList.add('action-btn');
+                exportOneCommentHtmlBtn.classList.add('export-one-comment-html-btn');
+                exportOneCommentHtmlBtn.textContent = '导出';
+                exportOneCommentHtmlBtn.addEventListener('click', () => {
+                    // 当前评论的元素
+                    const button = event.target;
+                    const commentElement = button.closest('.comment');
+                    const commentHtml = commentElement.outerHTML;
+                    console.log(commentHtml)
+                    exportToHtml(commentHtml, filename = "exportOneComment.html");
+                });
+
+                //添加修改按钮
+                const editBtn = document.createElement('button');
+                editBtn.classList.add('action-btn');
+                editBtn.classList.add('edit-btn');
+                editBtn.textContent = '修改';
+
+                editBtn.addEventListener('click', () => {
+                    authorInput.value = item.author;
+                    titleInput.value = item.title;
+                    contentCodeInput.value = item.contentcode;
+                    tagInput.value = item.tag.join(',');
+                    starInput.value = item.star;
+
+                    const html2mdconverter = new showdown.Converter();
+                    contentInput.value = html2mdconverter.makeMarkdown(item.content);
+
+                    // 保存当前评论的索引
+                    editBtn.dataset.index = index;
+                    // 更改发送按钮的功能为保存修改
+                    sendBtn.textContent = '保存修改';
+                    sendBtn.dataset.editIndex = index;
+
+                    // 显示编辑器区域
+                    const editorArea = document.getElementById('editorArea');
+                    editorArea.style.display = 'block';
+                    authorInput.style.backgroundColor = '#fdfbe3';
+                    titleInput.style.backgroundColor = '#fdfbe3';
+                    contentInput.style.backgroundColor = '#fdfbe3';
+                    contentCodeInput.style.backgroundColor = '#fdfbe3';
+
+                    updateRating(item.star);
+
+                    // 页面滚动到内容输入框位置
+                    contentInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    contentInput.focus();
+
+                });
+
+
+                // 添加生成内容二维码按钮
+                const qrCodeBtn = document.createElement('button');
+                qrCodeBtn.classList.add('action-btn');
+                qrCodeBtn.classList.add('qr-code-btn');
+                qrCodeBtn.textContent = '二维';
+                qrCodeBtn.addEventListener('click', () => {
+                    generateQRCode(item.content);
+                });
+
+                // 添加代码内容二维码按钮
+                const qrCodeCodeBtn = document.createElement('button');
+                qrCodeCodeBtn.classList.add('action-btn');
+                qrCodeCodeBtn.classList.add('qr-code-code-btn');
+                qrCodeCodeBtn.textContent = '二维';
+                qrCodeCodeBtn.addEventListener('click', () => {
+                    generateQRCode(item.contentcode);
+                });
+
+                // 添加导出图片按钮
+                const exportImageBtn = document.createElement('button');
+                exportImageBtn.classList.add('action-btn');
+                exportImageBtn.classList.add('export-one-comment-image-btn');
+                exportImageBtn.textContent = '图片';
+                exportImageBtn.addEventListener('click', async () => {
+                    try {
+                        // 隐藏按钮
+                        copyBtn.style.display = 'none';
+                        copyCodeBtn.style.display = 'none';
+                        deleteBtn.style.display = 'none';
+                        exportOneCommentHtmlBtn.style.display = 'none';
+                        editBtn.style.display = 'none';
+                        qrCodeCodeBtn.style.display = 'none';
+                        qrCodeBtn.style.display = 'none';
+                        exportImageBtn.style.display = 'none';
+                        tagContainer.style.display = 'none';
+                        //调整comm宽度
+                        commentDiv.style.width = '60%';
+
+
+                        const actionsDivs = document.querySelectorAll('.action');
+                        actionsDivs.forEach(div => {
+                            div.style.marginBottom = '-0.5em';
+                        });
+
+                        // 使用 html2canvas 将 div 内容转换为 canvas
+                        const canvas = await html2canvas(commentDiv, {
+                            // 确保捕获所有子元素及其样式
+                            scale: 5, // 提高图片质量，可根据需要调整
+                            allowTaint: false,
+                            useCORS: true,
+                            //调整图片大小
+
+                        });
+                        // 将 canvas 转换为图片的 data URL
+                        const imageDataUrl = canvas.toDataURL('image/png');
+
+                        // 创建下载链接
+                        const link = document.createElement('a');
+                        link.href = imageDataUrl;
+                        link.download = `comment-${index + 1}.png`;
+                        // 触发下载
+                        link.click();
+                    } catch (error) {
+                        console.error('导出图片时出错:', error);
+                    } finally {
+                        // 显示按钮
+                        exportImageBtn.style.display = 'block';
+                        copyBtn.style.display = 'block';
+                        copyCodeBtn.style.display = 'block';
+                        deleteBtn.style.display = 'block';
+                        editBtn.style.display = 'block';
+                        qrCodeCodeBtn.style.display = 'block';
+                        qrCodeBtn.style.display = 'block';
+                        exportOneCommentHtmlBtn.style.display = 'block';
+                        tagContainer.style.display = 'block';
+                        commentDiv.style.width = '';
+
+
+                        const actionDivs = document.querySelectorAll('.action');
+                        actionDivs.forEach(div => {
+                            div.style.marginBottom = '-2em';
+                        });
+                    }
+                });
+
+
+                // 组装元素
+                timeAuthorDiv.appendChild(authorP);
+                timeAuthorDiv.appendChild(timeP);
+                titleDiv.appendChild(titleP);
+                headerDiv.appendChild(timeAuthorDiv);
+                headerDiv.appendChild(headerActionsDiv);
+                commentDiv.appendChild(headerDiv);
+                commentDiv.appendChild(titleDiv);
+
+                headerActionsDiv.appendChild(starDiv);
+                headerActionsDiv.appendChild(deleteBtn);
+                headerActionsDiv.appendChild(exportOneCommentHtmlBtn);
+                headerActionsDiv.appendChild(exportImageBtn);
+                headerActionsDiv.appendChild(editBtn);
+
+                contentActionsDiv.appendChild(qrCodeBtn);
+                contentActionsDiv.appendChild(copyBtn);
+                contentContainertDiv.appendChild(contentDiv);
+                contentContainertDiv.appendChild(contentActionsDiv);
+                contentContainertDiv.appendChild(copySuccessPopup);
+
+                contentCodeActionsDiv.appendChild(qrCodeCodeBtn);
+                contentCodeActionsDiv.appendChild(copyCodeBtn);
+                contentCodeContainertDiv.appendChild(contentCodeDiv);
+                contentCodeContainertDiv.appendChild(contentCodeActionsDiv);
+                contentCodeContainertDiv.appendChild(copyCodeSuccessPopup);
+
+                commentDiv.appendChild(contentContainertDiv);
+                commentDiv.appendChild(contentCodeContainertDiv);
+                commentDiv.appendChild(tagContainer);
+                comments.appendChild(commentDiv);
+            });
+
+            renderTags();
+            renderExistingTags();
+            updateAllCommentsCount();
+            clearContent();
+            copyPreCode();
+        }
+
+    </script>
+    <script id="exportsjs">
+
+
+
+        // 复制文本并显示提示信息的函数方法C
+        function copyBtnTextAndShowStatus(text) {
+            // 模拟复制操作
+            navigator.clipboard.writeText(text).then(() => {
+                console.log('文本复制成功');
+            }).catch((error) => {
+                console.error('文本复制失败:', error);
+            });
+        }
+
+        //解析html标签里的文本内容,自动分行
+        function parseHtmlText(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            const textContentArray = [];
+            const walk = (node) => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent.trim();
+                    if (text) {
+                        textContentArray.push(text);
+                    }
+                } else {
+                    for (let i = 0; i < node.childNodes.length; i++) {
+                        walk(node.childNodes[i]);
+                    }
+                }
+            };
+            walk(doc.body);
+            const result = textContentArray.join('\n');
+            return result;
+        }
+
+        function generateQRCode(text) {
+            try {
+                // 设置二维码的容错级别为 L（低）
+                const typeNumber = 0;
+                const errorCorrectionLevel = 'L';
+                // 创建二维码对象
+                const qr = qrcode(typeNumber, errorCorrectionLevel);
+                // 添加输入的文本到二维码对象
+                qr.addData(text);
+                // 生成二维码
+                qr.make();
+                // 获取二维码的 HTML 代码，这里设置了更大的尺寸
+                const qrHtml = qr.createImgTag(10, 20);
+                // 将二维码的 HTML 代码插入到指定的容器中
+                document.getElementById('qrcode').innerHTML = qrHtml;
+
+                // 显示弹窗
+                const modal = document.getElementById('qrcode-container');
+                modal.style.display = "flex";
+
+                // 为关闭按钮添加点击事件
+                const closeBtn = document.getElementsByClassName("close")[0];
+                closeBtn.onclick = function () {
+                    modal.style.display = "none";
+                };
+
+                // 为二维码添加点击事件，实现放大功能
+                const qrImg = document.querySelector('#qrcode img');
+                qrImg.onclick = function () {
+                    this.classList.toggle('enlarged');
+                };
+
+                // 点击弹窗外部关闭弹窗
+                window.onclick = function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
+                };
+            } catch (error) {
+                alert('Error: ')
+            }
+        }
+
+
+        ///////////////////////
+
+        // 获取所有的复制按钮         // 为每个复制按钮添加点击事件监听器
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        copyButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                // 获取当前评论的内容
+                const commentContent = button.closest('.comment').querySelector('.content').textContent;
+                copyBtnTextAndShowStatus(parseHtmlText(commentContent));
+                const successPopup = button.closest('.contentcontainer').querySelector('.copy-success-popup');
+                successPopup.style.display = 'block';
+                setTimeout(() => {
+                    successPopup.style.display = 'none';
+                }, 1000);
+            });
+        });
+
+        // 获取所有的代码复制按钮         // 为每个复制按钮添加点击事件监听器
+        const copyCodeButtons = document.querySelectorAll('.copy-code-btn');
+        copyCodeButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                // 获取当前评论的内容
+                const commentCodeContent = button.closest('.comment').querySelector('.contentcode').textContent;
+                copyBtnTextAndShowStatus(commentCodeContent);
+                const successCodePopup = button.closest('.contentcodecontainer').querySelector('.copy-success-popup');
+                successCodePopup.style.display = 'block';
+                setTimeout(() => {
+                    successCodePopup.style.display = 'none';
+                }, 1000);
+            });
+        });
+
+
+        //使用 JavaScript 方法：隐藏删除按钮，同时隐藏修改按钮
+        function hideButtons() {
+            try {
+                const editbuttons = document.querySelectorAll('.edit-btn');
+                editbuttons.forEach(button => {
+                    button.style.display = 'none';
+                });
+
+                const deletebuttons = document.querySelectorAll('.delete-btn');
+                deletebuttons.forEach((button) => {
+                    button.style.display = 'none';
+                });
+
+                const exportimagebtns = document.querySelectorAll('.export-one-comment-image-btn');
+                exportimagebtns.forEach((button) => {
+                    button.style.display = 'none';
+                });
+
+                const exportOneCommentHtmlBtns = document.querySelectorAll('.export-one-comment-html-btn');
+                exportOneCommentHtmlBtns.forEach((button) => {
+                    button.style.display = 'none';
+                });
+
+                const tagContainers = document.querySelectorAll('.tag-container');
+                tagContainers.forEach((button) => {
+                    button.style.display = 'none';
+                });
+
+                const editorArea = document.getElementById('editorArea');
+                editorArea.style.display = 'none';
+            }
+            catch (error) {
+                console.log('Error: ');
+            }
+
+        }
+
+        // 获取qr-code-btn,添加点击事件监听器
+        const qrcodeButtons = document.querySelectorAll('.qr-code-btn');
+        qrcodeButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                // 获取当前评论的内容
+                const commentContent = button.closest('.comment').querySelector('.content').textContent;
+                generateQRCode(commentContent);
+            });
+        });
+
+        // 获取qr-code-btn,添加点击事件监听器
+        const qrcodeCodeButtons = document.querySelectorAll('.qr-code-code-btn');
+        qrcodeCodeButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                // 获取当前评论的内容
+                const commentContent = button.closest('.comment').querySelector('.contentcode').textContent;
+                generateQRCode(commentContent);
+            });
+        });
+
+        function copyPreCode() {
+            const copyButtons = document.querySelectorAll('.copy-pre-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const codeElement = button.closest('.comment').querySelector('code');
+                    const codeContent = codeElement.textContent;
+                    try {
+                        // 使用 navigator.clipboard.writeText 复制文本到剪贴板
+                        await navigator.clipboard.writeText(codeContent);
+                        codeElement.style.backgroundColor = '#eeffee';
+                        button.textContent = '复制';
+                        setTimeout(() => {
+                            button.textContent = '复制';
+                            codeElement.style.backgroundColor = '';
+                        }, 1000);
+                    } catch (err) {
+                        console.error('复制失败:', err);
+                    }
+                });
+            });
+        }
+        copyPreCode();
+        hideButtons();
+    </script>
+    <script>
+
+        function convertToTagList() {
+            const inputElement = document.getElementById('tag');
+            const inputValue = inputElement.value;
+            const tagList = inputValue.split(',');
+            const trimmedTagList = tagList.map(tag => tag.trim());
+            // 移除空格
+            const filteredTagList = trimmedTagList.filter(tag => tag !== '');
+            // 移除重复项目
+            const uniqueTagList = [...new Set(filteredTagList)];
+            // 返回转换后的标签列表
+            return uniqueTagList;
+        }
+
+        // 评价等级函数
+        function getRating() {
+            const starContainer = document.getElementById('star-container');
+            const stars = starContainer.querySelectorAll('.star-icon');
+            const ratingDisplay = document.getElementById('rating-display');
+
+            // 为星星容器添加 mousedown 事件监听器
+            starContainer.addEventListener('mousedown', function (event) {
+                event.preventDefault(); // 阻止 mousedown 事件的默认行为
+            });
+
+            // 为每个星星添加点击事件监听器
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    // 获取当前点击星星的等级（从 1 开始）
+
+                    event.preventDefault();
+                    const rating = index + 1;
+
+                    // 更新星星的选中状态
+                    stars.forEach((s, i) => {
+                        if (i < rating) {
+                            s.classList.add('selected');
+                            s.textContent = '★'; // 将星星文本内容改为 ★
+                        } else {
+                            s.classList.remove('selected');
+                            s.textContent = '☆'; // 未选中的星星恢复为原来的符号
+                        }
+                    });
+
+                    // 更新显示的评价等级
+                    starInput.value = rating;
+
+                    // 这里可以添加将评价等级发送到后端的逻辑
+                    console.log(`用户评价等级为: ${rating}`);
+
+                });
+            });
+
+        }
+
+        getRating();
+
+        //将星星重置恢复到未选中状态
+        function resetStars() {
+            const starContainer = document.getElementById('star-container');
+            const stars = starContainer.querySelectorAll('.star-icon');
+            const starInput = document.getElementById('star');
+            starInput.value = 0;
+            stars.forEach((s, i) => {
+                if (i < starInput.value) {
+                    s.classList.add('selected');
+                    s.textContent = '★';
+                }
+                else {
+                    s.classList.remove('selected');
+                    s.textContent = '☆';
+                }
+            })
+        }
+
+        // 点击修改按钮时更新星级显示的函数
+        function updateRating(starCount) {
+            const starContainer = document.getElementById('star-container');
+            const stars = starContainer.querySelectorAll('.star-icon');
+            const ratingDisplay = document.getElementById('rating-display');
+            const starInput = document.getElementById('star');
+            starInput.value = starCount;
+            if (!isNaN(starCount) && starCount >= 1 && starCount <= 6) {
+                stars.forEach((s, i) => {
+                    if (i < starCount) {
+                        s.classList.add('selected');
+                        s.textContent = '★';
+                    } else {
+                        s.classList.remove('selected');
+                        s.textContent = '☆';
+                    }
+                });
+                // ratingDisplay.textContent = `当前评价等级: ${starCount}`;
+                console.log(`用户评价等级为: ${starCount}`);
+            } else {
+                alert('请输入1到5之间的整数！');
+            }
+        }
+
+        // 发送按钮点击事件
+        sendBtn.addEventListener('click', () => {
+            const tagList = convertToTagList();
+            if (sendBtn.dataset.editIndex) {
+                // 如果是保存修改
+                const editIndex = parseInt(sendBtn.dataset.editIndex);
+                const newComment = {
+                    "id": commentsdata[editIndex].id,
+                    "author": authorInput.value,
+                    "title": titleInput.value,
+                    "time": commentsdata[editIndex].time,
+                    "modified": true,
+                    "modifiedTime": new Date().toISOString().slice(0, 19).replace('T', ' '),
+                    "tag": tagList,
+                    "star": starInput.value,
+                    "content": contentPreview.innerHTML,
+                    "contentcode": contentCodeInput.value,
+                };
+                commentsdata[editIndex] = newComment;
+                // 恢复发送按钮的原始功能
+                sendBtn.textContent = '发送';
+                delete sendBtn.dataset.editIndex;
+                // 渲染评论并滚动到修改后的内容
+                renderComments(commentsdata);
+                const modifiedCommentDiv = comments.children[editIndex];
+                modifiedCommentDiv.scrollIntoView({ behavior: 'smooth' });
+                modifiedCommentDiv.style.backgroundColor = '#fdfbe3';
+                setTimeout(() => {
+                    modifiedCommentDiv.style.backgroundColor = '';
+                    authorInput.style.backgroundColor = '';
+                    titleInput.style.backgroundColor = '';
+                    contentInput.style.backgroundColor = '';
+                    contentCodeInput.style.backgroundColor = '';
+                }, 2000);
+            } else {
+                // 正常添加新评论
+                const newComment = {
+                    "id": Date.now().toString(),
+                    "author": authorInput.value,
+                    "title": titleInput.value,
+                    "time": new Date().toISOString().slice(0, 19).replace('T', ' '),
+                    "modified": false,
+                    "modifiedTime": null,
+                    "tag": tagList,
+                    "star": starInput.value,
+                    "content": contentPreview.innerHTML,
+                    "contentcode": contentCodeInput.value,
+                };
+                commentsdata.push(newComment);
+
+                // 渲染评论并滚动到页面底部
+                renderComments(commentsdata);
+                contentInput.scrollIntoView({ behavior: 'smooth' });
+            }
+            clearContent();
+        });
+
+        // 导出json按钮点击事件
+        exportBtn.addEventListener('click', () => {
+            const data = `let commentsdata = ${JSON.stringify(commentsdata, null, 2)};`;
+            const blob = new Blob([data], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.js';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        function exportToHtml(divcontent, filename) {
+            const headOuterContent = document.head.outerHTML;
+            const scriptElement_exportjs = document.getElementById('exportsjs');
+            const scriptContent_exportjs = scriptElement_exportjs.textContent || scriptElement_exportjs.outerHTML;
+            const scriptElement_exportsjs_qrcode = document.getElementById('exportsjs-qrcode');
+            const scriptContent_exportsjs_qrcode = scriptElement_exportsjs_qrcode.outerHTML || scriptElement_exportsjs_qrcode.textContent;
+
+            const htmlContent = `<html>
+            ${headOuterContent}
+            <body>
+                ${divcontent}
+                <div id=\"statusBar\" class=\"statusbar\"></div>
+                <!-- 二维码弹窗容器 -->
+                <div id=\"qrcode-container\" class=\"qrcode-container\" style=\"display:none;\">
+                    <div class=\"qrcode-content\">
+                        <span class=\"close\" id=\"qrcode-close-btn\">&times;</span>
+                        <div id=\"qrcode\"></div>
+                    </div>
+                </div>
+                \<script\>${scriptContent_exportjs}\<\/script>
+                ${scriptContent_exportsjs_qrcode}
+            </body>
+            </html>`;
+            console.log(htmlContent);
+            // 创建 Blob 对象
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            console.log(blob);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        // 导出全部comments到html按钮点击事件
+        exportAllCommentsToHtmlBtn.addEventListener('click', () => {
+            const comments = document.getElementById('mainArea').innerHTML;
+            exportToHtml(comments, filename = "exportAllComments.html");
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var openPopupBtn = document.getElementById('helpBtn');
+            var popupContainer = document.getElementById('help-container');
+            var closeBtn = document.querySelector('.close-btn');
+
+            // 打开弹窗
+            openPopupBtn.addEventListener('click', function () {
+                popupContainer.style.display = 'flex';
+            });
+
+            // 关闭弹窗
+            closeBtn.addEventListener('click', function () {
+                popupContainer.style.display = 'none';
+            });
+
+            // 点击弹窗外部区域关闭弹窗
+            popupContainer.addEventListener('click', function (event) {
+                if (event.target === popupContainer) {
+                    popupContainer.style.display = 'none';
+                }
+            });
+        });
+
+
+        // 点击foldeditorAreaBtn按钮,切换editorArea折叠/展开状态
+        foldeditorAreaBtn.addEventListener('click', () => {
+            const editorArea = document.getElementById('editorArea');
+            if (editorArea.style.display === 'none') {
+                editorArea.style.display = 'block';
+            } else {
+                editorArea.style.display = 'none';
+            }
+            //定位到编辑框
+            contentInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+
+        // 点击插入代码按钮折叠/展开状态
+        insertCodeBtn.addEventListener('click', () => {
+            const contentCode = document.getElementById('contentcode');
+            if (contentCode.style.display === 'none') {
+                contentCode.style.display = 'block';
+            } else {
+                contentCode.style.display = 'none';
+            }
+            //定位到编辑框
+            contentcodeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+
+        function clearContent() {
+            // authorInput.value = '';
+            titleInput.value = '';
+            contentInput.value = '';
+            contentCodeInput.value = '';
+            imageBase64Input.value = '';
+            tagInput.value = '';
+            starInput.value = '';
+            resetStars();
+            // 清空id="image-base64"
+            imageBase64.value = '';
+        }
+        //清空编辑框的内容按钮点击事件
+
+        clearBtn.addEventListener('click', () => {
+            clearContent();
+            titleInput.value = '';
+        })
+
+        // 按评价等级排序函数
+        function sortCommentsByRating() {
+            commentsdata.sort((a, b) => {
+                const ratingA = parseInt(a.star);
+                const ratingB = parseInt(b.star);
+                return ratingB - ratingA;
+            });
+            renderComments(commentsdata);
+        }
+
+        // 按日期评分排序函数
+        //a 和 b 是 commentsdata 数组中的两个元素，代表两条评论数据。
+        function sortCommentsByDate() {
+            commentsdata.sort((a, b) => {
+                const dateA = new Date(a.time);
+                const dateB = new Date(b.time);
+                return dateB - dateA;
+            });
+            // 渲染评论
+            renderComments(commentsdata);
+        }
+
+        //点击分类按钮事件
+        sortBtn.addEventListener('click', () => {
+            const sortType = sortBtn.textContent;
+            if (sortType === '按评价等级排序') {
+                sortCommentsByRating();
+                sortBtn.textContent = '按日期评分排序';
+            } else if (sortType === '按日期评分排序') {
+                sortCommentsByDate();
+                sortBtn.textContent = '按评价等级排序';
+            }
+        })
+
+        // 过滤评论函数
+        function filterCommentsByTag(tag) {
+            if (!commentsdata) {
+                console.error('commentsdata 未定义');
+                return [];
+            }
+            console.log('开始过滤评论，标签:', tag);
+            const result = commentsdata.filter(comment => comment.tag.includes(tag));
+            console.log('过滤结果:', result);
+            return result;
+        }
+
+        //点击allCommentsBtn,显示所有有评论
+        allCommentsBtn.addEventListener('click', () => {
+            renderComments(commentsdata);
+        })
+
+        // 计算所有评论的数量,更新到<button id="allCommentsBtn" 中
+        function updateAllCommentsCount() {
+            const allCommentsCount = commentsdata.length;
+            allCommentsBtn.textContent = `全部 (${allCommentsCount})`;
+        }
+
+        // 获取所有tags并添加到banner中中
+        function renderTags() {
+            const allTagsDiv = document.getElementById('allTags');
+            allTagsDiv.innerHTML = '';
+
+            const uniqueTags = new Set();
+            for (const comment of commentsdata) {
+                const tags = comment.tag;
+                for (const tag of tags) {
+                    uniqueTags.add(tag);
+                }
+            }
+
+            uniqueTags.forEach(tag => {
+                const tagElement = document.createElement('button');
+                const tagCount = commentsdata.filter(comment => comment.tag.includes(tag)).length;
+                tagElement.classList.add('tag');
+                tagElement.textContent = `${tag} (${tagCount})`;
+                allTagsDiv.appendChild(tagElement);
+
+                tagElement.addEventListener('click', () => {
+                    // 调用 filterCommentsByTag 函数
+                    const filteredComments = filterCommentsByTag(tag);
+
+                    if (filteredComments.length > 0) {
+                        renderComments(filteredComments);
+                    } else {
+                        console.log('未找到包含该标签的评论');
+                    }
+                });
+            });
+
+        }
+
+        // 函数:// 获取所有的tag,以button形式添加到<div id="existingtags">区,,添加点击事件监听器,点击后,该背景色变红,并将此tag追加加到<input id="tag">,以逗号隔开,<input id="tag">去除重复tag,如再次点击,则取消红底色,并删除该tag.​
+        function renderExistingTags() {
+            const exitTagsDiv = document.getElementById('existingtagsdiv');
+            exitTagsDiv.innerHTML = '';
+
+            const tagInput = document.getElementById('tag');
+            const uniqueTags = new Set();
+            for (const comment of commentsdata) {
+                const tags = comment.tag;
+                for (const tag of tags) {
+                    uniqueTags.add(tag);
+                }
+            }
+
+            uniqueTags.forEach(tag => {
+                const tagButton = document.createElement('button');
+                tagButton.textContent = tag;
+                tagButton.classList.add('existingtag');
+                exitTagsDiv.appendChild(tagButton);
+
+                tagButton.addEventListener('click', () => {
+                    if (tagButton.style.backgroundColor === 'gray') {
+                        // 取消红底色，并删除该tag
+                        tagButton.style.backgroundColor = '';
+                        tagButton.style.color = 'black';
+                        const currentTags = tagInput.value.split(',').filter(t => t.trim() !== '');
+                        const newTags = currentTags.filter(t => t !== tag);
+                        tagInput.value = newTags.join(',');
+                    } else {
+                        // 背景色变红，并将此tag追加到<input id="tag">
+                        tagButton.style.backgroundColor = 'gray';
+                        tagButton.style.color = 'white';
+                        const currentTags = tagInput.value.split(',').filter(t => t.trim() !== '');
+                        if (!currentTags.includes(tag)) {
+                            currentTags.push(tag);
+                        }
+                        tagInput.value = [...new Set(currentTags)].join(',');
+                    }
+                });
+            });
+        }
+
+
+        // 当点击任意标签时，过滤并重置评论列表
+        document.addEventListener('click', (event) => {
+            const clickedElement = event.target;
+            if (clickedElement.classList.contains('tag')) {
+                const tag = clickedElement.textContent;
+                const filteredComments = filterCommentsByTag(tag);
+                if (filteredComments.length > 0) {
+                    renderComments(filteredComments);
+                } else {
+                    console.log('未找到包含该标签的评论');
+                }
+            }
+        })
+
+        renderComments(commentsdata);
+
+    </script>
+
+    <!-- //图片插入弹窗框代码 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openModalBtn = document.getElementById('insertimgsBtn');
+            const modal = document.getElementById('my-modal');
+            const closeBtn = document.querySelector('.close');
+            const imageUrlsInput = document.getElementById('image-urls');
+            const localImagesBtn = document.getElementById('local-images-btn');
+            const localImagesInput = document.getElementById('local-images-input');
+            const urlImagesBtn = document.getElementById('url-images-btn');
+            const previewContainer = document.getElementById('preview-container');
+            const editor = document.getElementById('editor');
+            const confirmBtn = document.getElementById('confirm-btn');
+
+
+            //点击选择本地图片文件,并将文件名添加到id=local-image-names中
+            localImagesBtn.addEventListener('click', function () {
+                localImagesInput.click();
+            });
+
+            // 打开弹窗
+            openModalBtn.addEventListener('click', () => {
+                modal.style.display = 'block';
+            });
+
+            // 关闭弹窗
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // 点击窗口外关闭弹窗
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+
+            // 点击localImagesInput,选择本地图片并添加到预览区中
+            localImagesInput.addEventListener('change', async function (event) {
+                const localFiles = Array.from(localImagesInput.files);
+                const allLocalPromises = [];
+
+                // 将文件名添加到id=local-image-names中,逗号隔开
+                localFiles.forEach(file => {
+                    const fileName = file.name;
+                    const localImageNames = document.getElementById('local-image-names');
+                    localImageNames.value += fileName + ',';
+                });
+
+                // 处理本地图片，二次过滤
+                for (const file of localFiles) {
+                    if (/^image\//.test(file.type)) {
+                        if (file.size > 2 * 1024 * 1024) {
+                            allLocalPromises.push(compressImage(file));
+                        } else {
+                            allLocalPromises.push(new Promise((resolve) => {
+                                const reader = new FileReader();
+                                reader.onload = (e) => resolve(e.target.result);
+                                reader.readAsDataURL(file);
+                            }));
+                        }
+                    }
+                }
+
+                try {
+                    const allLocaBase64Images = await Promise.all(allLocalPromises);
+                    const imageBase64 = document.getElementById('image-base64');
+
+                    allLocaBase64Images.forEach(base64Data => {
+                        if (base64Data) {
+                            addImageToPreview(base64Data);
+                            imageBase64.value += '\n'+ base64Data + ',';
+                        }
+                    });
+                } catch (error) {
+                    console.error('处理图片时出错:', error);
+                }
+                updateArrowVisibility();
+            });
+
+            // 网络图片按钮点击事件
+            urlImagesBtn.addEventListener('click', async () => {
+                const allUrlPromises = [];
+                const remoteUrls = imageUrlsInput.value.split(',').map(url => url.trim()).filter(url => url);
+                remoteUrls.forEach(url => {
+                    allUrlPromises.push(fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`网络请求失败，状态码: ${response.status}`);
+                            }
+                            return response.blob();
+                        })
+                        .then(blob => {
+                            return new Promise((resolve) => {
+                                const reader = new FileReader();
+                                reader.onload = (e) => resolve(e.target.result);
+                                reader.readAsDataURL(blob);
+                            });
+                        })
+                        .catch(error => {
+                            console.error(`加载网络图片 ${url} 失败:`, error);
+                            return null;
+                        }));
+                });
+
+                const allUrlBase64Images = await Promise.all(allUrlPromises);
+                const imageBase64 = document.getElementById('image-base64');
+
+                allUrlBase64Images.forEach(base64Data => {
+                    if (base64Data) {
+                        addImageToPreview(base64Data);
+                        //将图片编码添加到id="image-base64"中
+                        imageBase64.value += base64Data + ',';
+                    }
+                });
+
+                // 清空输入框
+                imageUrlsInput.value = '';
+                updateArrowVisibility();
+            });
+
+            // 添加图片到预览区
+            function addImageToPreview(base64Data) {
+                const previewItem = document.createElement('div');
+                previewItem.classList.add('preview-item');
+
+                const img = document.createElement('img');
+                img.src = base64Data;
+                previewItem.appendChild(img);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn-img');
+                deleteBtn.textContent = 'X';
+                deleteBtn.addEventListener('click', () => {
+                    previewItem.remove();
+                    updateArrowVisibility();
+                });
+                previewItem.appendChild(deleteBtn);
+
+                const leftBtn = document.createElement('button');
+                leftBtn.classList.add('move-btn', 'move-left-btn');
+                leftBtn.textContent = '<';
+                leftBtn.addEventListener('click', () => {
+                    moveImageLeft(previewItem);
+                    updateArrowVisibility();
+                });
+                previewItem.appendChild(leftBtn);
+
+                const rightBtn = document.createElement('button');
+                rightBtn.classList.add('move-btn', 'move-right-btn');
+                rightBtn.textContent = '>';
+                rightBtn.addEventListener('click', () => {
+                    moveImageRight(previewItem);
+                    updateArrowVisibility();
+                });
+                previewItem.appendChild(rightBtn);
+
+                previewContainer.appendChild(previewItem);
+            }
+
+            // 左移图片
+            function moveImageLeft(item) {
+                const prevItem = item.previousElementSibling;
+                if (prevItem) {
+                    previewContainer.insertBefore(item, prevItem);
+                }
+            }
+
+            // 右移图片
+            function moveImageRight(item) {
+                const nextItem = item.nextElementSibling;
+                if (nextItem) {
+                    previewContainer.insertBefore(nextItem, item);
+                }
+            }
+
+            // 确认插入按钮点击事件
+            confirmBtn.addEventListener('click', () => {
+                const previewItems = Array.from(previewContainer.children);
+                let newEditorContent = '';
+                previewItems.forEach(item => {
+                    const img = item.querySelector('img');
+                    const base64Data = img.src;
+                    const imgTag = `\n<img src="${base64Data}" alt="插入的图片">`;
+                    newEditorContent += imgTag;
+                });
+                imageBase64Input.value = newEditorContent;
+                insertTextContentToTextarea("content", newEditorContent);
+                modal.style.display = 'none';
+                // 清空预览区
+                previewContainer.innerHTML = '';
+                const localImageNames = document.getElementById('local-image-names');
+                localImageNames.value = '';
+                const urlsInput = document.getElementById('image-urls');
+                urlsInput.value = '';
+            });
+
+            // 更新箭头可见性
+            function updateArrowVisibility() {
+                const previewItems = Array.from(previewContainer.children);
+                previewItems.forEach((item, index) => {
+                    const leftBtn = item.querySelector('.move-left-btn');
+                    const rightBtn = item.querySelector('.move-right-btn');
+
+                    if (index === 0) {
+                        leftBtn.style.display = 'none';
+                    } else {
+                        leftBtn.style.display = 'flex';
+                    }
+
+                    if (index === previewItems.length - 1) {
+                        rightBtn.style.display = 'none';
+                    } else {
+                        rightBtn.style.display = 'flex';
+                    }
+                });
+            }
+
+
+            // 压缩图片
+            function compressImage(file) {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.src = e.target.result;
+                        img.onload = () => {
+                            let quality = 0.9;
+                            let canvas = document.createElement('canvas');
+                            let ctx = canvas.getContext('2d');
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            let dataUrl = canvas.toDataURL(file.type, quality);
+                            let byteCharacters = atob(dataUrl.split(',')[1]);
+                            let byteNumbers = new Array(byteCharacters.length);
+                            for (let i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            let byteArray = new Uint8Array(byteNumbers);
+                            let blob = new Blob([byteArray], { type: file.type });
+                            while (blob.size > 2 * 1024 * 1024 && quality > 0.1) {
+                                quality -= 0.1;
+                                dataUrl = canvas.toDataURL(file.type, quality);
+                                byteCharacters = atob(dataUrl.split(',')[1]);
+                                byteNumbers = new Array(byteCharacters.length);
+                                for (let i = 0; i < byteCharacters.length; i++) {
+                                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                }
+                                byteArray = new Uint8Array(byteNumbers);
+                                blob = new Blob([byteArray], { type: file.type });
+                            }
+                            resolve(dataUrl);
+                        };
+                    };
+                });
+            }
+        });
+
+        function insertTextContentToTextarea(targettextarea, textContent) {
+            const textarea = document.getElementById(targettextarea);
+            const selectionStart = textarea.selectionStart;
+            const selectionEnd = textarea.selectionEnd;
+            const text = textarea.value;
+            const newText = text.slice(0, selectionStart) + textContent + text.slice(selectionEnd);
+            textarea.value = newText;
+            textarea.selectionStart = selectionStart + textContent.length;
+            textarea.selectionEnd = selectionStart + textContent.length;
+        }
+
+
+        function addMouseEnterLeaveEffect(mousediv, showdiv) {
+            const mouseDivs = document.querySelectorAll(mousediv)
+            mouseDivs.forEach((mouseDiv) => {
+                const showDiv = mouseDiv.querySelector(showdiv);
+                mouseDiv.addEventListener('mouseenter', function () {
+                    showDiv.style.display = 'block';
+                    let opacity = 0;
+                    const fadeInInterval = setInterval(() => {
+                        if (opacity < 1) {
+                            opacity += 0.1;
+                            showDiv.style.opacity = opacity;
+                        } else {
+                            clearInterval(fadeInInterval);
+                        }
+                    }, 30);
+                });
+                mouseDiv.addEventListener('mouseleave', function () {
+                    showDiv.style.display = 'none';
+                    const fadeOutInterval = setInterval(() => {
+                        if (opacity > 0) {
+                            opacity -= 0.1;
+                            showDiv.style.opacity = opacity;
+                        } else {
+                            showDiv.style.display = 'none';
+                            clearInterval(fadeOutInterval);
+                        }
+                    }, 30);
+                });
+            });
+        }
+
+        function updatePreview() {
+            contentPreview.innerHTML = marked.parse(contentInput.value);
+            if (typeof hljs !== 'undefined') {
+                hljs.highlightAll();
+            }
+            addPreCodeCopyBtns();
+            copyPreCode();
+        }
+
+        // 为每个代码块添加复制按钮
+        function addPreCodeCopyBtns() {
+            // 为每个代码块添加复制按钮
+            const codeBlocks = document.querySelectorAll('pre code');
+            codeBlocks.forEach((codeBlock) => {
+                const pre = codeBlock.parentNode;
+                const copyButtonDiv = document.createElement('div');
+                copyButtonDiv.classList.add('copy-pre-btn-div');
+                const copyButton = document.createElement('button');
+                copyButton.textContent = '复制';
+                copyButton.classList.add('copy-pre-btn');
+                copyButtonDiv.appendChild(copyButton);
+                pre.appendChild(copyButtonDiv);
+            });
+        }
+
+        addPreCodeCopyBtns();
+        copyPreCode();
+        contentInput.addEventListener('input', updatePreview);
+    </script>
+    <script id="exportsjs-qrcode">
+        /**
+ * Minified by jsDelivr using Terser v5.19.2.
+ * Original file: /npm/qrcode-generator@1.4.4/qrcode.js
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+        var qrcode = function () { var t = function (t, r) { var e = t, n = g[r], o = null, i = 0, a = null, u = [], f = {}, c = function (t, r) { o = function (t) { for (var r = new Array(t), e = 0; e < t; e += 1) { r[e] = new Array(t); for (var n = 0; n < t; n += 1)r[e][n] = null } return r }(i = 4 * e + 17), l(0, 0), l(i - 7, 0), l(0, i - 7), s(), h(), d(t, r), e >= 7 && v(t), null == a && (a = p(e, n, u)), w(a, r) }, l = function (t, r) { for (var e = -1; e <= 7; e += 1)if (!(t + e <= -1 || i <= t + e)) for (var n = -1; n <= 7; n += 1)r + n <= -1 || i <= r + n || (o[t + e][r + n] = 0 <= e && e <= 6 && (0 == n || 6 == n) || 0 <= n && n <= 6 && (0 == e || 6 == e) || 2 <= e && e <= 4 && 2 <= n && n <= 4) }, h = function () { for (var t = 8; t < i - 8; t += 1)null == o[t][6] && (o[t][6] = t % 2 == 0); for (var r = 8; r < i - 8; r += 1)null == o[6][r] && (o[6][r] = r % 2 == 0) }, s = function () { for (var t = B.getPatternPosition(e), r = 0; r < t.length; r += 1)for (var n = 0; n < t.length; n += 1) { var i = t[r], a = t[n]; if (null == o[i][a]) for (var u = -2; u <= 2; u += 1)for (var f = -2; f <= 2; f += 1)o[i + u][a + f] = -2 == u || 2 == u || -2 == f || 2 == f || 0 == u && 0 == f } }, v = function (t) { for (var r = B.getBCHTypeNumber(e), n = 0; n < 18; n += 1) { var a = !t && 1 == (r >> n & 1); o[Math.floor(n / 3)][n % 3 + i - 8 - 3] = a } for (n = 0; n < 18; n += 1) { a = !t && 1 == (r >> n & 1); o[n % 3 + i - 8 - 3][Math.floor(n / 3)] = a } }, d = function (t, r) { for (var e = n << 3 | r, a = B.getBCHTypeInfo(e), u = 0; u < 15; u += 1) { var f = !t && 1 == (a >> u & 1); u < 6 ? o[u][8] = f : u < 8 ? o[u + 1][8] = f : o[i - 15 + u][8] = f } for (u = 0; u < 15; u += 1) { f = !t && 1 == (a >> u & 1); u < 8 ? o[8][i - u - 1] = f : u < 9 ? o[8][15 - u - 1 + 1] = f : o[8][15 - u - 1] = f } o[i - 8][8] = !t }, w = function (t, r) { for (var e = -1, n = i - 1, a = 7, u = 0, f = B.getMaskFunction(r), c = i - 1; c > 0; c -= 2)for (6 == c && (c -= 1); ;) { for (var g = 0; g < 2; g += 1)if (null == o[n][c - g]) { var l = !1; u < t.length && (l = 1 == (t[u] >>> a & 1)), f(n, c - g) && (l = !l), o[n][c - g] = l, -1 == (a -= 1) && (u += 1, a = 7) } if ((n += e) < 0 || i <= n) { n -= e, e = -e; break } } }, p = function (t, r, e) { for (var n = A.getRSBlocks(t, r), o = b(), i = 0; i < e.length; i += 1) { var a = e[i]; o.put(a.getMode(), 4), o.put(a.getLength(), B.getLengthInBits(a.getMode(), t)), a.write(o) } var u = 0; for (i = 0; i < n.length; i += 1)u += n[i].dataCount; if (o.getLengthInBits() > 8 * u) throw "code length overflow. (" + o.getLengthInBits() + ">" + 8 * u + ")"; for (o.getLengthInBits() + 4 <= 8 * u && o.put(0, 4); o.getLengthInBits() % 8 != 0;)o.putBit(!1); for (; !(o.getLengthInBits() >= 8 * u || (o.put(236, 8), o.getLengthInBits() >= 8 * u));)o.put(17, 8); return function (t, r) { for (var e = 0, n = 0, o = 0, i = new Array(r.length), a = new Array(r.length), u = 0; u < r.length; u += 1) { var f = r[u].dataCount, c = r[u].totalCount - f; n = Math.max(n, f), o = Math.max(o, c), i[u] = new Array(f); for (var g = 0; g < i[u].length; g += 1)i[u][g] = 255 & t.getBuffer()[g + e]; e += f; var l = B.getErrorCorrectPolynomial(c), h = k(i[u], l.getLength() - 1).mod(l); for (a[u] = new Array(l.getLength() - 1), g = 0; g < a[u].length; g += 1) { var s = g + h.getLength() - a[u].length; a[u][g] = s >= 0 ? h.getAt(s) : 0 } } var v = 0; for (g = 0; g < r.length; g += 1)v += r[g].totalCount; var d = new Array(v), w = 0; for (g = 0; g < n; g += 1)for (u = 0; u < r.length; u += 1)g < i[u].length && (d[w] = i[u][g], w += 1); for (g = 0; g < o; g += 1)for (u = 0; u < r.length; u += 1)g < a[u].length && (d[w] = a[u][g], w += 1); return d }(o, n) }; f.addData = function (t, r) { var e = null; switch (r = r || "Byte") { case "Numeric": e = M(t); break; case "Alphanumeric": e = x(t); break; case "Byte": e = m(t); break; case "Kanji": e = L(t); break; default: throw "mode:" + r }u.push(e), a = null }, f.isDark = function (t, r) { if (t < 0 || i <= t || r < 0 || i <= r) throw t + "," + r; return o[t][r] }, f.getModuleCount = function () { return i }, f.make = function () { if (e < 1) { for (var t = 1; t < 40; t++) { for (var r = A.getRSBlocks(t, n), o = b(), i = 0; i < u.length; i++) { var a = u[i]; o.put(a.getMode(), 4), o.put(a.getLength(), B.getLengthInBits(a.getMode(), t)), a.write(o) } var g = 0; for (i = 0; i < r.length; i++)g += r[i].dataCount; if (o.getLengthInBits() <= 8 * g) break } e = t } c(!1, function () { for (var t = 0, r = 0, e = 0; e < 8; e += 1) { c(!0, e); var n = B.getLostPoint(f); (0 == e || t > n) && (t = n, r = e) } return r }()) }, f.createTableTag = function (t, r) { t = t || 2; var e = ""; e += '<table style="', e += " border-width: 0px; border-style: none;", e += " border-collapse: collapse;", e += " padding: 0px; margin: " + (r = void 0 === r ? 4 * t : r) + "px;", e += '">', e += "<tbody>"; for (var n = 0; n < f.getModuleCount(); n += 1) { e += "<tr>"; for (var o = 0; o < f.getModuleCount(); o += 1)e += '<td style="', e += " border-width: 0px; border-style: none;", e += " border-collapse: collapse;", e += " padding: 0px; margin: 0px;", e += " width: " + t + "px;", e += " height: " + t + "px;", e += " background-color: ", e += f.isDark(n, o) ? "#000000" : "#ffffff", e += ";", e += '"/>'; e += "</tr>" } return e += "</tbody>", e += "</table>" }, f.createSvgTag = function (t, r, e, n) { var o = {}; "object" == typeof arguments[0] && (t = (o = arguments[0]).cellSize, r = o.margin, e = o.alt, n = o.title), t = t || 2, r = void 0 === r ? 4 * t : r, (e = "string" == typeof e ? { text: e } : e || {}).text = e.text || null, e.id = e.text ? e.id || "qrcode-description" : null, (n = "string" == typeof n ? { text: n } : n || {}).text = n.text || null, n.id = n.text ? n.id || "qrcode-title" : null; var i, a, u, c, g = f.getModuleCount() * t + 2 * r, l = ""; for (c = "l" + t + ",0 0," + t + " -" + t + ",0 0,-" + t + "z ", l += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"', l += o.scalable ? "" : ' width="' + g + 'px" height="' + g + 'px"', l += ' viewBox="0 0 ' + g + " " + g + '" ', l += ' preserveAspectRatio="xMinYMin meet"', l += n.text || e.text ? ' role="img" aria-labelledby="' + y([n.id, e.id].join(" ").trim()) + '"' : "", l += ">", l += n.text ? '<title id="' + y(n.id) + '">' + y(n.text) + "</title>" : "", l += e.text ? '<description id="' + y(e.id) + '">' + y(e.text) + "</description>" : "", l += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>', l += '<path d="', a = 0; a < f.getModuleCount(); a += 1)for (u = a * t + r, i = 0; i < f.getModuleCount(); i += 1)f.isDark(a, i) && (l += "M" + (i * t + r) + "," + u + c); return l += '" stroke="transparent" fill="black"/>', l += "</svg>" }, f.createDataURL = function (t, r) { t = t || 2, r = void 0 === r ? 4 * t : r; var e = f.getModuleCount() * t + 2 * r, n = r, o = e - r; return I(e, e, (function (r, e) { if (n <= r && r < o && n <= e && e < o) { var i = Math.floor((r - n) / t), a = Math.floor((e - n) / t); return f.isDark(a, i) ? 0 : 1 } return 1 })) }, f.createImgTag = function (t, r, e) { t = t || 2, r = void 0 === r ? 4 * t : r; var n = f.getModuleCount() * t + 2 * r, o = ""; return o += "<img", o += ' src="', o += f.createDataURL(t, r), o += '"', o += ' width="', o += n, o += '"', o += ' height="', o += n, o += '"', e && (o += ' alt="', o += y(e), o += '"'), o += "/>" }; var y = function (t) { for (var r = "", e = 0; e < t.length; e += 1) { var n = t.charAt(e); switch (n) { case "<": r += "&lt;"; break; case ">": r += "&gt;"; break; case "&": r += "&amp;"; break; case '"': r += "&quot;"; break; default: r += n } } return r }; return f.createASCII = function (t, r) { if ((t = t || 1) < 2) return function (t) { t = void 0 === t ? 2 : t; var r, e, n, o, i, a = 1 * f.getModuleCount() + 2 * t, u = t, c = a - t, g = { "██": "█", "█ ": "▀", " █": "▄", "  ": " " }, l = { "██": "▀", "█ ": "▀", " █": " ", "  ": " " }, h = ""; for (r = 0; r < a; r += 2) { for (n = Math.floor((r - u) / 1), o = Math.floor((r + 1 - u) / 1), e = 0; e < a; e += 1)i = "█", u <= e && e < c && u <= r && r < c && f.isDark(n, Math.floor((e - u) / 1)) && (i = " "), u <= e && e < c && u <= r + 1 && r + 1 < c && f.isDark(o, Math.floor((e - u) / 1)) ? i += " " : i += "█", h += t < 1 && r + 1 >= c ? l[i] : g[i]; h += "\n" } return a % 2 && t > 0 ? h.substring(0, h.length - a - 1) + Array(a + 1).join("▀") : h.substring(0, h.length - 1) }(r); t -= 1, r = void 0 === r ? 2 * t : r; var e, n, o, i, a = f.getModuleCount() * t + 2 * r, u = r, c = a - r, g = Array(t + 1).join("██"), l = Array(t + 1).join("  "), h = "", s = ""; for (e = 0; e < a; e += 1) { for (o = Math.floor((e - u) / t), s = "", n = 0; n < a; n += 1)i = 1, u <= n && n < c && u <= e && e < c && f.isDark(o, Math.floor((n - u) / t)) && (i = 0), s += i ? g : l; for (o = 0; o < t; o += 1)h += s + "\n" } return h.substring(0, h.length - 1) }, f.renderTo2dContext = function (t, r) { r = r || 2; for (var e = f.getModuleCount(), n = 0; n < e; n++)for (var o = 0; o < e; o++)t.fillStyle = f.isDark(n, o) ? "black" : "white", t.fillRect(n * r, o * r, r, r) }, f }; t.stringToBytes = (t.stringToBytesFuncs = { default: function (t) { for (var r = [], e = 0; e < t.length; e += 1) { var n = t.charCodeAt(e); r.push(255 & n) } return r } }).default, t.createStringToBytes = function (t, r) { var e = function () { for (var e = S(t), n = function () { var t = e.read(); if (-1 == t) throw "eof"; return t }, o = 0, i = {}; ;) { var a = e.read(); if (-1 == a) break; var u = n(), f = n() << 8 | n(); i[String.fromCharCode(a << 8 | u)] = f, o += 1 } if (o != r) throw o + " != " + r; return i }(), n = "?".charCodeAt(0); return function (t) { for (var r = [], o = 0; o < t.length; o += 1) { var i = t.charCodeAt(o); if (i < 128) r.push(i); else { var a = e[t.charAt(o)]; "number" == typeof a ? (255 & a) == a ? r.push(a) : (r.push(a >>> 8), r.push(255 & a)) : r.push(n) } } return r } }; var r, e, n, o, i, a = 1, u = 2, f = 4, c = 8, g = { L: 1, M: 0, Q: 3, H: 2 }, l = 0, h = 1, s = 2, v = 3, d = 4, w = 5, p = 6, y = 7, B = (r = [[], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34], [6, 22, 38], [6, 24, 42], [6, 26, 46], [6, 28, 50], [6, 30, 54], [6, 32, 58], [6, 34, 62], [6, 26, 46, 66], [6, 26, 48, 70], [6, 26, 50, 74], [6, 30, 54, 78], [6, 30, 56, 82], [6, 30, 58, 86], [6, 34, 62, 90], [6, 28, 50, 72, 94], [6, 26, 50, 74, 98], [6, 30, 54, 78, 102], [6, 28, 54, 80, 106], [6, 32, 58, 84, 110], [6, 30, 58, 86, 114], [6, 34, 62, 90, 118], [6, 26, 50, 74, 98, 122], [6, 30, 54, 78, 102, 126], [6, 26, 52, 78, 104, 130], [6, 30, 56, 82, 108, 134], [6, 34, 60, 86, 112, 138], [6, 30, 58, 86, 114, 142], [6, 34, 62, 90, 118, 146], [6, 30, 54, 78, 102, 126, 150], [6, 24, 50, 76, 102, 128, 154], [6, 28, 54, 80, 106, 132, 158], [6, 32, 58, 84, 110, 136, 162], [6, 26, 54, 82, 110, 138, 166], [6, 30, 58, 86, 114, 142, 170]], e = 1335, n = 7973, i = function (t) { for (var r = 0; 0 != t;)r += 1, t >>>= 1; return r }, (o = {}).getBCHTypeInfo = function (t) { for (var r = t << 10; i(r) - i(e) >= 0;)r ^= e << i(r) - i(e); return 21522 ^ (t << 10 | r) }, o.getBCHTypeNumber = function (t) { for (var r = t << 12; i(r) - i(n) >= 0;)r ^= n << i(r) - i(n); return t << 12 | r }, o.getPatternPosition = function (t) { return r[t - 1] }, o.getMaskFunction = function (t) { switch (t) { case l: return function (t, r) { return (t + r) % 2 == 0 }; case h: return function (t, r) { return t % 2 == 0 }; case s: return function (t, r) { return r % 3 == 0 }; case v: return function (t, r) { return (t + r) % 3 == 0 }; case d: return function (t, r) { return (Math.floor(t / 2) + Math.floor(r / 3)) % 2 == 0 }; case w: return function (t, r) { return t * r % 2 + t * r % 3 == 0 }; case p: return function (t, r) { return (t * r % 2 + t * r % 3) % 2 == 0 }; case y: return function (t, r) { return (t * r % 3 + (t + r) % 2) % 2 == 0 }; default: throw "bad maskPattern:" + t } }, o.getErrorCorrectPolynomial = function (t) { for (var r = k([1], 0), e = 0; e < t; e += 1)r = r.multiply(k([1, C.gexp(e)], 0)); return r }, o.getLengthInBits = function (t, r) { if (1 <= r && r < 10) switch (t) { case a: return 10; case u: return 9; case f: case c: return 8; default: throw "mode:" + t } else if (r < 27) switch (t) { case a: return 12; case u: return 11; case f: return 16; case c: return 10; default: throw "mode:" + t } else { if (!(r < 41)) throw "type:" + r; switch (t) { case a: return 14; case u: return 13; case f: return 16; case c: return 12; default: throw "mode:" + t } } }, o.getLostPoint = function (t) { for (var r = t.getModuleCount(), e = 0, n = 0; n < r; n += 1)for (var o = 0; o < r; o += 1) { for (var i = 0, a = t.isDark(n, o), u = -1; u <= 1; u += 1)if (!(n + u < 0 || r <= n + u)) for (var f = -1; f <= 1; f += 1)o + f < 0 || r <= o + f || 0 == u && 0 == f || a == t.isDark(n + u, o + f) && (i += 1); i > 5 && (e += 3 + i - 5) } for (n = 0; n < r - 1; n += 1)for (o = 0; o < r - 1; o += 1) { var c = 0; t.isDark(n, o) && (c += 1), t.isDark(n + 1, o) && (c += 1), t.isDark(n, o + 1) && (c += 1), t.isDark(n + 1, o + 1) && (c += 1), 0 != c && 4 != c || (e += 3) } for (n = 0; n < r; n += 1)for (o = 0; o < r - 6; o += 1)t.isDark(n, o) && !t.isDark(n, o + 1) && t.isDark(n, o + 2) && t.isDark(n, o + 3) && t.isDark(n, o + 4) && !t.isDark(n, o + 5) && t.isDark(n, o + 6) && (e += 40); for (o = 0; o < r; o += 1)for (n = 0; n < r - 6; n += 1)t.isDark(n, o) && !t.isDark(n + 1, o) && t.isDark(n + 2, o) && t.isDark(n + 3, o) && t.isDark(n + 4, o) && !t.isDark(n + 5, o) && t.isDark(n + 6, o) && (e += 40); var g = 0; for (o = 0; o < r; o += 1)for (n = 0; n < r; n += 1)t.isDark(n, o) && (g += 1); return e += Math.abs(100 * g / r / r - 50) / 5 * 10 }, o), C = function () { for (var t = new Array(256), r = new Array(256), e = 0; e < 8; e += 1)t[e] = 1 << e; for (e = 8; e < 256; e += 1)t[e] = t[e - 4] ^ t[e - 5] ^ t[e - 6] ^ t[e - 8]; for (e = 0; e < 255; e += 1)r[t[e]] = e; var n = { glog: function (t) { if (t < 1) throw "glog(" + t + ")"; return r[t] }, gexp: function (r) { for (; r < 0;)r += 255; for (; r >= 256;)r -= 255; return t[r] } }; return n }(); function k(t, r) { if (void 0 === t.length) throw t.length + "/" + r; var e = function () { for (var e = 0; e < t.length && 0 == t[e];)e += 1; for (var n = new Array(t.length - e + r), o = 0; o < t.length - e; o += 1)n[o] = t[o + e]; return n }(), n = { getAt: function (t) { return e[t] }, getLength: function () { return e.length }, multiply: function (t) { for (var r = new Array(n.getLength() + t.getLength() - 1), e = 0; e < n.getLength(); e += 1)for (var o = 0; o < t.getLength(); o += 1)r[e + o] ^= C.gexp(C.glog(n.getAt(e)) + C.glog(t.getAt(o))); return k(r, 0) }, mod: function (t) { if (n.getLength() - t.getLength() < 0) return n; for (var r = C.glog(n.getAt(0)) - C.glog(t.getAt(0)), e = new Array(n.getLength()), o = 0; o < n.getLength(); o += 1)e[o] = n.getAt(o); for (o = 0; o < t.getLength(); o += 1)e[o] ^= C.gexp(C.glog(t.getAt(o)) + r); return k(e, 0).mod(t) } }; return n } var A = function () { var t = [[1, 26, 19], [1, 26, 16], [1, 26, 13], [1, 26, 9], [1, 44, 34], [1, 44, 28], [1, 44, 22], [1, 44, 16], [1, 70, 55], [1, 70, 44], [2, 35, 17], [2, 35, 13], [1, 100, 80], [2, 50, 32], [2, 50, 24], [4, 25, 9], [1, 134, 108], [2, 67, 43], [2, 33, 15, 2, 34, 16], [2, 33, 11, 2, 34, 12], [2, 86, 68], [4, 43, 27], [4, 43, 19], [4, 43, 15], [2, 98, 78], [4, 49, 31], [2, 32, 14, 4, 33, 15], [4, 39, 13, 1, 40, 14], [2, 121, 97], [2, 60, 38, 2, 61, 39], [4, 40, 18, 2, 41, 19], [4, 40, 14, 2, 41, 15], [2, 146, 116], [3, 58, 36, 2, 59, 37], [4, 36, 16, 4, 37, 17], [4, 36, 12, 4, 37, 13], [2, 86, 68, 2, 87, 69], [4, 69, 43, 1, 70, 44], [6, 43, 19, 2, 44, 20], [6, 43, 15, 2, 44, 16], [4, 101, 81], [1, 80, 50, 4, 81, 51], [4, 50, 22, 4, 51, 23], [3, 36, 12, 8, 37, 13], [2, 116, 92, 2, 117, 93], [6, 58, 36, 2, 59, 37], [4, 46, 20, 6, 47, 21], [7, 42, 14, 4, 43, 15], [4, 133, 107], [8, 59, 37, 1, 60, 38], [8, 44, 20, 4, 45, 21], [12, 33, 11, 4, 34, 12], [3, 145, 115, 1, 146, 116], [4, 64, 40, 5, 65, 41], [11, 36, 16, 5, 37, 17], [11, 36, 12, 5, 37, 13], [5, 109, 87, 1, 110, 88], [5, 65, 41, 5, 66, 42], [5, 54, 24, 7, 55, 25], [11, 36, 12, 7, 37, 13], [5, 122, 98, 1, 123, 99], [7, 73, 45, 3, 74, 46], [15, 43, 19, 2, 44, 20], [3, 45, 15, 13, 46, 16], [1, 135, 107, 5, 136, 108], [10, 74, 46, 1, 75, 47], [1, 50, 22, 15, 51, 23], [2, 42, 14, 17, 43, 15], [5, 150, 120, 1, 151, 121], [9, 69, 43, 4, 70, 44], [17, 50, 22, 1, 51, 23], [2, 42, 14, 19, 43, 15], [3, 141, 113, 4, 142, 114], [3, 70, 44, 11, 71, 45], [17, 47, 21, 4, 48, 22], [9, 39, 13, 16, 40, 14], [3, 135, 107, 5, 136, 108], [3, 67, 41, 13, 68, 42], [15, 54, 24, 5, 55, 25], [15, 43, 15, 10, 44, 16], [4, 144, 116, 4, 145, 117], [17, 68, 42], [17, 50, 22, 6, 51, 23], [19, 46, 16, 6, 47, 17], [2, 139, 111, 7, 140, 112], [17, 74, 46], [7, 54, 24, 16, 55, 25], [34, 37, 13], [4, 151, 121, 5, 152, 122], [4, 75, 47, 14, 76, 48], [11, 54, 24, 14, 55, 25], [16, 45, 15, 14, 46, 16], [6, 147, 117, 4, 148, 118], [6, 73, 45, 14, 74, 46], [11, 54, 24, 16, 55, 25], [30, 46, 16, 2, 47, 17], [8, 132, 106, 4, 133, 107], [8, 75, 47, 13, 76, 48], [7, 54, 24, 22, 55, 25], [22, 45, 15, 13, 46, 16], [10, 142, 114, 2, 143, 115], [19, 74, 46, 4, 75, 47], [28, 50, 22, 6, 51, 23], [33, 46, 16, 4, 47, 17], [8, 152, 122, 4, 153, 123], [22, 73, 45, 3, 74, 46], [8, 53, 23, 26, 54, 24], [12, 45, 15, 28, 46, 16], [3, 147, 117, 10, 148, 118], [3, 73, 45, 23, 74, 46], [4, 54, 24, 31, 55, 25], [11, 45, 15, 31, 46, 16], [7, 146, 116, 7, 147, 117], [21, 73, 45, 7, 74, 46], [1, 53, 23, 37, 54, 24], [19, 45, 15, 26, 46, 16], [5, 145, 115, 10, 146, 116], [19, 75, 47, 10, 76, 48], [15, 54, 24, 25, 55, 25], [23, 45, 15, 25, 46, 16], [13, 145, 115, 3, 146, 116], [2, 74, 46, 29, 75, 47], [42, 54, 24, 1, 55, 25], [23, 45, 15, 28, 46, 16], [17, 145, 115], [10, 74, 46, 23, 75, 47], [10, 54, 24, 35, 55, 25], [19, 45, 15, 35, 46, 16], [17, 145, 115, 1, 146, 116], [14, 74, 46, 21, 75, 47], [29, 54, 24, 19, 55, 25], [11, 45, 15, 46, 46, 16], [13, 145, 115, 6, 146, 116], [14, 74, 46, 23, 75, 47], [44, 54, 24, 7, 55, 25], [59, 46, 16, 1, 47, 17], [12, 151, 121, 7, 152, 122], [12, 75, 47, 26, 76, 48], [39, 54, 24, 14, 55, 25], [22, 45, 15, 41, 46, 16], [6, 151, 121, 14, 152, 122], [6, 75, 47, 34, 76, 48], [46, 54, 24, 10, 55, 25], [2, 45, 15, 64, 46, 16], [17, 152, 122, 4, 153, 123], [29, 74, 46, 14, 75, 47], [49, 54, 24, 10, 55, 25], [24, 45, 15, 46, 46, 16], [4, 152, 122, 18, 153, 123], [13, 74, 46, 32, 75, 47], [48, 54, 24, 14, 55, 25], [42, 45, 15, 32, 46, 16], [20, 147, 117, 4, 148, 118], [40, 75, 47, 7, 76, 48], [43, 54, 24, 22, 55, 25], [10, 45, 15, 67, 46, 16], [19, 148, 118, 6, 149, 119], [18, 75, 47, 31, 76, 48], [34, 54, 24, 34, 55, 25], [20, 45, 15, 61, 46, 16]], r = function (t, r) { var e = {}; return e.totalCount = t, e.dataCount = r, e }, e = {}; return e.getRSBlocks = function (e, n) { var o = function (r, e) { switch (e) { case g.L: return t[4 * (r - 1) + 0]; case g.M: return t[4 * (r - 1) + 1]; case g.Q: return t[4 * (r - 1) + 2]; case g.H: return t[4 * (r - 1) + 3]; default: return } }(e, n); if (void 0 === o) throw "bad rs block @ typeNumber:" + e + "/errorCorrectionLevel:" + n; for (var i = o.length / 3, a = [], u = 0; u < i; u += 1)for (var f = o[3 * u + 0], c = o[3 * u + 1], l = o[3 * u + 2], h = 0; h < f; h += 1)a.push(r(c, l)); return a }, e }(), b = function () { var t = [], r = 0, e = { getBuffer: function () { return t }, getAt: function (r) { var e = Math.floor(r / 8); return 1 == (t[e] >>> 7 - r % 8 & 1) }, put: function (t, r) { for (var n = 0; n < r; n += 1)e.putBit(1 == (t >>> r - n - 1 & 1)) }, getLengthInBits: function () { return r }, putBit: function (e) { var n = Math.floor(r / 8); t.length <= n && t.push(0), e && (t[n] |= 128 >>> r % 8), r += 1 } }; return e }, M = function (t) { var r = a, e = t, n = { getMode: function () { return r }, getLength: function (t) { return e.length }, write: function (t) { for (var r = e, n = 0; n + 2 < r.length;)t.put(o(r.substring(n, n + 3)), 10), n += 3; n < r.length && (r.length - n == 1 ? t.put(o(r.substring(n, n + 1)), 4) : r.length - n == 2 && t.put(o(r.substring(n, n + 2)), 7)) } }, o = function (t) { for (var r = 0, e = 0; e < t.length; e += 1)r = 10 * r + i(t.charAt(e)); return r }, i = function (t) { if ("0" <= t && t <= "9") return t.charCodeAt(0) - "0".charCodeAt(0); throw "illegal char :" + t }; return n }, x = function (t) { var r = u, e = t, n = { getMode: function () { return r }, getLength: function (t) { return e.length }, write: function (t) { for (var r = e, n = 0; n + 1 < r.length;)t.put(45 * o(r.charAt(n)) + o(r.charAt(n + 1)), 11), n += 2; n < r.length && t.put(o(r.charAt(n)), 6) } }, o = function (t) { if ("0" <= t && t <= "9") return t.charCodeAt(0) - "0".charCodeAt(0); if ("A" <= t && t <= "Z") return t.charCodeAt(0) - "A".charCodeAt(0) + 10; switch (t) { case " ": return 36; case "$": return 37; case "%": return 38; case "*": return 39; case "+": return 40; case "-": return 41; case ".": return 42; case "/": return 43; case ":": return 44; default: throw "illegal char :" + t } }; return n }, m = function (r) { var e = f, n = t.stringToBytes(r), o = { getMode: function () { return e }, getLength: function (t) { return n.length }, write: function (t) { for (var r = 0; r < n.length; r += 1)t.put(n[r], 8) } }; return o }, L = function (r) { var e = c, n = t.stringToBytesFuncs.SJIS; if (!n) throw "sjis not supported."; !function (t, r) { var e = n("友"); if (2 != e.length || 38726 != (e[0] << 8 | e[1])) throw "sjis not supported." }(); var o = n(r), i = { getMode: function () { return e }, getLength: function (t) { return ~~(o.length / 2) }, write: function (t) { for (var r = o, e = 0; e + 1 < r.length;) { var n = (255 & r[e]) << 8 | 255 & r[e + 1]; if (33088 <= n && n <= 40956) n -= 33088; else { if (!(57408 <= n && n <= 60351)) throw "illegal char at " + (e + 1) + "/" + n; n -= 49472 } n = 192 * (n >>> 8 & 255) + (255 & n), t.put(n, 13), e += 2 } if (e < r.length) throw "illegal char at " + (e + 1) } }; return i }, D = function () { var t = [], r = { writeByte: function (r) { t.push(255 & r) }, writeShort: function (t) { r.writeByte(t), r.writeByte(t >>> 8) }, writeBytes: function (t, e, n) { e = e || 0, n = n || t.length; for (var o = 0; o < n; o += 1)r.writeByte(t[o + e]) }, writeString: function (t) { for (var e = 0; e < t.length; e += 1)r.writeByte(t.charCodeAt(e)) }, toByteArray: function () { return t }, toString: function () { var r = ""; r += "["; for (var e = 0; e < t.length; e += 1)e > 0 && (r += ","), r += t[e]; return r += "]" } }; return r }, S = function (t) { var r = t, e = 0, n = 0, o = 0, i = { read: function () { for (; o < 8;) { if (e >= r.length) { if (0 == o) return -1; throw "unexpected end of file./" + o } var t = r.charAt(e); if (e += 1, "=" == t) return o = 0, -1; t.match(/^\s$/) || (n = n << 6 | a(t.charCodeAt(0)), o += 6) } var i = n >>> o - 8 & 255; return o -= 8, i } }, a = function (t) { if (65 <= t && t <= 90) return t - 65; if (97 <= t && t <= 122) return t - 97 + 26; if (48 <= t && t <= 57) return t - 48 + 52; if (43 == t) return 62; if (47 == t) return 63; throw "c:" + t }; return i }, I = function (t, r, e) { for (var n = function (t, r) { var e = t, n = r, o = new Array(t * r), i = { setPixel: function (t, r, n) { o[r * e + t] = n }, write: function (t) { t.writeString("GIF87a"), t.writeShort(e), t.writeShort(n), t.writeByte(128), t.writeByte(0), t.writeByte(0), t.writeByte(0), t.writeByte(0), t.writeByte(0), t.writeByte(255), t.writeByte(255), t.writeByte(255), t.writeString(","), t.writeShort(0), t.writeShort(0), t.writeShort(e), t.writeShort(n), t.writeByte(0); var r = a(2); t.writeByte(2); for (var o = 0; r.length - o > 255;)t.writeByte(255), t.writeBytes(r, o, 255), o += 255; t.writeByte(r.length - o), t.writeBytes(r, o, r.length - o), t.writeByte(0), t.writeString(";") } }, a = function (t) { for (var r = 1 << t, e = 1 + (1 << t), n = t + 1, i = u(), a = 0; a < r; a += 1)i.add(String.fromCharCode(a)); i.add(String.fromCharCode(r)), i.add(String.fromCharCode(e)); var f, c, g, l = D(), h = (f = l, c = 0, g = 0, { write: function (t, r) { if (t >>> r != 0) throw "length over"; for (; c + r >= 8;)f.writeByte(255 & (t << c | g)), r -= 8 - c, t >>>= 8 - c, g = 0, c = 0; g |= t << c, c += r }, flush: function () { c > 0 && f.writeByte(g) } }); h.write(r, n); var s = 0, v = String.fromCharCode(o[s]); for (s += 1; s < o.length;) { var d = String.fromCharCode(o[s]); s += 1, i.contains(v + d) ? v += d : (h.write(i.indexOf(v), n), i.size() < 4095 && (i.size() == 1 << n && (n += 1), i.add(v + d)), v = d) } return h.write(i.indexOf(v), n), h.write(e, n), h.flush(), l.toByteArray() }, u = function () { var t = {}, r = 0, e = { add: function (n) { if (e.contains(n)) throw "dup key:" + n; t[n] = r, r += 1 }, size: function () { return r }, indexOf: function (r) { return t[r] }, contains: function (r) { return void 0 !== t[r] } }; return e }; return i }(t, r), o = 0; o < r; o += 1)for (var i = 0; i < t; i += 1)n.setPixel(i, o, e(i, o)); var a = D(); n.write(a); for (var u = function () { var t = 0, r = 0, e = 0, n = "", o = {}, i = function (t) { n += String.fromCharCode(a(63 & t)) }, a = function (t) { if (t < 0); else { if (t < 26) return 65 + t; if (t < 52) return t - 26 + 97; if (t < 62) return t - 52 + 48; if (62 == t) return 43; if (63 == t) return 47 } throw "n:" + t }; return o.writeByte = function (n) { for (t = t << 8 | 255 & n, r += 8, e += 1; r >= 6;)i(t >>> r - 6), r -= 6 }, o.flush = function () { if (r > 0 && (i(t << 6 - r), t = 0, r = 0), e % 3 != 0) for (var o = 3 - e % 3, a = 0; a < o; a += 1)n += "=" }, o.toString = function () { return n }, o }(), f = a.toByteArray(), c = 0; c < f.length; c += 1)u.writeByte(f[c]); return u.flush(), "data:image/gif;base64," + u }; return t }(); qrcode.stringToBytesFuncs["UTF-8"] = function (t) { return function (t) { for (var r = [], e = 0; e < t.length; e++) { var n = t.charCodeAt(e); n < 128 ? r.push(n) : n < 2048 ? r.push(192 | n >> 6, 128 | 63 & n) : n < 55296 || n >= 57344 ? r.push(224 | n >> 12, 128 | n >> 6 & 63, 128 | 63 & n) : (e++, n = 65536 + ((1023 & n) << 10 | 1023 & t.charCodeAt(e)), r.push(240 | n >> 18, 128 | n >> 12 & 63, 128 | n >> 6 & 63, 128 | 63 & n)) } return r }(t) }, function (t) { "function" == typeof define && define.amd ? define([], t) : "object" == typeof exports && (module.exports = t()) }((function () { return qrcode }));
+        //# sourceMappingURL=/sm/b9b55b7928f7a7304183d3620d26b7bbc2225cbca7498907aeb1d634eef15287.map
+    </script>
+</body>
+
+</html>
