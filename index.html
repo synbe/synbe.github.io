@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欣笔日志</title>
+    <style>
+        body {
+            font-family: '微软雅黑', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+
+        .banner {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #7db381;
+            height: 50px;
+            border-bottom: 3px solid #e8f5e9;
+            border-radius: 5px;
+        }
+
+        .profile-avatar img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .profile-info {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .profile-section {
+            height: 200px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-section {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            height: 32px;
+            border-radius: 5px;
+        }
+
+        .calendar-header button {
+            height: 32px;
+            padding: 0px 15px;
+            font-size: 23px;
+            font-weight: bold;
+            color: #7db381;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            height: 220px;
+            margin: 10px;
+            padding: 5px;
+        }
+
+        .calendar-day {
+            position: relative;
+            padding: 5px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s;
+            height: 25px;
+            width: 43px;
+        }
+
+        .calendar-day:hover {
+            background: #e3f2fd;
+        }
+
+        .nav-list {
+            padding-left: 1em;
+        }
+
+        .nav-list-header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #E8F5E9;
+            padding: 5px 0;
+            border-radius: 5px;
+        }
+
+        .nav-list-body {
+            padding: 10px;
+        }
+
+        .nav-list-body li {
+            list-style: none;
+            margin: 1px;
+            padding-left: 10px;
+        }
+
+        .nav-list-body a {
+            text-decoration: none;
+            color: #000;
+            font-size: 0.8em;
+            width: 100%;
+            height: 20px;
+            display: block;
+            padding: 2px 0;
+        }
+
+        .nav-list-body a:hover {
+            opacity: 0.8;
+            background: #E8F5E9;
+        }
+
+        .has-entry {
+            background: #E8F5E9;
+        }
+
+        .entry-count {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            font-size: 0.8em;
+            color: var(--primary-color);
+        }
+
+        .editor-section {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        #editor {
+            display: none;
+        }
+
+        #editor .editor-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            height: 32px;
+        }
+
+        #editor .editor-btns button {
+            height: 32px;
+            padding: 0px 32px;
+        }
+
+        .comment-section .editor-btns {
+            margin: 5px;
+            width: 100px;
+        }
+
+        .comment-section .editor-btns button {
+            height: 32px;
+            padding: 0px 32px;
+            margin-top: 5px;
+        }
+
+        .date-picker {
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        #searchBox {
+            width: 300px;
+            height: 32px;
+            margin: 0;
+        }
+
+        .tag-container {
+            border-top: 1px #efefef solid;
+            padding-top: 10px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .tag {
+            background: #f0f2f5;
+            color: #7db381;
+            padding: 0px 3px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .tag-cloud {
+            line-height: 20px;
+            padding: 5px;
+        }
+
+        .tag:hover {
+            opacity: 0.8;
+            color: #fff;
+            background: #7db381;
+        }
+
+
+        .entry-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: var(--secondary-color);
+            border-radius: 5px;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .entry-item:hover {
+            box-shadow: inset 0 0 0 1px rgb(208, 208, 224);
+        }
+
+        .entry-list {
+            list-style: none;
+            margin-bottom: 10px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        button {
+            cursor: pointer;
+            transition: opacity 0.2s;
+            border-radius: 5px;
+            border: none;
+            padding: 2px 5px;
+            background: #e8f5e9;
+        }
+
+        button:hover {
+            opacity: 0.8;
+            color: #fff;
+            background: #7db381;
+        }
+
+        .entry-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 22px;
+            border-bottom: 1px solid #efefef;
+            margin-bottom: 10px;
+        }
+
+        .entry-title {
+            font-weight: bold;
+        }
+
+        .entry-date {
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .entry-actions {
+            display: flex;
+            gap: 5px;
+            display: none;
+        }
+
+        .entry-header:hover .entry-actions {
+            display: block;
+        }
+
+        .entry-actions-btn {
+            background: transparent;
+            color: #000;
+            padding: 0px 5px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .entry-actions-btn:hover {
+            color: #fff;
+            background: #7db381;
+        }
+
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .view-switch {
+            height: 50px;
+        }
+
+        .switch-actions {
+            gap: 5px;
+            height: 50px;
+            text-align: right;
+            padding: 0 15px;
+        }
+
+        .switch-actions button {
+            background: transparent;
+            border-radius: 0;
+            height: 50px;
+            width: 95px;
+            color: #fff;
+        }
+
+        .switch-actions button:hover {
+            color: #000;
+            background-color: #E8F5E9;
+        }
+
+        .switch-actions input {
+            background-color: #E8F5E9;
+        }
+
+        .entry-content img {
+            width: 100%;
+            margin: 5px auto;
+            border-radius: 5px;
+        }
+
+        .comment-section {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            height: 32px;
+            align-items: center;
+            margin: 20px 0;
+            padding: 10px 0;
+        }
+
+        .comment-input {
+            flex: 1;
+            height: 80px;
+            /* 增加高度 */
+            resize: vertical;
+            /* 允许垂直调整大小 */
+        }
+
+
+        .comments {
+            border: 1px solid #efefef;
+            border-radius: 5px;
+        }
+
+        .comment-item {
+            padding: 5px;
+            background: transparent;
+            font-size: 0.9em;
+        }
+
+        .comment-item img {
+            width: 100px;
+            border-radius: 5px;
+        }
+
+        .comment-item img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            height: 1em;
+            margin-bottom: 5px;
+        }
+
+        .comment-authortime {
+            display: flex;
+        }
+
+        .comment-text {
+            font-size: 0.9em;
+            margin-bottom: 4px;
+        }
+
+        .comment-author,.comment-time {
+            font-size: 0.8em;
+            color: #666;
+            text-align: right;
+            margin-right: 5px;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 5px;
+            display: none;
+        }
+
+        .comment-item:hover .comment-actions {
+            display: block;
+        }
+
+        .comment-actions-btn {
+            background: transparent;
+            padding: 0px 5px;
+            cursor: pointer;
+        }
+
+        .comment-count {
+            font-size: 0.8em;
+            text-align: right;
+            color: #666;
+            padding-right: 2em;
+        }
+
+        pre code {
+            border-radius: 5px;
+        }
+
+        .allentrieslist {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .allentrieslist a {
+            color: #000;
+            text-decoration: none;
+            font-size: 0.9em;
+            padding: 5px 10px;
+        }
+
+        .modal {
+            display: none;
+            z-index: 1;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.67);
+            top: 0;
+            left: 0;
+            margin: 0 auto;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+        }
+
+        .modal img {
+            border-radius: 5px;
+            margin: 0 auto;
+            overflow-y: scroll;
+        }
+
+        .modal-content {
+            display: block;
+            max-width: 100%;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .existingtagsdiv {
+            margin-bottom: 10px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-day {
+                min-height: 60px;
+                padding: 8px;
+                background-color: purple;
+            }
+        }
+    </style>
+    <script src="./data.js"></script>
+    <script src="./src/marked.min.js"></script>
+    <script src="./src/highlight.min.js"></script>
+    <link rel="stylesheet" href="./src/monokai.min.css">
+</head>
+
+<body>
+    <div class="banner">
+        <div class="view-switch">
+            <div class="switch-actions">
+                <button onclick="initHomePage()">首页</button>
+                <button onclick="creatNewEntry()">新建日志</button>
+                <button onclick="showTodayEntries()">今日日志</button>
+                <button onclick="initCalendar()">刷新</button>
+                <button id="newestEntries" onclick="showNewestEntries()">最新日志</button>
+                <button id="allEntriesCount" onclick="showAllEntries()">全部日志</button>
+                <button id="allEntriesList" onclick="showAllEntriesList()">日志列表</button>
+                <button id="favoriteEntriesCount" onclick="showFavoriteEntries()">日志收藏</button>
+                <input type="text" id="searchBox" placeholder="搜索日志" oninput="searchEntries()">
+                <button onclick="exportJSON()">导出数据</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="calendar-section">
+            <div class="profile-section">
+                <div class="profile-header"></div>
+                <div class="profile-body">
+                    <div class="profile-avatar">
+                        <img src="./assets/avatar.jpg" alt="头像">
+                    </div>
+                    <div class="profile-info">
+                        <h4>synBE</h4>
+                        <p>简介：我是一名爱好编程者</p>
+                    </div>
+                </div>
+            </div>
+            <div class="calendar-header nav-list-header">
+                <button onclick="changeMonth(-1)">&lt;</button>
+                <h3 id="currentMonth"></h3>
+                <button onclick="changeMonth(1)">&gt;</button>
+            </div>
+            <div class="calendar-grid" id="calendar"></div>
+            <div class="nav-list" id="navlist">
+                <div class="nav-list-header">最新日志</div>
+                <div class="nav-list-body" id="newestEntriesList"></div>
+                <div class="nav-list-header">最新评论</div>
+                <div class="nav-list-body" id="newestCommentsList"></div>
+                <div class="nav-list-header">标签</div>
+                <div class="nav-list-body tag-cloud" id="tagCloud"></div>
+            </div>
+        </div>
+
+        <div class="editor-section">
+            <div class="entry-list">
+                <ol id="entryList"></ol>
+            </div>
+            <div id="editor">
+                <div class="date-picker">
+                    <input type="date" id="entryDate" value="2025-03-10">
+                </div>
+                <input type="text" id="title" placeholder="日志标题">
+                <input type="text" id="author" placeholder="日志作者" value="synBE">
+                <textarea id="content" rows="8" placeholder="记录今天的点滴..."></textarea>
+                <input type="text" id="tags" placeholder="标签（用逗号分隔）" style="flex: 1;">
+                <div id="existingtagsdiv" class="existingtagsdiv"></div>
+                <input type="file" id="local-images-input" accept="image/*,.jpg,.jpeg,.png,.gif,.bmp,.tiff" multiple
+                    style="display: none;">
+                <div class="editor-btns">
+                    <button onclick="clearBtn()">
+                        清空
+                    </button>
+                    <button class="local-images-btn" id="local-images-btn" onclick="insertLocalImagesToEntry(this)">
+                        图片
+                    </button>
+                    <button onclick="saveEntry()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img id="modalImg" class="modal-content">
+    </div>
+
+
+    <script>
+        // let currentDate = new Date(2025, 2, 10);
+        let currentDate = new Date();
+        let editingId = null;
+
+        // 格式化日期001
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function formatDateTime(datetime) {
+            const year = datetime.getFullYear();
+            const month = String(datetime.getMonth() + 1).padStart(2, '0');
+            const day = String(datetime.getDate()).padStart(2, '0');
+            const hours = String(datetime.getHours()).padStart(2, '0');
+            const minutes = String(datetime.getMinutes()).padStart(2, '0');
+            const seconds = String(datetime.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        // Initialize the calendar，初始化日历，显示当前日期的日志，显示标签云，显示按钮数量
+        function initCalendar() {
+            // 删除下面这行代码，避免重置 currentDate
+            // currentDate = new Date();
+            const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+            document.getElementById('currentMonth').textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                calendar.appendChild(createDayElement(''));
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dayElement = createDayElement(d);
+                const dateStr = formatDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), d));
+                const entryCount = entries.filter(e => e.date === dateStr).length;
+                if (entryCount > 0) {
+                    dayElement.classList.add('has-entry');
+                    dayElement.innerHTML = `${d}<div class="entry-count">${entryCount}</div>`;
+                }
+
+                // 修改点击事件处理逻辑
+                dayElement.addEventListener('click', function () {
+                    if (entryCount === 0) {
+                        creatNewEntry();
+                    } else {
+                        showEntriesForDate(dateStr);
+                    }
+                });
+
+                calendar.appendChild(dayElement);
+            }
+
+            const tagCount = countTags(entries);
+            displayTagCloud(tagCount);
+            updateButtonCount();
+            renderExistingTags();
+            showNewestEntriesToNavList();
+            showNewestCommentsToNavList();
+            console.log('Calendar initialized');
+        }
+
+        // 创建日期元素，点击日期时，显示该日期的日志
+        function createDayElement(day) {
+            const div = document.createElement('div');
+            div.className = 'calendar-day';
+            if (day) {
+                div.innerHTML = day;
+                div.onclick = () => {
+                    // const selectedDate = 当前时间，精确到秒
+                    const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+                    document.getElementById('entryDate').value = formatDate(selectedDate);
+                    showEntriesForDate(formatDate(selectedDate));
+                };
+
+            }
+            return div;
+        }
+        //显示指定日期的日志
+        function showEntriesForDate(dateStr) {
+            const filtered = entries.filter(entry => entry.date === dateStr);
+            const list = document.getElementById('entryList');
+            if (!list) {
+                return;
+            }
+            const html = generateEntryListHTML(filtered);
+            list.innerHTML = html;
+
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+
+        marked.setOptions({
+            sanitize: false, // 不对 HTML 进行额外的清理
+            smartypants: true, // 支持智能引号
+            breaks: true // 支持软换行
+        });
+
+        // 功能：生成日志列表的 HTML，并返回 HTML 字符串，用于显示日志列表，
+        // 参数：entriesArray，日志数组，
+        function generateEntryListHTML(entriesArray) {
+            const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
+            return entriesArray.map(entry => {
+                let title = entry.title;
+                let author = entry.author;
+                let content = entry.content;
+                let commentsHTML = '';
+
+                if (keyword) {
+                    const regex = new RegExp(keyword, 'gi');
+                    title = title.replace(regex, match => `<span style="background-color: yellow;">${match}</span>`);
+                    author = author.replace(regex, match => `<span style="background-color: yellow;">${match}</span>`);
+                    content = content.replace(regex, match => `<span style="background-color: yellow;">${match}</span>`);
+                }
+
+                // 使用 marked.parse 解析日志内容
+                let parsedContent = marked.parse(content);
+
+                // 封装处理链接的函数
+                function processLinks(content) {
+                    return content.replace(/\[\[([^\|]+)(?:\|([^\]]+))?\]\]/g, (match, linkText, linkId) => {
+                        if (!linkId) {
+                            // 如果没有提供日志id，尝试根据标题查找id
+                            const targetEntry = entries.find(e => e.title === linkText);
+                            linkId = targetEntry ? targetEntry.id : null;
+                        }
+                        if (!linkId) {
+                            console.warn('Invalid link ID for title:', linkText);
+                            return match; // 返回原始内容
+                        }
+                        return `<a href="#" onclick="showEntry('${linkId}', event)">${linkText}</a>`;
+                    });
+                }
+
+                // 处理日志链接
+                parsedContent = processLinks(parsedContent);
+
+                // 确保解析后的代码块符合 Highlight.js 要求
+                parsedContent = parsedContent.replace(/<pre><code>/g, '<pre><code class="hljs">');
+
+                // 高亮显示代码块
+                parsedContent = highlightCodeBlocks(parsedContent);
+
+
+                // 处理评论中的日志链接
+                if (entry.comments) {
+                    commentsHTML = entry.comments.map(comment => {
+                        let commentText = comment.text;
+                        if (keyword) {
+                            const regex = new RegExp(keyword, 'gi');
+                            commentText = commentText.replace(regex, match => `<span style="background-color: yellow;">${match}</span>`);
+                        }
+                        // 使用 marked.parse 解析评论内容
+                        const parsedCommentText = marked.parse(commentText);
+                        const parsedCommentWithLinks = processLinks(parsedCommentText);
+                        // 确保解析后的代码块符合 Highlight.js 要求
+                        const highlightedCommentText = parsedCommentWithLinks.replace(/<pre><code>/g, '<pre><code class="hljs">');
+                        // 高亮显示评论中的代码块
+                        const highlightedComment = highlightCodeBlocks(highlightedCommentText);
+                        return `
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <div class="comment-authortime">
+                                <div class="comment-author" sytle="display:none">${comment.commentauthor}</div>
+                                <div class="comment-time">${comment.time}</div>
+                            </div>
+                            <div class="comment-actions">
+                                <button class="comment-actions-btn" onclick="deleteComment('${entry.id}', '${comment.time}')">删除</button>
+                                <button class="comment-actions-btn" onclick="editComment('${entry.id}', '${comment.time}')">编辑</button>
+                            </div>
+                        </div>
+                        <div class="comment-text">${highlightedComment}</div>
+                    </div>
+                `;
+                    }).join('');
+                }
+
+                return `
+            <div class="entry-item" id="entry-${entry.id}">
+                <div class="entry-header">
+                    <div class="entry-date">${author} ${entry.creattimestamp}</div>
+                    <div class="entry-actions">
+                        <button class="entry-actions-btn" onclick="toggleFavorite('${entry.id}')">${entry.isFavorite ? '取消收藏' : '收藏'}</button>
+                        <button class="entry-actions-btn" onclick="copyEntryLink('${entry.id}')">复制链接</button>
+                        <button class="entry-actions-btn" onclick="deleteEntry('${entry.id}', event)">删除</button>
+                        <button class="entry-actions-btn" onclick="editEntry('${entry.id}')">编辑</button>
+                    </div>
+                </div>
+                <div class="entry-title">${title}</div>
+                <div class="entry-content">${parsedContent}</div>
+                ${entry.tags.length ? `<div class="tag-container">${entry.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+                <div class="comment-count">评论(${entry.comments ? entry.comments.length : 0})</div>
+                <div class="comments" id="comments-${entry.id}">
+                    ${commentsHTML}
+                </div>
+                <div class="comment-section">
+                    <input type="text" class="comment-author" data-entry-id="${entry.id}" placeholder="你的名字" value="synbe" style="display: none;">
+                    <textarea class="comment-input" data-entry-id="${entry.id}" placeholder="添加评论"></textarea>
+                    <div class="editor-btns">
+                        <button class="local-images-btn" onclick="insertLocalImagesToComment(this)">图片</button>
+                        <button class="comment-submit-btn" onclick="handleCommentSubmit('${entry.id}', this)">发表</button>
+                        </div>
+                </div>
+            </div>
+        `;
+            }).join('');
+        }
+
+
+        function decodeHtmlEntities(str) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = str;
+            return textarea.value;
+        }
+
+        function highlightCodeBlocks(html) {
+            return html.replace(/<pre><code([^>]*)>(.*?)<\/code><\/pre>/gs, (match, lang, code) => {
+                // 解码 HTML 实体
+                const decodedCode = decodeHtmlEntities(code);
+
+                // 提取语言标识符，去除 "language-" 前缀
+                const language = (lang || '').match(/class="([^"]+)"/)?.[1]?.replace('hljs', '').replace('language-', '').trim() || 'plaintext';
+
+                // 使用 Highlight.js 高亮代码
+                const highlightedCode = hljs.highlight(decodedCode, { language }).value;
+
+                return `<pre><code class="hljs ${language}">${highlightedCode}</code></pre>`;
+            });
+        }
+
+        window.onload = function () {
+            const codeBlocks = document.querySelectorAll('pre code');
+            codeBlocks.forEach(codeBlock => {
+                const originalCode = codeBlock.textContent;
+
+                // 解码 HTML 实体
+                const decodedCode = decodeHtmlEntities(originalCode);
+
+                // 使用 Highlight.js 高亮代码
+                if (typeof hljs !== 'undefined') {
+                    const highlightedCode = hljs.highlightAuto(decodedCode).value;
+                    codeBlock.innerHTML = highlightedCode;
+                }
+            });
+        };
+
+        // 搜索条目
+        function searchEntries() {
+            const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
+            const filteredEntries = entries.filter(entry => {
+                return entry.title.toLowerCase().includes(keyword) || entry.content.toLowerCase().includes(keyword);
+            });
+            const list = document.getElementById('entryList');
+            list.innerHTML = generateEntryListHTML(filteredEntries);
+
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+
+            // 手动触发代码高亮
+            if (typeof hljs !== 'undefined') {
+                hljs.highlightAll();
+            }
+        }
+
+        // 编辑指定id的条目
+        function editEntry(id) {
+            const entry = entries.find(e => e.id === id);
+            if (entry) {
+                document.getElementById('title').value = entry.title;
+                document.getElementById('author').value = entry.author;
+                document.getElementById('content').value = entry.content;
+                document.getElementById('entryDate').value = entry.date;
+                document.getElementById('tags').value = entry.tags.join(', ');
+                document.getElementById('editor').style.display = 'block';
+                document.getElementById('entryList').style.display = 'none';
+                // 正确设置 editingId
+                editingId = id;
+                initCalendar();
+            }
+        }
+
+
+        // 保存条目（新增或编辑）
+        function saveEntry() {
+            const title = document.getElementById('title').value.trim();
+            const author = document.getElementById('author').value.trim();
+            const content = document.getElementById('content').value.trim();
+            const tags = document.getElementById('tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const date = document.getElementById('entryDate').value;
+
+            if (!title || !content) {
+                return alert('标题和内容不能为空');
+            }
+
+            let entry;
+            if (editingId) {
+                // 编辑已有条目
+                const existingEntry = entries.find(e => e.id === editingId);
+                entry = {
+                    ...existingEntry,
+                    title,
+                    content,
+                    tags,
+                    date,
+                    edittimestamp: formatDateTime(new Date())
+                };
+                const index = entries.findIndex(e => e.id === editingId);
+                entries[index] = entry;
+            } else {
+                // 新增条目
+                const newId = Math.random().toString(36).substr(2, 15);
+                entry = {
+                    id: newId,
+                    author: author,
+                    title,
+                    content,
+                    tags,
+                    date,
+                    creattimestamp: formatDateTime(new Date()),
+                    edittimestamp: formatDateTime(new Date()),
+                    isFavorite: false,
+                    comments: []
+                };
+                entries.push(entry);
+            }
+
+            // 调试：输出更新后的 entries 数组
+            clearForm();
+            editingId = null; // 保存后重置 editingId
+            initCalendar();
+            showEntry(entry.id);
+
+            showNewestEntriesToNavList();
+        }
+
+
+        // 删除指定id的条目
+        function deleteEntry(id, event) {
+            event.stopPropagation();
+            if (!confirm('确定要删除这篇日志吗？')) return;
+            entries = entries.filter(e => e.id !== id);
+            initCalendar();
+            showNewstEntries();
+        }
+
+        //显示最新3篇日志//按时间从新到旧排序
+        function showNewstEntries() {
+            const newestEntries = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 3);
+            const list = document.getElementById('entryList');
+            list.innerHTML = generateEntryListHTML(newestEntries);
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+
+        // 显示所有条目
+        function showAllEntries() {
+            const sortedEntries = sortEntriesDesc(entries);
+            const list = document.getElementById('entryList');
+            list.innerHTML = generateEntryListHTML(sortedEntries);
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+
+        //此处函数功能：标签云
+        function countTags(entriesArray) {
+            const tagCount = {};
+            entriesArray.forEach(entry => {
+                entry.tags.forEach(tag => {
+                    if (tagCount[tag]) {
+                        tagCount[tag]++;
+                    } else {
+                        tagCount[tag] = 1;
+                    }
+                });
+            });
+            return tagCount;
+        }
+
+        //此函数功能：显示所有条目列表，以链接为形式
+        function showAllEntriesList() {
+            const list = document.getElementById('entryList');
+            // 将所有的日志，以标题链接的形式展示，并按时间排序
+            list.innerHTML = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).map(entry => `
+                        <li><div class="entry-item allentrieslist">
+                            <a href="#" onclick="showEntry('${entry.id}', event)">${entry.title}</a>
+                            <div class="entry-date">${entry.creattimestamp}</div>
+                        </div>
+                        </li>
+                    `).join('');
+            displayTagCloud(countTags(entries));
+
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+
+        function showEntry(id, event) {
+            if (event) {
+                event.preventDefault(); // 阻止默认的 href 跳转行为
+            }
+            const list = document.getElementById('entryList');
+            const filteredEntries = entries.filter(e => e.id === id);
+            if (filteredEntries.length > 0) {
+                list.innerHTML = generateEntryListHTML(filteredEntries);
+                document.getElementById('editor').style.display = 'none';
+                document.getElementById('entryList').style.display = 'block';
+            } else {
+                console.log('No entry found with id:', id);
+            }
+        }
+
+        // 新的函数，用于显示单个条目并添加动画效果
+        function showEntryWithAnimation(id) {
+            const list = document.getElementById('entryList');
+            list.style.opacity = 0;
+            list.innerHTML = generateEntryListHTML(entries.filter(e => e.id === id));
+            setTimeout(() => {
+                list.style.opacity = 1;
+            }, 300);
+
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+
+        // ... existing code ...
+
+
+        function createTagElement(tag, count) {
+            const span = document.createElement('span');
+            span.className = 'tag';
+            span.textContent = `${tag} (${count})`;
+            span.onclick = () => filterEntriesByTag(tag);
+            return span;
+        }
+
+        function displayTagCloud(tagCount) {
+            const tagCloud = document.getElementById('tagCloud');
+            tagCloud.innerHTML = ''; // 清空标签云容器
+
+            // 将标签按数量从多到少排序
+            const sortedTags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
+            sortedTags.forEach(([tag, count]) => {
+                const tagElement = createTagElement(tag, count);
+                tagCloud.appendChild(tagElement);
+            });
+        }
+
+
+        // 通过标签云过滤条目
+        function filterEntriesByTag(tag) {
+            const filteredEntries = entries.filter(entry => entry.tags.includes(tag));
+            const list = document.getElementById('entryList');
+            list.innerHTML = generateEntryListHTML(filteredEntries);
+
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+
+        // 清空表单
+        function clearForm() {
+            document.getElementById('title').value = '';
+            document.getElementById('author').value = '';
+            document.getElementById('content').value = '';
+            document.getElementById('tags').value = '';
+            editingId = null;
+        }
+
+        // 导出 JSON
+        function exportJSON() {
+            const data = `let entries = ` + JSON.stringify(entries, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.js';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+
+        // 添加评论
+        function addComment(entryId, commentAuthor, commentText) {
+            const entry = entries.find(e => e.id === entryId);
+            if (!entry || !commentText.trim()) {
+                return;
+            }
+
+            // 修改为通过 entryId 获取对应的评论输入框
+            const commentArea = document.querySelector(`textarea[data-entry-id="${entryId}"]`);
+            if (!commentArea) {
+                return;
+            }
+            const commentTime = commentArea.dataset.commentTime;
+
+            let targetTime;
+            if (commentTime) {
+                const commentToEdit = entry.comments.find(comment => comment.time === commentTime);
+                if (commentToEdit) {
+                    commentToEdit.commentauthor = commentAuthor.trim();
+                    commentToEdit.text = commentText.trim();
+                    commentToEdit.time = formatDateTime(new Date());
+                    targetTime = commentToEdit.time;
+                }
+                commentArea.value = "";
+                commentArea.removeAttribute('data-comment-time');
+            } else {
+                if (!entry.comments) entry.comments = [];
+                const timestamp = formatDateTime(new Date());
+                entry.comments.push({
+                    id: Math.random().toString(36).substr(2, 15),
+                    commentauthor: commentAuthor.trim(),
+                    time: timestamp,
+                    text: commentText.trim(),
+                });
+                targetTime = timestamp;
+                commentArea.value = "";
+            }
+
+            initCalendar();
+            showEntry(entryId);
+
+            // 等待页面更新后再查找评论元素
+            setTimeout(() => {
+                const commentElement = findCommentElement(entryId, targetTime);
+                if (commentElement) {
+                    // 设置背景色为黄色
+                    commentElement.style.backgroundColor = '#f7e769';
+                    // 3秒后恢复背景色
+                    setTimeout(() => {
+                        commentElement.style.backgroundColor = '';
+                    }, 1000);
+                }
+            }, 100); // 等待100毫秒确保页面更新
+        }
+
+        // 提交评论
+        function handleCommentSubmit(entryId, button) {
+            const commentAuthorInputBox = button.closest('.comment-section').querySelector('.comment-author');
+            commentAuthor = commentAuthorInputBox.value;
+            const commentTextInputBox = button.closest('.comment-section').querySelector('.comment-input');
+            commentText = commentTextInputBox.value;
+            addComment(entryId, commentAuthor, commentText);
+            commentAuthorInputBox.value = '';
+            commentTextInputBox.value = '';
+        }
+
+        // 新增辅助函数：查找评论元素
+        function findCommentElement(entryId, time) {
+            const commentsContainer = document.getElementById(`comments-${entryId}`);
+            if (commentsContainer) {
+                return Array.from(commentsContainer.querySelectorAll('.comment-item')).find(comment => {
+                    const commentTime = comment.querySelector('.comment-time').textContent.trim();
+                    return commentTime === time;
+                });
+            }
+            return null;
+        }
+
+        // 新增辅助函数：高亮评论元素
+        function highlightComment(commentElement) {
+            commentElement.style.backgroundColor = '#f7e769';
+            setTimeout(() => {
+                commentElement.style.backgroundColor = '';
+            }, 1000);
+        }
+
+
+        // 复制日志链接到剪贴板
+        function copyEntryLink(id) {
+            const entry = entries.find(e => e.id === id);
+            if (entry) {
+                const link = `[[${entry.title}|${id}]]`;
+                navigator.clipboard.writeText(link)
+                    .then(() => {
+                        // 修改按钮样式，显示复制成功按钮改为复制成功，显示三秒
+                        const copyButton = document.querySelector(`#entry-${id} .entry-actions button:nth-child(2)`);
+                        if (copyButton) {
+                            copyButton.innerText = '复制成功';
+                            setTimeout(() => {
+                                copyButton.innerText = '复制链接';
+                            }, 1000);
+                        } else {
+                            console.error('未找到复制按钮元素，id:', id);
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('无法复制链接到剪贴板: ', err);
+                    });
+            }
+        }
+
+
+        //评论删除
+        function deleteComment(entryId, timestamp) {
+            const entry = entries.find(e => e.id === entryId);
+            if (entry) {
+                entry.comments = entry.comments.filter(comment => comment.time !== timestamp);
+                showFavoriteEntries();
+            }
+            initCalendar();
+            showEntry(entryId);
+        }
+
+        // 编辑评论
+        function editComment(entryId, timestamp) {
+            const entry = entries.find(e => e.id === entryId);
+            if (entry) {
+                const commentToEdit = entry.comments.find(comment => comment.time === timestamp);
+                if (commentToEdit) {
+                    // 将评论内容输出到评论输入框中
+                    // 修改选择器为 textarea
+                    const commentArea = document.querySelector(`textarea[data-entry-id="${entryId}"]`);
+                    if (commentArea) {
+                        commentArea.value = commentToEdit.text;
+                        commentArea.dataset.commentTime = timestamp; // 保存当前评论的时间戳
+                        // 滚动到编辑框，设置背景为黄色，3秒后恢复为白色
+                        commentArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setTimeout(() => {
+                            commentArea.style.backgroundColor = '#f7e769';
+                        }, 10);
+                        setTimeout(() => {
+                            commentArea.style.backgroundColor = '';
+                        }, 1000);
+                    }
+                    // 将发表class=".comment-submit-bt按钮文本修改为“保存”
+                    const submitButton = commentArea.closest('.comment-section').querySelector('.comment-submit-btn');
+                    if (submitButton) {
+                        submitButton.textContent = '保存';
+                    }
+                }
+            }
+            initCalendar();
+        }
+        // 添加收藏功能
+        function toggleFavorite(entryId) {
+            const entry = entries.find(e => e.id === entryId);
+            if (entry) {
+                entry.isFavorite = !entry.isFavorite; // 切换收藏状态
+                updateButtonCount(); // 更新收藏按钮数量
+                const favoriteButton = document.querySelector(`#entry-${entryId} .entry-actions button:nth-child(1)`);
+                if (favoriteButton) {
+                    favoriteButton.textContent = entry.isFavorite ? '取消收藏' : '收藏';
+                }
+                showEntry(entryId);
+            } else {
+                console.log('未找到指定的日志条目');
+            }
+        }
+
+
+        // 显示收藏的条目
+        function showFavoriteEntries() {
+            const favoriteEntries = entries.filter(entry => entry.isFavorite);
+            const sortedEntries = sortEntriesDesc(favoriteEntries);
+            const list = document.getElementById('entryList');
+            list.innerHTML = generateEntryListHTML(sortedEntries);
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+        // 搜索条目
+        function searchEntries() {
+            const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
+            const filteredEntries = entries.filter(entry => {
+                return entry.title.toLowerCase().includes(keyword) || entry.content.toLowerCase().includes(keyword);
+            });
+            const list = document.getElementById('entryList');
+            list.innerHTML = generateEntryListHTML(filteredEntries);
+
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+
+        // 切换月份
+        function changeMonth(offset) {
+            currentDate.setMonth(currentDate.getMonth() + offset);
+            initCalendar();
+        }
+
+        //清空所有表单
+        function clearBtn() {
+            document.getElementById('title').value = '';
+            document.getElementById('author').value = '';
+            document.getElementById('content').value = '';
+            document.getElementById('tags').value = '';
+            document.getElementById('local-images-input').value = '';
+        }
+
+
+
+        //新建输入日志，插入本地图片
+        function insertLocalImagesToEntry(button) {
+            const localImagesInput = document.createElement('input');
+            localImagesInput.type = 'file';
+            localImagesInput.accept = 'image/*,.jpg,.jpeg,.png,.gif,.bmp,.tiff';
+            localImagesInput.multiple = true;
+            localImagesInput.style.display = 'none';
+
+            const targetTextarea = document.getElementById('content');
+
+            localImagesInput.addEventListener('change', function () {
+                const files = localImagesInput.files;
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    processFile(file, targetTextarea);
+                }
+                localImagesInput.value = '';
+            });
+
+            localImagesInput.click();
+        }
+
+        //评论插入本地图片
+        function insertLocalImagesToComment(button) {
+            const localImagesInput = document.createElement('input');
+            localImagesInput.type = 'file';
+            localImagesInput.accept = 'image/*,.jpg,.jpeg,.png,.gif,.bmp,.tiff';
+            localImagesInput.multiple = true;
+            localImagesInput.style.display = 'none';
+
+            const targetTextarea = button.parentElement.previousElementSibling; //
+
+            localImagesInput.addEventListener('change', function () {
+                const files = localImagesInput.files;
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    processFile(file, targetTextarea);
+                }
+                localImagesInput.value = '';
+            });
+
+            localImagesInput.click();
+        }
+
+
+        // 处理单个文件的函数
+        function processFile(file, targetTextarea) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    if (file.size > 1024 * 1024) {
+                        compressImage(img, (compressedImg) => {
+                            insertBase64ToTextarea(compressedImg, targetTextarea);
+                        });
+                    } else {
+                        insertBase64ToTextarea(img, targetTextarea);
+                    }
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 压缩图片函数
+        function compressImage(img, callback) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // 简单的压缩比例设置，可根据需求调整
+            const maxWidth = 800;
+            const maxHeight = 600;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth) {
+                height = height * (maxWidth / width);
+                width = maxWidth;
+            }
+
+            if (height > maxHeight) {
+                width = width * (maxHeight / height);
+                height = maxHeight;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob(function (blob) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    const compressedImg = new Image();
+                    compressedImg.src = reader.result;
+                    callback(compressedImg);
+                };
+                reader.onerror = function () {
+                    console.error('压缩后文件读取失败');
+                };
+                reader.readAsDataURL(blob);
+            }, 'image/jpeg', 0.8);
+        }
+
+        // 将图片转换为 Base64 并插入到文本框
+        function insertBase64ToTextarea(img, targetTextarea) {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob(function (blob) {
+                if (blob) {
+                    const reader = new FileReader();
+                    reader.onloadend = function () {
+                        const base64 = reader.result;
+                        if (targetTextarea) {
+                            targetTextarea.value += `![图片](${base64})\n`;
+                        } else {
+                            console.error('未找到文本框元素');
+                        }
+                    };
+                    reader.onerror = function () {
+                        console.error('插入图片时文件读取失败');
+                    };
+                    reader.readAsDataURL(blob);
+                } else {
+                    console.error('图片转换为 Base64 失败');
+                }
+            });
+        }
+
+        // 全部日历按钮和收藏的日历按钮后添加数量
+        function updateButtonCount() {
+            const allEntriesCount = entries.length;
+            const favoriteEntriesCount = entries.filter(entry => entry.isFavorite).length;
+            document.getElementById('allEntriesCount').textContent = '全部日志 (' + allEntriesCount + ')';
+            document.getElementById('allEntriesList').textContent = '日志列表 (' + allEntriesCount + ')';
+            document.getElementById('favoriteEntriesCount').textContent = '日志收藏 (' + favoriteEntriesCount + ')';
+            //更新数据
+        }
+
+        // 按新到旧排序日志的函数
+        function sortEntriesDesc(entries) {
+            return entries.sort((a, b) => {
+                const timestampA = new Date(a.creattimestamp || a.edittimestamp);
+                const timestampB = new Date(b.creattimestamp || b.edittimestamp);
+                return timestampB - timestampA;
+            });
+        }
+
+
+
+        // 显示当天的日志
+
+        function showTodayEntries() {
+            const today = new Date();
+            const todayStr = formatDate(today);
+            const entriesForToday = entries.filter(entry => entry.date === todayStr);
+            if (entriesForToday.length === 0) {
+                creatNewEntry();
+            } else {
+                showEntriesForDate(todayStr);
+            }
+        }
+
+
+
+        //显示最新3篇日志//按时间从新到旧排序
+        function showNewestEntries() {
+            const sortedEntries = sortEntriesDesc(entries);
+            const list = document.getElementById('entryList');
+            list.innerHTML = generateEntryListHTML(sortedEntries);
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'block';
+        }
+
+        //新建日志
+        function creatNewEntry() {
+            //将#editor设置为显示，隐藏#entryList。
+            document.getElementById('editor').style.display = 'block';
+            document.getElementById('entryList').style.display = 'none';
+
+            // 清空表单
+            clearForm();
+        }
+
+        // 最新5篇日志显示到导航列表项
+        function showNewestEntriesToNavList() {
+            const navList = document.getElementById('newestEntriesList'); // 假设导航列表的 id 是 'newestEntriesNavList'
+            if (!navList) {
+                return;
+            }
+            navList.innerHTML = ''; // 清空列表
+
+            // 按创建时间降序排序
+            const sortedEntries = entries.slice().sort((a, b) => {
+                const dateA = new Date(a.creattimestamp || a.edittimestamp);
+                const dateB = new Date(b.creattimestamp || b.edittimestamp);
+                return dateB - dateA;
+            });
+
+            // 取最新的 5 条日志和时间戳
+            const newestEntries = sortedEntries.slice(0, 5);
+
+            newestEntries.forEach(entry => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `#${entry.id}`;
+                link.textContent = entry.title;
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    showEntry(entry.id);
+                });
+                listItem.appendChild(link);
+                navList.appendChild(listItem);
+            });
+        }
+
+
+
+        // Define a function to get the newest comments
+        function getNewestComments() {
+            const allComments = [];
+            entries.forEach(entry => {
+                if (entry.comments) {
+                    allComments.push(...entry.comments.map(comment => ({
+                        ...comment,
+                        entryId: entry.id
+                    })));
+                }
+            });
+            // Sort comments by time in descending order
+            allComments.sort((a, b) => new Date(b.time) - new Date(a.time));
+            return allComments;
+        }
+
+
+        // 首页
+        function initHomePage() {
+            //设置：打开指定id日之后，并设置为首页
+            showEntry("inithomepage");
+        }
+
+        // 更新 showNewestComments 函数
+        function showNewestCommentsToNavList() {
+            const newestCommentsList = document.getElementById('newestCommentsList');
+            newestCommentsList.innerHTML = '';
+            const newestComments = getNewestComments();
+            for (let i = 0; i < 5 && i < newestComments.length; i++) {
+                const newestComment = newestComments[i];
+                const newestCommentLink = document.createElement('a');
+                // 生成指向条目中评论的链接
+                newestCommentLink.href = `#comments-${newestComment.entryId}`;
+                // 截取前20个字并添加省略号
+                const commentText = newestComment.text.length > 20 ? newestComment.text.substring(0, 30) + '...' : newestComment.text;
+                // 显示评论前20个字和评论时间戳
+                newestCommentLink.innerHTML = `${commentText}`;
+                // 添加点击事件，确保在点击时滚动到对应位置
+                newestCommentLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const targetId = `comments-${newestComment.entryId}`;
+
+                    // 显示对应的日志条目
+                    showEntry(newestComment.entryId);
+
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+
+                        // 找到具体的评论元素
+                        const commentElement = Array.from(targetElement.querySelectorAll('.comment-item')).find(comment => {
+                            const commentTime = comment.querySelector('.comment-time').textContent.trim(); // 去除多余空格
+                            return commentTime === newestComment.time;
+
+                        });
+
+
+                        if (commentElement) {
+                            // 设置背景色为黄色
+                            commentElement.style.backgroundColor = '#f7e769';
+
+                            // 3秒后恢复背景色
+                            setTimeout(() => {
+                                commentElement.style.backgroundColor = 'transparent';
+                            }, 1000);
+                        }
+                    } else {
+                        console.log('Element not found:', targetId); // 调试信息
+                    }
+                });
+                const listItem = document.createElement('li');
+                listItem.appendChild(newestCommentLink);
+                newestCommentsList.appendChild(listItem);
+            }
+        }
+
+
+
+        // 初始化图片弹窗功能
+        function initImageModal() {
+            const modal = document.getElementById('imageModal');
+            if (!modal) {
+                return;
+            }
+            const closeBtn = document.querySelector('.close');
+            const modalImg = document.getElementById('modalImg');
+
+            if (!closeBtn) {
+                console.error('Close button not found. Checking all elements in the DOM:');
+                const allElements = document.getElementsByTagName('*');
+                for (let i = 0; i < allElements.length; i++) {
+                    const element = allElements[i];
+                    if (element.classList.contains('close')) {
+                        console.log('Found close button element:', element);
+                    }
+                }
+                return;
+            }
+
+
+            // 为所有日志图片添加点击事件监听器
+            document.addEventListener('click', function (event) {
+                // 修改点击事件条件判断
+                if (event.target.tagName === 'IMG' && event.target.closest('.entry-content')) {
+                    showModal(modal, modalImg, event.target.src);
+                }
+            });
+
+
+            // 为所有评论图片添加点击事件监听器
+            document.addEventListener('click', function (event) {
+                // 修改点击事件条件判断
+                if (event.target.tagName === 'IMG' && event.target.closest('.comment-item')) {
+                    showModal(modal, modalImg, event.target.src);
+                }
+            });
+
+            // 为关闭按钮添加点击事件监听器
+            closeBtn.addEventListener('click', function () {
+                closeModal(modal);
+            });
+
+            // 点击弹窗外部关闭弹窗
+            window.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        }
+
+        // 显示弹窗
+        function showModal(modal, modalImg, src) {
+            modal.style.display = 'block';
+            modalImg.src = src;
+        }
+
+        // 关闭弹窗
+        function closeModal(modal) {
+            modal.style.display = 'none';
+        }
+
+        // 确保在 DOM 加载完成后调用 initImageModal
+        document.addEventListener('DOMContentLoaded', function () {
+            initImageModal();
+        });
+
+
+        // 显示弹窗
+        function showModal(modal, modalImg, src) {
+            modal.style.display = 'block';
+            modalImg.src = src;
+        }
+
+        // 关闭弹窗
+        function closeModal(modal) {
+            modal.style.display = 'none';
+        }
+
+        // 确保在 DOM 加载完成后调用 initImageModal
+        document.addEventListener('DOMContentLoaded', function () {
+            initImageModal();
+        });
+
+
+        function renderExistingTags() {
+            const exitTagsDiv = document.getElementById('existingtagsdiv');
+            exitTagsDiv.innerHTML = '';
+
+            const tagInput = document.getElementById('tags');
+            const tagCount = {}; // 用于统计每个标签的数量
+
+            // 统计每个标签的数量
+            for (const entry of entries) {
+                const tags = entry.tags;
+                for (const tag of tags) {
+                    if (tagCount[tag]) {
+                        tagCount[tag]++;
+                    } else {
+                        tagCount[tag] = 1;
+                    }
+                }
+            }
+
+            // 按标签数量从多到少排序
+            const sortedTags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]).map(([tag]) => tag);
+
+            sortedTags.forEach(tag => {
+                const tagButton = document.createElement('button');
+                tagButton.textContent = tag;
+                tagButton.classList.add('existingtag');
+                exitTagsDiv.appendChild(tagButton);
+
+                tagButton.addEventListener('click', () => {
+                    if (tagButton.style.backgroundColor === 'gray') {
+                        // 取消红底色，并删除该tag
+                        tagButton.style.backgroundColor = '';
+                        tagButton.style.color = 'black';
+                        const currentTags = tagInput.value.split(',').filter(t => t.trim() !== '');
+                        const newTags = currentTags.filter(t => t !== tag);
+                        tagInput.value = newTags.join(',');
+                    } else {
+                        // 背景色变红，并将此tag追加到<input id="tag">
+                        tagButton.style.backgroundColor = '#7db381';
+                        tagButton.style.color = 'white';
+                        const currentTags = tagInput.value.split(',').filter(t => t.trim() !== '');
+                        if (!currentTags.includes(tag)) {
+                            currentTags.push(tag);
+                        }
+                        tagInput.value = [...new Set(currentTags)].join(',');
+                    }
+                });
+            });
+        }
+
+        // 定义函数，用于设置日期输入框的值为当前日期
+        function setCurrentDateToEntryDateInput() {
+            const entryDateInput = document.getElementById('entryDate');
+            const currentDate = new Date();
+            formattedDate = formatDate(currentDate);
+            entryDateInput.value = formattedDate;
+        }
+
+
+        setCurrentDateToEntryDateInput();
+        initCalendar();
+        renderExistingTags();
+        initHomePage();
+
+    </script>
+</body>
+
+</html>
