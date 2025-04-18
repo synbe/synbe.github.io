@@ -1,3 +1,7 @@
+<!-- todo:
+1. list区未完成 <ol id="entryList"></ol><div id="entryShow"></div>
+2. 日志区的tag点击事件 -->
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 
@@ -15,7 +19,7 @@
         .banner {
             max-width: 1400px;
             margin: 0 auto;
-            background-color: #7db381;
+            background-color: #216026;
             height: 50px;
             border-bottom: 3px solid #e8f5e9;
             border-radius: 5px;
@@ -70,7 +74,7 @@
             padding: 0px 15px;
             font-size: 23px;
             font-weight: bold;
-            color: #7db381;
+            color: #216026;
         }
 
         .calendar-grid {
@@ -110,13 +114,7 @@
         }
 
         .nav-list-body {
-            padding: 0px;
-        }
-
-
-        .nav-list-body ul {
-            padding: 0px;
-            margin: 0;
+            padding: 10px;
         }
 
         .nav-list-body li {
@@ -128,7 +126,7 @@
         .nav-list-body a {
             text-decoration: none;
             color: #000;
-            font-size: 0.8em;
+            font-size: 1鹅毛;
             width: 100%;
             height: 20px;
             display: block;
@@ -148,7 +146,7 @@
             position: absolute;
             bottom: 4px;
             right: 4px;
-            font-size: 0.8em;
+            font-size: 1em;
             color: var(--primary-color);
         }
 
@@ -157,6 +155,16 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .entry-list,
+        .entry-show {
+            list-style: none;
+            margin-bottom: 10px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin: 10px 0;
         }
 
         #editor {
@@ -208,8 +216,8 @@
         }
 
         .tag {
-            background: #f0f2f5;
-            color: #7db381;
+            background: #e8f5e9;
+            color: #216026;
             padding: 0px 3px;
             border-radius: 5px;
             font-size: 0.85em;
@@ -219,13 +227,14 @@
 
         .tag-cloud {
             line-height: 20px;
-            padding: 5px;
+            padding: 0 20px 10px 20px;
+            border-bottom: 2px #e8f5e9 solid;
         }
 
         .tag:hover {
             opacity: 0.8;
             color: #fff;
-            background: #7db381;
+            background: #216026;
         }
 
 
@@ -242,13 +251,6 @@
             box-shadow: inset 0 0 0 1px rgb(208, 208, 224);
         }
 
-        .entry-list {
-            list-style: none;
-            margin-bottom: 10px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
         button {
             cursor: pointer;
             transition: opacity 0.2s;
@@ -261,48 +263,64 @@
         button:hover {
             opacity: 0.8;
             color: #fff;
-            background: #7db381;
+            background: #216026;
         }
 
         .entry-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 22px;
-            border-bottom: 1px solid #efefef;
-            margin-bottom: 10px;
+            height: 30px;
+            margin: 5px 0;
+            background: #e8f5e9;
+
         }
+
 
         .entry-title {
             font-weight: bold;
+            font-size: 19px;
+            margin: 0;
+            color: #216026;
+        }
+
+        .entry-meta,
+        .comment-meta {
+            padding: 2px 5px;
+            font-size: 14px;
+            color: #777;
+            background: #E8F5E9;
+            display: flex;
         }
 
         .entry-date {
-            font-size: 0.8em;
+            font-size: 1em;
             color: #999;
         }
 
         .entry-actions {
-            display: flex;
             gap: 5px;
-            display: none;
+            text-align: right;
+            color: #216026;
+            height: 1em;
+            margin-bottom: 5px;
         }
 
-        .entry-header:hover .entry-actions {
-            display: block;
+        .action-btndiv {
+            display: none;
         }
 
         .entry-actions-btn {
             background: transparent;
-            color: #000;
             padding: 0px 5px;
             cursor: pointer;
             transition: opacity 0.2s;
+            color: #216026;
         }
 
         .entry-actions-btn:hover {
             color: #fff;
-            background: #7db381;
+            background: #216026;
         }
 
 
@@ -378,7 +396,7 @@
         .comment-item {
             padding: 5px;
             background: transparent;
-            font-size: 0.9em;
+            font-size: 1em;
         }
 
         .comment-item img {
@@ -394,26 +412,22 @@
         .comment-header {
             display: flex;
             justify-content: space-between;
-            height: 1em;
+            height: 22px;
             margin-bottom: 5px;
+            padding: 0 5px;
+            background: #e8f5e9;
         }
 
-        .comment-authortime {
-            display: flex;
+        .entry-author,
+        .comment-author {
+            margin-right: 5px;
         }
 
         .comment-text {
-            font-size: 0.9em;
+            font-size: 1em;
             margin-bottom: 4px;
         }
 
-        .comment-author,
-        .comment-time {
-            font-size: 0.8em;
-            color: #666;
-            text-align: right;
-            margin-right: 5px;
-        }
 
         .comment-actions {
             display: flex;
@@ -421,25 +435,26 @@
             display: none;
         }
 
-        .comment-item:hover .comment-actions {
-            display: block;
-        }
-
         .comment-actions-btn {
             background: transparent;
             padding: 0px 5px;
             cursor: pointer;
+            color: #216026;
         }
 
+
+        .entry-show:hover .action-btndiv,
+        .comment-item:hover .comment-actions,
+        .entry-list-item:hover .action-btndiv {
+            display: block;
+        }
+
+
         .comment-count {
-            font-size: 0.8em;
+            font-size: 1em;
             text-align: right;
             color: #666;
             padding-right: 2em;
-        }
-
-        pre code {
-            border-radius: 5px;
         }
 
         .allentrieslist {
@@ -456,7 +471,7 @@
         .allentrieslist a {
             color: #000;
             text-decoration: none;
-            font-size: 0.9em;
+            font-size: 1em;
             padding: 5px 10px;
         }
 
@@ -509,6 +524,60 @@
             cursor: pointer;
         }
 
+        /* 列表项样式 */
+        .entry-list-item {
+            list-style-type: none;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .entry-list-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .entry-summary {
+            color: #555;
+        }
+
+        pre code {
+            border-radius: 5px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #216026;
+        }
+
+        a {
+            color: #216026;
+            text-decoration: none;
+        }
+
+        blockquote {
+            color: #216026;
+            border-left: 2px solid #216026;
+            padding: 1px 5px;
+            background: #e8f5e9;
+            border-radius: 3px;
+            margin: 10px;
+        }
+
+        blockquote p {
+            padding: 1px;
+            margin: 10px;
+        }
+
+
+
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -521,6 +590,7 @@
             }
         }
     </style>
+
     <script src="./data.js"></script>
     <script src="./src/marked.min.js"></script>
     <script src="./src/highlight.min.js"></script>
@@ -534,11 +604,12 @@
                 <button onclick="initHomePage()">首页</button>
                 <button onclick="creatNewEntry()">新建日志</button>
                 <button onclick="showTodayEntries()">今日日志</button>
-                <button onclick="initCalendar()">刷新</button>
                 <button id="newestEntries" onclick="showNewestEntries()">最新日志</button>
                 <button id="allEntriesCount" onclick="showAllEntries()">全部日志</button>
                 <button id="allEntriesList" onclick="showAllEntriesList()">日志列表</button>
                 <button id="favoriteEntriesCount" onclick="showFavoriteEntries()">日志收藏</button>
+                <button id="commonLinks" onclick="showCommonLinks()">常用链接</button>
+                <button onclick="initCalendar()">刷新</button>
                 <input type="text" id="searchBox" placeholder="搜索日志" oninput="searchEntries()">
                 <button onclick="exportJSON()">导出数据</button>
             </div>
@@ -569,27 +640,16 @@
                 <div class="nav-list-body" id="newestEntriesList"></div>
                 <div class="nav-list-header">最新评论</div>
                 <div class="nav-list-body" id="newestCommentsList"></div>
-                <div class="nav-list-header">链接</div>
-                <div class="nav-list-body">
-                    <ul>
-                        <li><a href="./tools/ablums/commentjsjson01-latest/index.html">commentjsjson01-latest</a></li>
-                        <li><a href="./tools/ablums/m3u8downloader-latest/index.html">m3u8downloader-latest</a></li>
-                        <li><a href="./tools/ablums/m3u8playerjs-latest/index.html">m3u8playerjs-latest</a></li>
-                        <li><a href="./tools/ablums/md2singlehtmljs02-latest/index.html">md2singlehtmljs02-latest</a>
-                        </li>
-                        <li><a href="./tools/ablums/tinymce-02-latest/index.html">tinymce-02-latest</a></li>
-                        <li><a href="./tools/ablums/wechatsimulatorjs-b-latest/index.html">wechatsimulatorjs-b-latest</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="nav-list-header">标签</div>
-                <div class="nav-list-body tag-cloud" id="tagCloud"></div>
             </div>
         </div>
 
         <div class="editor-section">
+            <div class="tag-cloud" id="tagCloud"></div>
             <div class="entry-list">
-                <ol id="entryList"></ol>
+                <div id="entryList"></div>
+            </div>
+            <div class="entry-show">
+                <div id="entryShow"></div>
             </div>
             <div id="editor">
                 <div class="date-picker">
@@ -670,12 +730,19 @@
                     dayElement.innerHTML = `${d}<div class="entry-count">${entryCount}</div>`;
                 }
 
-                // 修改点击事件处理逻辑
+                // 日期点击事件处理逻辑,如果日志1，则直接显示该日志，如大于1，则显示日志列表，如果没有日志，则新建日志
                 dayElement.addEventListener('click', function () {
                     if (entryCount === 0) {
+                        // 如果该日期没有日志，创建新日志
                         creatNewEntry();
+                    } else if (entryCount === 1) {
+                        // 如果该日期只有一篇日志，直接显示该日志
+                        const entryId = entries.find(e => e.date === dateStr).id;
+                        showEntry(entryId);
                     } else {
-                        showEntriesForDate(dateStr);
+                        // 如果该日期有多篇日志，显示日志列表
+                        const entriesForToday = entries.filter(e => e.date === dateStr);
+                        creatEntriesList(entriesForToday);
                     }
                 });
 
@@ -710,15 +777,9 @@
         //显示指定日期的日志
         function showEntriesForDate(dateStr) {
             const filtered = entries.filter(entry => entry.date === dateStr);
-            const list = document.getElementById('entryList');
-            if (!list) {
-                return;
-            }
-            const html = generateEntryListHTML(filtered);
-            list.innerHTML = html;
 
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
+            creatEntriesList(filtered);
+            initCalendar();
         }
 
         marked.setOptions({
@@ -730,6 +791,10 @@
         // 功能：生成日志列表的 HTML，并返回 HTML 字符串，用于显示日志列表，
         // 参数：entriesArray，日志数组，
         function generateEntryListHTML(entriesArray) {
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('entryList').style.display = 'none';
+            document.getElementById('entryShow').style.display = 'block';
+
             const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
             return entriesArray.map(entry => {
                 let title = entry.title;
@@ -791,7 +856,7 @@
                         return `
                     <div class="comment-item">
                         <div class="comment-header">
-                            <div class="comment-authortime">
+                            <div class="comment-meta">
                                 <div class="comment-author" sytle="display:none">${comment.commentauthor}</div>
                                 <div class="comment-time">${comment.time}</div>
                             </div>
@@ -808,18 +873,26 @@
 
                 return `
             <div class="entry-item" id="entry-${entry.id}">
+                <div class="entry-title">
+                    <span class="entry-title">${entry.title}</span>
+                </div>
                 <div class="entry-header">
-                    <div class="entry-date">${author} ${entry.creattimestamp}</div>
+                    <div class="entry-meta">
+                            <div class="entry-author">${entry.author} </div>
+                            <div class="entry-date">${entry.creattimestamp}</div>
+                    </div>
                     <div class="entry-actions">
-                        <button class="entry-actions-btn" onclick="toggleFavorite('${entry.id}')">${entry.isFavorite ? '取消收藏' : '收藏'}</button>
-                        <button class="entry-actions-btn" onclick="copyEntryLink('${entry.id}')">复制链接</button>
-                        <button class="entry-actions-btn" onclick="deleteEntry('${entry.id}', event)">删除</button>
-                        <button class="entry-actions-btn" onclick="editEntry('${entry.id}')">编辑</button>
+                            <div class="action-btndiv">
+                                    <button class="entry-actions-btn" onclick="toggleFavorite('${entry.id}')">${entry.isFavorite ? '取消收藏' : '收藏'}</button>
+                                    <button class="entry-actions-btn" onclick="copyEntryLink('${entry.id}')">复制链接</button>
+                                    <button class="entry-actions-btn" onclick="shareEntry('${entry.id}')">分享</button>
+                                    <button class="entry-actions-btn" onclick="deleteEntry('${entry.id}', event)">删除</button>
+                                    <button class="entry-actions-btn" onclick="editEntry('${entry.id}')">编辑</button>
+                            </div>
                     </div>
                 </div>
-                <div class="entry-title">${title}</div>
                 <div class="entry-content">${parsedContent}</div>
-                ${entry.tags.length ? `<div class="tag-container">${entry.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+                ${entry.tags.length ? `<div class="tag-container">${entry.tags.map(t => `<span class="tag" onclick="filterEntriesByTag('${t}')">${t}</span>`).join('')}</div>` : ''}
                 <div class="comment-count">评论(${entry.comments ? entry.comments.length : 0})</div>
                 <div class="comments" id="comments-${entry.id}">
                     ${commentsHTML}
@@ -835,6 +908,7 @@
             </div>
         `;
             }).join('');
+
         }
 
 
@@ -881,11 +955,8 @@
             const filteredEntries = entries.filter(entry => {
                 return entry.title.toLowerCase().includes(keyword) || entry.content.toLowerCase().includes(keyword);
             });
-            const list = document.getElementById('entryList');
+            const list = document.getElementById('entryShow');
             list.innerHTML = generateEntryListHTML(filteredEntries);
-
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
 
             // 手动触发代码高亮
             if (typeof hljs !== 'undefined') {
@@ -902,9 +973,10 @@
                 document.getElementById('content').value = entry.content;
                 document.getElementById('entryDate').value = entry.date;
                 document.getElementById('tags').value = entry.tags.join(', ');
+
                 document.getElementById('editor').style.display = 'block';
-                document.getElementById('entryList').style.display = 'none';
-                // 正确设置 editingId
+                document.getElementById('entryShow').style.display = 'none';
+
                 editingId = id;
                 initCalendar();
             }
@@ -971,25 +1043,16 @@
             if (!confirm('确定要删除这篇日志吗？')) return;
             entries = entries.filter(e => e.id !== id);
             initCalendar();
-            showNewstEntries();
+            showNewestEntries();
         }
 
-        //显示最新3篇日志//按时间从新到旧排序
-        function showNewstEntries() {
-            const newestEntries = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 3);
-            const list = document.getElementById('entryList');
-            list.innerHTML = generateEntryListHTML(newestEntries);
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
-        }
 
         // 显示所有条目
         function showAllEntries() {
             const sortedEntries = sortEntriesDesc(entries);
-            const list = document.getElementById('entryList');
+            const list = document.getElementById('entryShow');
             list.innerHTML = generateEntryListHTML(sortedEntries);
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
+
         }
 
         //此处函数功能：标签云
@@ -1007,33 +1070,101 @@
             return tagCount;
         }
 
-        //此函数功能：显示所有条目列表，以链接为形式
-        function showAllEntriesList() {
+        // 函数：去除标签、换行符、markdown语法标签
+        function removeTags(str) {
+            // 去除标签
+            str = str.replace(/<\/?[^>]+(>|$)/g, "");
+            // 去除换行符
+            str = str.replace(/\n/g, "");
+            // 去除markdown语法标签
+            str = str.replace(/^#+\s+/g, "");
+            str = str.replace(/^>+\s+/g, "");
+            str = str.replace(/^[*\-+]+\s+/g, "");
+            str = str.replace(/^\d+\.\s+/g, "");
+            str = str.replace(/^---+$/g, "");
+            str = str.replace(/^\s+$/g, "");
+            str = str.replace(/\`/g, "");
+            str = str.replace(/\\/g, "");
+            //去除![]()和[]()和[[]]语法标签 
+            str = str.replace(/\[.*\]\(.*\)/g, "");
+            str = str.replace(/\!\[.*\]\(.*\)/g, "");
+            str = str.replace(/\[.*\]/g, "");
+            return str;
+        }
+
+        function creatEntriesList(entriesArray) {
             const list = document.getElementById('entryList');
-            // 将所有的日志，以标题链接的形式展示，并按时间排序
-            list.innerHTML = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).map(entry => `
-                        <li><div class="entry-item allentrieslist">
-                            <a href="#" onclick="showEntry('${entry.id}', event)">${entry.title}</a>
+            list.innerHTML = entriesArray.sort((a, b) => {
+                const dateA = new Date(a.creattimestamp || a.edittimestamp);
+                const dateB = new Date(b.creattimestamp || b.edittimestamp);
+                if (isNaN(dateA) || isNaN(dateB)) {
+                    console.error('Invalid timestamp:', a.creattimestamp, b.creattimestamp);
+                    return 0;
+                }
+                return dateB - dateA;
+            }).map(entry => {
+                // 截取正文的前100个字符作为摘要,要求截取后，不能有标签，不能有换行符，不能有markdown语法标签
+                const summary = removeTags(entry.content).slice(0, 100);
+                return `
+            <div class="entry-list-item" onclick="showEntry('${entry.id}', event)" >
+                <article class="entry-article" >
+                    <div class="entry-title">
+                        <div class="entry-title">${entry.title}</div>
+                    </div>
+                    <header class="entry-header">
+                        <div class="entry-meta">
+                            <div class="entry-author">${entry.author}</div>
                             <div class="entry-date">${entry.creattimestamp}</div>
                         </div>
-                        </li>
-                    `).join('');
-            displayTagCloud(countTags(entries));
+                         <div class="entry-actions">
+                            <div class="action-btndiv">
+                                    <button class="entry-actions-btn" onclick="toggleFavorite('${entry.id}')">${entry.isFavorite ? '取消收藏' : '收藏'}</button>
+                                    <button class="entry-actions-btn" onclick="copyEntryLink('${entry.id}')">复制链接</button>
+                                    <button class="entry-actions-btn" onclick="shareEntry('${entry.id}')">分享</button>
+                                    <button class="entry-actions-btn" onclick="deleteEntry('${entry.id}', event)">删除</button>
+                                    <button class="entry-actions-btn" onclick="editEntry('${entry.id}')">编辑</button>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="entry-content">
+                        <p class="entry-summary">${summary}${entry.content.length > 100 ? '...' : ''}</p>
+                    </div>
+                        ${entry.tags.length ? `<div class="tag-container">${entry.tags.map(t => `<span class="tag" onclick="filterEntriesByTag('${t}')">${t}</span>`).join('')}</div>` : ''}
+                </article>
+            </div>
+        `;
+            }).join(''); // 添加 join('') 方法将数组转换为字符串
+
+            displayTagCloud(countTags(entriesArray));
 
             document.getElementById('editor').style.display = 'none';
             document.getElementById('entryList').style.display = 'block';
+            document.getElementById('entryShow').style.display = 'none';
+        }
+
+        // ... existing code ...
+
+
+
+        //此函数功能：显示所有条目列表，以链接为形式
+        function showAllEntriesList() {
+            const sortedEntries = sortEntriesDesc(entries);
+            creatEntriesList(sortedEntries);
         }
 
         function showEntry(id, event) {
             if (event) {
                 event.preventDefault(); // 阻止默认的 href 跳转行为
             }
-            const list = document.getElementById('entryList');
+            const list = document.getElementById('entryShow');
             const filteredEntries = entries.filter(e => e.id === id);
             if (filteredEntries.length > 0) {
                 list.innerHTML = generateEntryListHTML(filteredEntries);
+
                 document.getElementById('editor').style.display = 'none';
-                document.getElementById('entryList').style.display = 'block';
+                document.getElementById('entryList').style.display = 'none';
+                document.getElementById('entryShow').style.display = 'block';
+
             } else {
                 console.log('No entry found with id:', id);
             }
@@ -1041,15 +1172,12 @@
 
         // 新的函数，用于显示单个条目并添加动画效果
         function showEntryWithAnimation(id) {
-            const list = document.getElementById('entryList');
+            const list = document.getElementById('entryShow');
             list.style.opacity = 0;
             list.innerHTML = generateEntryListHTML(entries.filter(e => e.id === id));
             setTimeout(() => {
                 list.style.opacity = 1;
             }, 300);
-
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
         }
 
         // ... existing code ...
@@ -1080,10 +1208,10 @@
         function filterEntriesByTag(tag) {
             const filteredEntries = entries.filter(entry => entry.tags.includes(tag));
             const list = document.getElementById('entryList');
-            list.innerHTML = generateEntryListHTML(filteredEntries);
+            creatEntriesList(filteredEntries);
 
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
+            initCalendar();
+
         }
 
         // 清空表单
@@ -1203,7 +1331,7 @@
                 navigator.clipboard.writeText(link)
                     .then(() => {
                         // 修改按钮样式，显示复制成功按钮改为复制成功，显示三秒
-                        const copyButton = document.querySelector(`#entry-${id} .entry-actions button:nth-child(2)`);
+                        const copyButton = document.querySelector(`#entry-${id} .action-btndiv button:nth-child(3)`);
                         if (copyButton) {
                             copyButton.innerText = '复制成功';
                             setTimeout(() => {
@@ -1282,22 +1410,41 @@
         function showFavoriteEntries() {
             const favoriteEntries = entries.filter(entry => entry.isFavorite);
             const sortedEntries = sortEntriesDesc(favoriteEntries);
-            const list = document.getElementById('entryList');
-            list.innerHTML = generateEntryListHTML(sortedEntries);
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
+
+            creatEntriesList(sortedEntries);
+            initCalendar();
+
         }
+
+        //shareEntry
+        function shareEntry(entryId) {
+            const entry = entries.find(e => e.id === entryId);
+            if (entry) {
+                const link = `[[${entry.title}|${entry.id}]]`;
+                navigator.clipboard.writeText(link)
+                    .then(() => {
+                        alert('链接已复制到剪贴板');
+                    })
+                    .catch((err) => {
+                        console.error('无法复制链接到剪贴板: ', err);
+                    });
+            } else { }
+        }
+
+        //常用链接
+        function showCommonLinks() {
+            showEntry("commonLinksId");
+        }
+
         // 搜索条目
         function searchEntries() {
             const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
             const filteredEntries = entries.filter(entry => {
                 return entry.title.toLowerCase().includes(keyword) || entry.content.toLowerCase().includes(keyword);
             });
-            const list = document.getElementById('entryList');
+            const list = document.getElementById('entryShow');
             list.innerHTML = generateEntryListHTML(filteredEntries);
 
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
         }
 
         // 切换月份
@@ -1484,13 +1631,12 @@
 
 
 
-        //显示最新3篇日志//按时间从新到旧排序
+        //显示最新2篇日志//按时间从新到旧排序
         function showNewestEntries() {
-            const sortedEntries = sortEntriesDesc(entries);
-            const list = document.getElementById('entryList');
-            list.innerHTML = generateEntryListHTML(sortedEntries);
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
+            const newestEntries = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 1);
+            const list = document.getElementById('entryShow');
+            list.innerHTML = generateEntryListHTML(newestEntries);
+
         }
 
         //新建日志
@@ -1498,6 +1644,7 @@
             //将#editor设置为显示，隐藏#entryList。
             document.getElementById('editor').style.display = 'block';
             document.getElementById('entryList').style.display = 'none';
+            document.getElementById('entryShow').style.display = 'none';
 
             // 清空表单
             clearForm();
@@ -1505,7 +1652,7 @@
 
         // 最新5篇日志显示到导航列表项
         function showNewestEntriesToNavList() {
-            const navList = document.getElementById('newestEntriesList'); // 假设导航列表的 id 是 'newestEntriesNavList'
+            const navList = document.getElementById('newestEntriesList'); // 
             if (!navList) {
                 return;
             }
@@ -1557,7 +1704,7 @@
         // 首页
         function initHomePage() {
             //设置：打开指定id日之后，并设置为首页
-            showEntry("inithomepage");
+            showEntry("initHomePageId");
         }
 
         // 更新 showNewestComments 函数
@@ -1571,7 +1718,8 @@
                 // 生成指向条目中评论的链接
                 newestCommentLink.href = `#comments-${newestComment.entryId}`;
                 // 截取前20个字并添加省略号
-                const commentText = newestComment.text.length > 20 ? newestComment.text.substring(0, 30) + '...' : newestComment.text;
+                const newestCommentContent = removeTags(newestComment.text); 
+                const commentText = newestCommentContent.length > 22 ? newestCommentContent.substring(0, 20) + '...' : newestCommentContent;
                 // 显示评论前20个字和评论时间戳
                 newestCommentLink.innerHTML = `${commentText}`;
                 // 添加点击事件，确保在点击时滚动到对应位置
@@ -1740,7 +1888,7 @@
                         tagInput.value = newTags.join(',');
                     } else {
                         // 背景色变红，并将此tag追加到<input id="tag">
-                        tagButton.style.backgroundColor = '#7db381';
+                        tagButton.style.backgroundColor = '#216026';
                         tagButton.style.color = 'white';
                         const currentTags = tagInput.value.split(',').filter(t => t.trim() !== '');
                         if (!currentTags.includes(tag)) {
