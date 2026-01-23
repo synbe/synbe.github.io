@@ -1,1920 +1,846 @@
-<!-- todo:
-1. list区未完成 <ol id="entryList"></ol><div id="entryShow"></div>
-2. 日志区的tag点击事件 -->
-
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="UTF-8">
-    <title>欣笔日志</title>
-    <style>
-        body {
-            font-family: '微软雅黑', system-ui, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f0f2f5;
-        }
-
-        .banner {
-            max-width: 1400px;
-            margin: 0 auto;
-            background-color: #216026;
-            height: 50px;
-            border-bottom: 3px solid #e8f5e9;
-            border-radius: 5px;
-        }
-
-        .profile-avatar img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .profile-info {
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .profile-section {
-            height: 200px;
-            background: #e8f5e9;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .calendar-section {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            height: 32px;
-            border-radius: 5px;
-        }
-
-        .calendar-header button {
-            height: 32px;
-            padding: 0px 15px;
-            font-size: 23px;
-            font-weight: bold;
-            color: #216026;
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 2px;
-            height: 220px;
-            margin: 10px;
-            padding: 5px;
-        }
-
-        .calendar-day {
-            position: relative;
-            padding: 5px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.2s;
-            height: 25px;
-            width: 43px;
-        }
-
-        .calendar-day:hover {
-            background: #e3f2fd;
-        }
-
-        .nav-list {
-            padding-left: 1em;
-        }
-
-        .nav-list-header {
-            font-weight: bold;
-            text-align: center;
-            background-color: #E8F5E9;
-            padding: 5px 0;
-            border-radius: 5px;
-        }
-
-        .nav-list-body {
-            padding: 10px;
-        }
-
-        .nav-list-body li {
-            list-style: none;
-            margin: 1px;
-            padding-left: 10px;
-        }
-
-        .nav-list-body a {
-            text-decoration: none;
-            color: #000;
-            font-size: 1鹅毛;
-            width: 100%;
-            height: 20px;
-            display: block;
-            padding: 2px 0;
-        }
-
-        .nav-list-body a:hover {
-            opacity: 0.8;
-            background: #E8F5E9;
-        }
-
-        .has-entry {
-            background: #E8F5E9;
-        }
-
-        .entry-count {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            font-size: 1em;
-            color: var(--primary-color);
-        }
-
-        .editor-section {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-
-        .entry-list,
-        .entry-show {
-            list-style: none;
-            margin-bottom: 10px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            margin: 10px 0;
-        }
-
-        #editor {
-            display: none;
-        }
-
-        #editor .editor-btns {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            height: 32px;
-        }
-
-        #editor .editor-btns button {
-            height: 32px;
-            padding: 0px 32px;
-        }
-
-        .comment-section .editor-btns {
-            margin: 5px;
-            width: 100px;
-        }
-
-        .comment-section .editor-btns button {
-            height: 32px;
-            padding: 0px 32px;
-            margin-top: 5px;
-        }
-
-        .date-picker {
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        #searchBox {
-            width: 300px;
-            height: 32px;
-            margin: 0;
-        }
-
-        .tag-container {
-            border-top: 1px #efefef solid;
-            padding-top: 10px;
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin: 10px 0;
-        }
-
-        .tag {
-            background: #e8f5e9;
-            color: #216026;
-            padding: 0px 3px;
-            border-radius: 5px;
-            font-size: 0.85em;
-            margin-right: 5px;
-            cursor: pointer;
-        }
-
-        .tag-cloud {
-            line-height: 20px;
-            padding: 0 20px 10px 20px;
-            border-bottom: 2px #e8f5e9 solid;
-        }
-
-        .tag:hover {
-            opacity: 0.8;
-            color: #fff;
-            background: #216026;
-        }
-
-
-        .entry-item {
-            padding: 12px;
-            margin: 8px 0;
-            background: var(--secondary-color);
-            border-radius: 5px;
-            position: relative;
-            transition: transform 0.2s;
-        }
-
-        .entry-item:hover {
-            box-shadow: inset 0 0 0 1px rgb(208, 208, 224);
-        }
-
-        button {
-            cursor: pointer;
-            transition: opacity 0.2s;
-            border-radius: 5px;
-            border: none;
-            padding: 2px 5px;
-            background: #e8f5e9;
-        }
-
-        button:hover {
-            opacity: 0.8;
-            color: #fff;
-            background: #216026;
-        }
-
-        .entry-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 30px;
-            margin: 5px 0;
-            background: #e8f5e9;
-
-        }
-
-
-        .entry-title {
-            font-weight: bold;
-            font-size: 19px;
-            margin: 0;
-            color: #216026;
-        }
-
-        .entry-meta,
-        .comment-meta {
-            padding: 2px 5px;
-            font-size: 14px;
-            color: #777;
-            background: #E8F5E9;
-            display: flex;
-        }
-
-        .entry-date {
-            font-size: 1em;
-            color: #999;
-        }
-
-        .entry-actions {
-            gap: 5px;
-            text-align: right;
-            color: #216026;
-            height: 1em;
-            margin-bottom: 5px;
-        }
-
-        .action-btndiv {
-            display: none;
-        }
-
-        .entry-actions-btn {
-            background: transparent;
-            padding: 0px 5px;
-            cursor: pointer;
-            transition: opacity 0.2s;
-            color: #216026;
-        }
-
-        .entry-actions-btn:hover {
-            color: #fff;
-            background: #216026;
-        }
-
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 6px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
-
-        .view-switch {
-            height: 50px;
-        }
-
-        .switch-actions {
-            gap: 5px;
-            height: 50px;
-            text-align: right;
-            padding: 0 15px;
-        }
-
-        .switch-actions button {
-            background: transparent;
-            border-radius: 0;
-            height: 50px;
-            width: 95px;
-            color: #fff;
-        }
-
-        .switch-actions button:hover {
-            color: #000;
-            background-color: #E8F5E9;
-        }
-
-        .switch-actions input {
-            background-color: #E8F5E9;
-        }
-
-        .entry-content img {
-            width: 100%;
-            margin: 5px auto;
-            border-radius: 5px;
-        }
-
-        .comment-section {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
-            height: 32px;
-            align-items: center;
-            margin: 20px 0;
-            padding: 10px 0;
-        }
-
-        .comment-input {
-            flex: 1;
-            height: 80px;
-            /* 增加高度 */
-            resize: vertical;
-            /* 允许垂直调整大小 */
-        }
-
-
-        .comments {
-            border: 1px solid #efefef;
-            border-radius: 5px;
-        }
-
-        .comment-item {
-            padding: 5px;
-            background: transparent;
-            font-size: 1em;
-        }
-
-        .comment-item img {
-            width: 100px;
-            border-radius: 5px;
-        }
-
-        .comment-item img:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            height: 22px;
-            margin-bottom: 5px;
-            padding: 0 5px;
-            background: #e8f5e9;
-        }
-
-        .entry-author,
-        .comment-author {
-            margin-right: 5px;
-        }
-
-        .comment-text {
-            font-size: 1em;
-            margin-bottom: 4px;
-        }
-
-
-        .comment-actions {
-            display: flex;
-            gap: 5px;
-            display: none;
-        }
-
-        .comment-actions-btn {
-            background: transparent;
-            padding: 0px 5px;
-            cursor: pointer;
-            color: #216026;
-        }
-
-
-        .entry-show:hover .action-btndiv,
-        .comment-item:hover .comment-actions,
-        .entry-list-item:hover .action-btndiv {
-            display: block;
-        }
-
-
-        .comment-count {
-            font-size: 1em;
-            text-align: right;
-            color: #666;
-            padding-right: 2em;
-        }
-
-        .allentrieslist {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .allentrieslist a {
-            color: #000;
-            text-decoration: none;
-            font-size: 1em;
-            padding: 5px 10px;
-        }
-
-        .modal {
-            display: none;
-            z-index: 1;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.67);
-            top: 0;
-            left: 0;
-            margin: 0 auto;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px;
-        }
-
-        .modal img {
-            border-radius: 5px;
-            margin: 0 auto;
-            overflow-y: scroll;
-        }
-
-        .modal-content {
-            display: block;
-            max-width: 100%;
-            margin: 0 auto;
-            height: 100%;
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .existingtagsdiv {
-            margin-bottom: 10px;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* 列表项样式 */
-        .entry-list-item {
-            list-style-type: none;
-            margin-bottom: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .entry-list-item:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-
-        .entry-summary {
-            color: #555;
-        }
-
-        pre code {
-            border-radius: 5px;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            color: #216026;
-        }
-
-        a {
-            color: #216026;
-            text-decoration: none;
-        }
-
-        blockquote {
-            color: #216026;
-            border-left: 2px solid #216026;
-            padding: 1px 5px;
-            background: #e8f5e9;
-            border-radius: 3px;
-            margin: 10px;
-        }
-
-        blockquote p {
-            padding: 1px;
-            margin: 10px;
-        }
-
-
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .calendar-day {
-                min-height: 60px;
-                padding: 8px;
-                background-color: purple;
-            }
-        }
-    </style>
-
-    <script src="./data.js"></script>
-    <script src="./src/marked.min.js"></script>
-    <script src="./src/highlight.min.js"></script>
-    <link rel="stylesheet" href="./src/monokai.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1d232a">
+  <title>WaveMessenger</title>
+  <style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+:root {
+  --tg-bg: #353a3f; --tg-bg-chat: #0f0f0f; --tg-header: #1d232a;
+  --tg-input: #232e3a; --tg-text: #ffffff; --tg-text-secondary: #7f91a4;
+  --tg-green: #4ade80; --tg-green-bg: rgba(74, 222, 128, 0.1);
+  --tg-blue: #60a5fa; --tg-blue-bg: rgba(96, 165, 250, 0.1);
+  --tg-red: #f87171; --tg-divider: #2b3544;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--tg-bg); color: var(--tg-text); height: 100vh; }
+.app { display: flex; flex-direction: column; height: 100vh; max-width: 600px; margin: 0 auto; position: relative; border: 1px var(--tg-green) solid;}
+.header { background: var(--tg-header); padding: 5px 10px; border-bottom: 1px solid var(--tg-divider); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-title { font-size: 18px; font-weight: 600; }
+.header-status { font-size: 12px; color: var(--tg-text-secondary); display: flex; align-items: center; gap: 8px; }
+.status-dot { width: 8px; height: 8px; border-radius: 5px; background: var(--tg-text-secondary); }
+.status-dot.listening { background: var(--tg-red); animation: pulse 1.5s infinite; }
+.status-dot.audio-ready { background: var(--tg-green); }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.header-right { display: flex; gap: 8px; }
+.icon-btn {
+  width: auto; height: 36px; padding: 0 12px; background: var(--tg-input); border: none;
+  border-radius: 5px; color: var(--tg-text); cursor: pointer; font-size: 14px;
+}
+.icon-btn:hover { background: var(--tg-divider); }
+.icon-btn.active { background: var(--tg-green-bg); color: var(--tg-green); }
+.chat-area { flex: 1; overflow-y: auto; padding: 5px; background: var(--tg-bg-chat); display: flex; flex-direction: column; gap: 12px; }
+.message { display: flex; gap: 8px; max-width: 85%; align-items: flex-start; }
+.message.sent { flex-direction: row-reverse; align-self: flex-end; }
+.message.received { flex-direction: row; align-self: flex-start; }
+.message-avatar {
+  width: 36px; height: 36px; border-radius: 5px; background: var(--tg-input);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.message-avatar.sent { background: var(--tg-green-bg); color: var(--tg-green); }
+.message-avatar.received { background: var(--tg-blue-bg); color: var(--tg-blue); }
+.message-content { display: flex; flex-direction: column; gap: 4px; }
+.message-bubble {
+  background: var(--tg-input); border-radius: 5px; padding: 10px 14px;
+  position: relative; word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; max-width: 100%;
+}
+.message.sent .message-bubble { background: var(--tg-green-bg); color: var(--tg-text); }
+.message.sent .message-bubble::after {
+  content: ""; position: absolute; right: -6px; top: 12px;
+  border: 6px solid transparent; border-left-color: var(--tg-green-bg);
+}
+.message.received .message-bubble::after {
+  content: ""; position: absolute; left: -6px; top: 12px;
+  border: 6px solid transparent; border-right-color: var(--tg-input);
+}
+.message-time { font-size: 11px; color: var(--msg-time, var(--tg-text-secondary)); margin-bottom: 6px; }
+.message-copy-btn {
+  position: absolute; top: 4px; right: 4px; width: 24px; height: 24px;
+  background: var(--tg-divider); border: none; border-radius: 5px;
+  color: var(--tg-text-secondary); cursor: pointer; font-size: 5px; padding: 0;
+}
+.message-seq-badge {
+  position: absolute; top: 4px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; background: var(--tg-blue-bg); color: var(--tg-blue);
+  padding: 2px 6px; border-radius: 5px; white-space: nowrap;
+}
+.message.sent .message-seq-badge { background: var(--tg-green-bg); color: var(--tg-green); }
+.message-merged-badge {
+  font-size: 10px; background: var(--tg-green-bg); color: var(--tg-green);
+  padding: 2px 6px; border-radius: 5px; margin-bottom: 4px; display: inline-block;
+}
+.message-text { font-size: 14px; line-height: 1.4; white-space: pre-wrap; }
+.message-merged-link {
+  color: var(--tg-blue); cursor: pointer; text-decoration: underline;
+  font-size: 12px; margin-top: 4px;
+}
+.input-area {
+  background: var(--tg-header); padding: 5px 10px; border-top: 1px solid var(--tg-divider); flex-shrink: 0;
+}
+.input-row { display: flex; gap: 8px; align-items: flex-end; }
+.input-wrapper {
+  flex: 1; background: var(--tg-input); border-radius: 5px; padding: 8px 12px;
+  display: flex; align-items: flex-end; gap: 8px;
+}
+textarea {
+  width: 100%; max-height: 100px; min-height: 36px; background: none;
+  border: none; color: var(--tg-text); font-size: 15px; resize: none; font-family: inherit;
+}
+textarea::placeholder { color: var(--tg-text-secondary); }
+.action-btn {
+  padding: 6px 10px; background: var(--tg-divider); border: none;
+  border-radius: 5px; color: var(--tg-text-secondary);  cursor: pointer;font-size: 18px;
+}
+.action-btn:hover { background: var(--tg-input); color: var(--tg-text); }
+.paste-btn {
+  width: 80px; height: 50px; border: none; border-radius: 5px;
+  background: var(--tg-divider); color: var(--tg-text-secondary);  cursor: pointer;font-size: 18px;
+}
+.paste-btn:hover { background: var(--tg-input); color: var(--tg-text); }
+.send-btn {
+  width: 100px; height: 50px; border: none; border-radius: 5px;
+  background: var(--tg-green); color: white; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.send-btn:hover { background: #22c55e; }
+.empty-state {
+  text-align: center; color: var(--tg-text-secondary); padding: 40px 20px;
+}
+
+/* Modal styles */
+.modal-overlay {
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.8); z-index: 1000; align-items: center; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--tg-header); width: 90%; max-width: 600px; max-height: 80vh;
+  border-radius: 5px; display: flex; flex-direction: column;
+}
+.modal-header {
+  padding: 16px; border-bottom: 1px solid var(--tg-divider);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-title { font-size: 16px; font-weight: 600; }
+.modal-close {
+  width: 32px; height: 32px; border: none; background: var(--tg-divider);
+  border-radius: 5px; color: var(--tg-text); cursor: pointer; font-size: 18px;
+}
+.modal-body {
+  flex: 1; overflow-y: auto; padding: 16px;
+}
+.modal-text {
+  background: var(--tg-input); padding: 16px; border-radius: 5px;
+  white-space: pre-wrap; word-wrap: break-word; word-break: break-word;
+  font-size: 14px; line-height: 1.6;
+}
+.modal-footer {
+  padding: 16px; border-top: 1px solid var(--tg-divider);
+  display: flex; gap: 8px; justify-content: flex-end;
+}
+.modal-btn {
+  padding: 8px 16px; border: none; border-radius: 5px;
+  font-size: 14px; cursor: pointer;
+}
+.modal-btn-copy { background: var(--tg-green); color: white; }
+.modal-btn-download { background: var(--tg-blue-bg); color: var(--tg-blue); }
+.modal-btn:hover { opacity: 0.9; }
+.chunk-badge {
+  background: var(--tg-blue-bg); color: var(--tg-blue);
+  padding: 2px 8px; border-radius: 5px; font-size: 11px;
+  margin-bottom: 8px; display: inline-block;
+}
+  </style>
 </head>
-
 <body>
-    <div class="banner">
-        <div class="view-switch">
-            <div class="switch-actions">
-                <button onclick="initHomePage()">首页</button>
-                <button onclick="creatNewEntry()">新建日志</button>
-                <button onclick="showTodayEntries()">今日日志</button>
-                <button id="newestEntries" onclick="showNewestEntries()">最新日志</button>
-                <button id="allEntriesCount" onclick="showAllEntries()">全部日志</button>
-                <button id="allEntriesList" onclick="showAllEntriesList()">日志列表</button>
-                <button id="favoriteEntriesCount" onclick="showFavoriteEntries()">日志收藏</button>
-                <button id="commonLinks" onclick="showCommonLinks()">常用链接</button>
-                <button onclick="initCalendar()">刷新</button>
-                <input type="text" id="searchBox" placeholder="搜索日志" oninput="searchEntries()">
-                <button onclick="exportJSON()">导出数据</button>
-            </div>
+  <div class="app">
+    <header class="header">
+      <div class="header-left">
+        <div class="header-title">WaveMessenger</div>
+        <div class="header-status">
+          <div class="status-dot" id="statusDot"></div>
+          <span id="statusText">未启动</span>
         </div>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="autoSaveBtn">保存日志: 关</button>
+        <button class="icon-btn" id="listenBtn">监听</button>
+      </div>
+    </header>
+    <div class="chat-area" id="chatArea">
+      <div class="empty-state">
+        <div>数据传输</div>
+        <div style="font-size: 14px; margin-top: 8px;">进入监听模式后，可通过声音发送和接收消息</div>
+      </div>
     </div>
-    <div class="container">
-        <div class="calendar-section">
-            <div class="profile-section">
-                <div class="profile-header"></div>
-                <div class="profile-body">
-                    <div class="profile-avatar">
-                        <img src="./assets/avatar.jpg" alt="头像">
-                    </div>
-                    <div class="profile-info">
-                        <h4>synBE</h4>
-                        <p>简介：我是一名爱好编程者</p>
-                    </div>
-                </div>
-            </div>
-            <div class="calendar-header nav-list-header">
-                <button onclick="changeMonth(-1)">&lt;</button>
-                <h3 id="currentMonth"></h3>
-                <button onclick="changeMonth(1)">&gt;</button>
-            </div>
-            <div class="calendar-grid" id="calendar"></div>
-            <div class="nav-list" id="navlist">
-                <div class="nav-list-header">最新日志</div>
-                <div class="nav-list-body" id="newestEntriesList"></div>
-                <div class="nav-list-header">最新评论</div>
-                <div class="nav-list-body" id="newestCommentsList"></div>
-            </div>
+    <div class="input-area">
+      <div class="input-row">
+        <button class="paste-btn" id="pasteBtn">粘贴</button>
+        <div class="input-wrapper">
+          <textarea id="messageInput" placeholder="输入消息..."></textarea>
         </div>
-
-        <div class="editor-section">
-            <div class="tag-cloud" id="tagCloud"></div>
-            <div class="entry-list">
-                <div id="entryList"></div>
-            </div>
-            <div class="entry-show">
-                <div id="entryShow"></div>
-            </div>
-            <div id="editor">
-                <div class="date-picker">
-                    <input type="date" id="entryDate" value="2025-03-10">
-                </div>
-                <input type="text" id="title" placeholder="日志标题">
-                <input type="text" id="author" placeholder="日志作者" value="synBE">
-                <textarea id="content" rows="8" placeholder="记录今天的点滴..."></textarea>
-                <input type="text" id="tags" placeholder="标签（用逗号分隔）" style="flex: 1;">
-                <div id="existingtagsdiv" class="existingtagsdiv"></div>
-                <input type="file" id="local-images-input" accept="image/*,.jpg,.jpeg,.png,.gif,.bmp,.tiff" multiple
-                    style="display: none;">
-                <div class="editor-btns">
-                    <button onclick="clearBtn()">
-                        清空
-                    </button>
-                    <button class="local-images-btn" id="local-images-btn" onclick="insertLocalImagesToEntry(this)">
-                        图片
-                    </button>
-                    <button onclick="saveEntry()">提交</button>
-                </div>
-            </div>
-        </div>
+        <button class="send-btn" id="sendBtn">发送</button>
+      </div>
     </div>
+  </div>
 
-    <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <img id="modalImg" class="modal-content">
+  <!-- Modal for merged text display -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">完整文本</div>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-text" id="modalText"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-copy" id="modalCopy">复制</button>
+        <button class="modal-btn modal-btn-download" id="modalDownload">下载</button>
+      </div>
     </div>
+  </div>
+
+  <script src="ggwave/ggwave.js"></script>
+  <script>
+// Telegram Style Audio Data Transmission
+
+let audioContext = null;
+let ggwaveModule = null;
+let ggwaveInstance = null;
+let isListening = false;
+let fastModeEnabled = false;
+let captureStream = null;
+let sourceNode = null;
+let scriptProcessor = null;
+let autoSaveEnabled = false;
+let incomingBuffer = '';
+let incomingTimeout = null;
+
+// Chunk handling for long text
+let currentBundleId = '';
+let currentChunks = {};
+let currentTotalChunks = 0;
+let currentReceivedCount = 0;
+let bundleTimeout = null;
+const CHUNK_TIMEOUT = 10000; // 10 seconds to wait for all chunks
+const MAX_CHUNK_SIZE = 30; // Max characters per chunk for audio transmission 数值太大会导致接收出现乱码
+
+function formatTimestamp(now) {
+    return '' + now.getFullYear() +
+           String(now.getMonth() + 1).padStart(2, '0') +
+           String(now.getDate()).padStart(2, '0') +
+           String(now.getHours()).padStart(2, '0') +
+           String(now.getMinutes()).padStart(2, '0') +
+           String(now.getSeconds()).padStart(2, '0');
+}
+
+function generateBundleId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+}
+
+function formatSeqNumber(num) {
+    return String(num + 1);
+}
+
+async function saveMessageToFile(type, text) {
+    if (!autoSaveEnabled) return;
+    try {
+        const timestamp = formatTimestamp(new Date()) + '.txt';
+        const blob = new Blob([new Date().toLocaleString() + '] ' + type.toUpperCase() + ': ' + text]);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = timestamp;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        console.log('Saved:', timestamp);
+    } catch (e) {
+        console.error('Save error:', e);
+    }
+}
+
+const messageInput = document.getElementById('messageInput');
+const pasteBtn = document.getElementById('pasteBtn');
+const sendBtn = document.getElementById('sendBtn');
+const listenBtn = document.getElementById('listenBtn');
+const autoSaveBtn = document.getElementById('autoSaveBtn');
+const chatArea = document.getElementById('chatArea');
+const statusDot = document.getElementById('statusDot');
+const statusText = document.getElementById('statusText');
+const modalOverlay = document.getElementById('modalOverlay');
+const modalClose = document.getElementById('modalClose');
+const modalText = document.getElementById('modalText');
+const modalCopy = document.getElementById('modalCopy');
+const modalDownload = document.getElementById('modalDownload');
+let currentMergedText = '';
+
+// Modal functions
+function showModal(text) {
+    currentMergedText = text;
+    modalText.textContent = text;
+    modalOverlay.classList.add('show');
+}
+
+function hideModal() {
+    modalOverlay.classList.remove('show');
+    currentMergedText = '';
+}
+
+modalClose.addEventListener('click', hideModal);
+modalOverlay.addEventListener('click', function(e) {
+    if (e.target === modalOverlay) {
+        hideModal();
+    }
+});
+
+modalCopy.addEventListener('click', function() {
+    navigator.clipboard.writeText(currentMergedText).then(function() {
+        modalCopy.textContent = '已复制';
+        setTimeout(function() {
+            modalCopy.textContent = '复制';
+        }, 1000);
+    }).catch(function(err) {
+        console.error('Copy error:', err);
+    });
+});
+
+modalDownload.addEventListener('click', function() {
+    if (!currentMergedText) return;
+    try {
+        const timestamp = formatTimestamp(new Date()) + '.txt';
+        const blob = new Blob([currentMergedText], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = timestamp;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (e) {
+        console.error('Download error:', e);
+    }
+});
+
+function addChatMessage(type, text, seqInfo, isMerged) {
+    console.log('addChatMessage: type=' + type + ', isMerged=' + isMerged + ', text length=' + text.length);
+    if (seqInfo) console.log('  seqInfo: current=' + seqInfo.current + ', total=' + seqInfo.total);
+
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar ' + type;
+    avatar.textContent = type === 'sent' ? '发' : '收';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'message-bubble';
+
+    // Add sequence badge for chunks or merged badge
+    if (isMerged) {
+        const mergedBadge = document.createElement('div');
+        mergedBadge.className = 'message-merged-badge';
+        mergedBadge.textContent = '已合并 ' + seqInfo.total + ' 片段';
+        bubble.appendChild(mergedBadge);
+        console.log('  -> Added merged badge');
+    } else if (seqInfo && seqInfo.total > 1) {
+        const seqBadge = document.createElement('div');
+        seqBadge.className = 'message-seq-badge';
+        seqBadge.textContent = seqInfo.current + '/' + seqInfo.total;
+        bubble.appendChild(seqBadge);
+        console.log('  -> Added sequence badge');
+    }
 
 
-    <script>
-        // let currentDate = new Date(2025, 2, 10);
-        let currentDate = new Date();
-        let editingId = null;
+    const time = document.createElement('div');
+    time.className = 'message-time';
+    time.textContent = new Date().toLocaleTimeString();
+    bubble.appendChild(time);
 
-        // 格式化日期001
-        function formatDate(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
+    const content = document.createElement('div');
+    content.className = 'message-text';
+    content.textContent = text;
+    bubble.appendChild(content);
+
+    // For received single chunks (1/1), hide the sequence badge since it's not really chunked
+    if (type === 'received' && seqInfo && seqInfo.total === 1) {
+        const seqBadge = bubble.querySelector('.message-seq-badge');
+        if (seqBadge) {
+            seqBadge.remove();
         }
+    }
 
-        function formatDateTime(datetime) {
-            const year = datetime.getFullYear();
-            const month = String(datetime.getMonth() + 1).padStart(2, '0');
-            const day = String(datetime.getDate()).padStart(2, '0');
-            const hours = String(datetime.getHours()).padStart(2, '0');
-            const minutes = String(datetime.getMinutes()).padStart(2, '0');
-            const seconds = String(datetime.getSeconds()).padStart(2, '0');
+    // Add copy and download buttons for merged messages
+    if (isMerged) {
+        const actionButtons = document.createElement('div');
+        actionButtons.style.cssText = 'display: flex; gap: 6px;margin-top: 8px;';
 
-            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        }
-
-        // Initialize the calendar，初始化日历，显示当前日期的日志，显示标签云，显示按钮数量
-        function initCalendar() {
-            // 删除下面这行代码，避免重置 currentDate
-            // currentDate = new Date();
-            const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
-            document.getElementById('currentMonth').textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
-
-            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-
-            for (let i = 0; i < firstDay.getDay(); i++) {
-                calendar.appendChild(createDayElement(''));
-            }
-
-            for (let d = 1; d <= daysInMonth; d++) {
-                const dayElement = createDayElement(d);
-                const dateStr = formatDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), d));
-                const entryCount = entries.filter(e => e.date === dateStr).length;
-                if (entryCount > 0) {
-                    dayElement.classList.add('has-entry');
-                    dayElement.innerHTML = `${d}<div class="entry-count">${entryCount}</div>`;
-                }
-
-                // 日期点击事件处理逻辑,如果日志1，则直接显示该日志，如大于1，则显示日志列表，如果没有日志，则新建日志
-                dayElement.addEventListener('click', function () {
-                    if (entryCount === 0) {
-                        // 如果该日期没有日志，创建新日志
-                        creatNewEntry();
-                    } else if (entryCount === 1) {
-                        // 如果该日期只有一篇日志，直接显示该日志
-                        const entryId = entries.find(e => e.date === dateStr).id;
-                        showEntry(entryId);
-                    } else {
-                        // 如果该日期有多篇日志，显示日志列表
-                        const entriesForToday = entries.filter(e => e.date === dateStr);
-                        creatEntriesList(entriesForToday);
-                    }
-                });
-
-                calendar.appendChild(dayElement);
-            }
-
-            const tagCount = countTags(entries);
-            displayTagCloud(tagCount);
-            updateButtonCount();
-            renderExistingTags();
-            showNewestEntriesToNavList();
-            showNewestCommentsToNavList();
-            console.log('Calendar initialized');
-        }
-
-        // 创建日期元素，点击日期时，显示该日期的日志
-        function createDayElement(day) {
-            const div = document.createElement('div');
-            div.className = 'calendar-day';
-            if (day) {
-                div.innerHTML = day;
-                div.onclick = () => {
-                    // const selectedDate = 当前时间，精确到秒
-                    const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-                    document.getElementById('entryDate').value = formatDate(selectedDate);
-                    showEntriesForDate(formatDate(selectedDate));
-                };
-
-            }
-            return div;
-        }
-        //显示指定日期的日志
-        function showEntriesForDate(dateStr) {
-            const filtered = entries.filter(entry => entry.date === dateStr);
-
-            creatEntriesList(filtered);
-            initCalendar();
-        }
-
-        marked.setOptions({
-            sanitize: false, // 不对 HTML 进行额外的清理
-            smartypants: true, // 支持智能引号
-            breaks: true // 支持软换行
+        const inlineCopyBtn = document.createElement('button');
+        inlineCopyBtn.className = 'action-btn';
+        inlineCopyBtn.textContent = '复制';
+        inlineCopyBtn.style.cssText = 'padding: 4px 8px; font-size: 11px; background: var(--tg-green); color: white;';
+        inlineCopyBtn.addEventListener('click', function() {
+            navigator.clipboard.writeText(text).then(function() {
+                inlineCopyBtn.textContent = '已复制';
+                setTimeout(function() {
+                    inlineCopyBtn.textContent = '复制';
+                }, 1000);
+            }).catch(function() {});
         });
 
-        // 功能：生成日志列表的 HTML，并返回 HTML 字符串，用于显示日志列表，
-        // 参数：entriesArray，日志数组，
-        function generateEntryListHTML(entriesArray) {
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'none';
-            document.getElementById('entryShow').style.display = 'block';
+        const inlineDownloadBtn = document.createElement('button');
+        inlineDownloadBtn.className = 'action-btn';
+        inlineDownloadBtn.textContent = '下载';
+        inlineDownloadBtn.style.cssText = 'padding: 4px 8px; font-size: 11px; background: var(--tg-blue-bg); color: var(--tg-blue);';
+        inlineDownloadBtn.addEventListener('click', function() {
+            try {
+                const timestamp = formatTimestamp(new Date()) + '.txt';
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = timestamp;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (e) {
+                console.error('Download error:', e);
+            }
+        });
 
-            const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
-            return entriesArray.map(entry => {
-                let title = entry.title;
-                let author = entry.author;
-                let content = entry.content;
-                let commentsHTML = '';
+        actionButtons.appendChild(inlineCopyBtn);
+        actionButtons.appendChild(inlineDownloadBtn);
+        bubble.appendChild(actionButtons);
+        console.log('  -> Added copy and download buttons');
+    }
 
-                if (keyword) {
-                    const regex = new RegExp(keyword, 'gi');
-                    title = title.replace(regex, match => `<span style="background-color: yellow;">${match}</span>`);
-                    author = author.replace(regex, match => `<span style="background-color: yellow;">${match}</span>`);
-                    content = content.replace(regex, match => `<span style="background-color: yellow;">${match}</span>`);
-                }
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    contentDiv.appendChild(bubble);
 
-                // 使用 marked.parse 解析日志内容
-                let parsedContent = marked.parse(content);
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message ' + type;
+    msgDiv.appendChild(avatar);
+    msgDiv.appendChild(contentDiv);
 
-                // 封装处理链接的函数
-                function processLinks(content) {
-                    return content.replace(/\[\[([^\|]+)(?:\|([^\]]+))?\]\]/g, (match, linkText, linkId) => {
-                        if (!linkId) {
-                            // 如果没有提供日志id，尝试根据标题查找id
-                            const targetEntry = entries.find(e => e.title === linkText);
-                            linkId = targetEntry ? targetEntry.id : null;
-                        }
-                        if (!linkId) {
-                            console.warn('Invalid link ID for title:', linkText);
-                            return match; // 返回原始内容
-                        }
-                        return `<a href="#" onclick="showEntry('${linkId}', event)">${linkText}</a>`;
-                    });
-                }
+    const emptyState = chatArea.querySelector('.empty-state');
+    if (emptyState) {
+        emptyState.style.display = 'none';
+    }
 
-                // 处理日志链接
-                parsedContent = processLinks(parsedContent);
+    chatArea.appendChild(msgDiv);
+    chatArea.scrollTop = chatArea.scrollHeight;
 
-                // 确保解析后的代码块符合 Highlight.js 要求
-                parsedContent = parsedContent.replace(/<pre><code>/g, '<pre><code class="hljs">');
+    saveMessageToFile(type, text);
 
-                // 高亮显示代码块
-                parsedContent = highlightCodeBlocks(parsedContent);
+    while (chatArea.children.length > 101) {
+        if (chatArea.children[0] && chatArea.children[0].classList.contains('empty-state')) {
+            break;
+        }
+        chatArea.removeChild(chatArea.children[0]);
+    }
 
+    console.log('  -> Message added, scroll to bottom');
+}
 
-                // 处理评论中的日志链接
-                if (entry.comments) {
-                    commentsHTML = entry.comments.map(comment => {
-                        let commentText = comment.text;
-                        if (keyword) {
-                            const regex = new RegExp(keyword, 'gi');
-                            commentText = commentText.replace(regex, match => `<span style="background-color: yellow;">${match}</span>`);
-                        }
-                        // 使用 marked.parse 解析评论内容
-                        const parsedCommentText = marked.parse(commentText);
-                        const parsedCommentWithLinks = processLinks(parsedCommentText);
-                        // 确保解析后的代码块符合 Highlight.js 要求
-                        const highlightedCommentText = parsedCommentWithLinks.replace(/<pre><code>/g, '<pre><code class="hljs">');
-                        // 高亮显示评论中的代码块
-                        const highlightedComment = highlightCodeBlocks(highlightedCommentText);
-                        return `
-                    <div class="comment-item">
-                        <div class="comment-header">
-                            <div class="comment-meta">
-                                <div class="comment-author" sytle="display:none">${comment.commentauthor}</div>
-                                <div class="comment-time">${comment.time}</div>
-                            </div>
-                            <div class="comment-actions">
-                                <button class="comment-actions-btn" onclick="deleteComment('${entry.id}', '${comment.time}')">删除</button>
-                                <button class="comment-actions-btn" onclick="editComment('${entry.id}', '${comment.time}')">编辑</button>
-                            </div>
-                        </div>
-                        <div class="comment-text">${highlightedComment}</div>
-                    </div>
-                `;
-                    }).join('');
-                }
+function convertTypedArray(src, type) {
+    const buffer = new ArrayBuffer(src.byteLength);
+    new src.constructor(buffer).set(src);
+    return new type(buffer);
+}
 
-                return `
-            <div class="entry-item" id="entry-${entry.id}">
-                <div class="entry-title">
-                    <span class="entry-title">${entry.title}</span>
-                </div>
-                <div class="entry-header">
-                    <div class="entry-meta">
-                            <div class="entry-author">${entry.author} </div>
-                            <div class="entry-date">${entry.creattimestamp}</div>
-                    </div>
-                    <div class="entry-actions">
-                            <div class="action-btndiv">
-                                    <button class="entry-actions-btn" onclick="toggleFavorite('${entry.id}')">${entry.isFavorite ? '取消收藏' : '收藏'}</button>
-                                    <button class="entry-actions-btn" onclick="copyEntryLink('${entry.id}')">复制链接</button>
-                                    <button class="entry-actions-btn" onclick="shareEntry('${entry.id}')">分享</button>
-                                    <button class="entry-actions-btn" onclick="deleteEntry('${entry.id}', event)">删除</button>
-                                    <button class="entry-actions-btn" onclick="editEntry('${entry.id}')">编辑</button>
-                            </div>
-                    </div>
-                </div>
-                <div class="entry-content">${parsedContent}</div>
-                ${entry.tags.length ? `<div class="tag-container">${entry.tags.map(t => `<span class="tag" onclick="filterEntriesByTag('${t}')">${t}</span>`).join('')}</div>` : ''}
-                <div class="comment-count">评论(${entry.comments ? entry.comments.length : 0})</div>
-                <div class="comments" id="comments-${entry.id}">
-                    ${commentsHTML}
-                </div>
-                <div class="comment-section">
-                    <input type="text" class="comment-author" data-entry-id="${entry.id}" placeholder="你的名字" value="synbe" style="display: none;">
-                    <textarea class="comment-input" data-entry-id="${entry.id}" placeholder="添加评论"></textarea>
-                    <div class="editor-btns">
-                        <button class="local-images-btn" onclick="insertLocalImagesToComment(this)">图片</button>
-                        <button class="comment-submit-btn" onclick="handleCommentSubmit('${entry.id}', this)">发表</button>
-                        </div>
-                </div>
-            </div>
-        `;
-            }).join('');
+function updateStatus(listening, ready) {
+    statusDot.className = 'status-dot';
+    if (listening) {
+        statusDot.classList.add('listening');
+        statusText.textContent = '监听中';
+    } else if (ready) {
+        statusDot.classList.add('audio-ready');
+        statusText.textContent = '已就绪';
+    } else {
+        statusText.textContent = '未启动';
+    }
+}
 
+async function initAudio() {
+    if (audioContext && ggwaveInstance) return true;
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+        if (audioContext.state === 'suspended') await audioContext.resume();
+
+        let attempts = 0;
+        while (!window.ggwave_factory && attempts < 50) {
+            await new Promise(function(r) { setTimeout(r, 100); });
+            attempts++;
         }
 
-
-        function decodeHtmlEntities(str) {
-            const textarea = document.createElement('textarea');
-            textarea.innerHTML = str;
-            return textarea.value;
+        if (!window.ggwave_factory) {
+            return false;
         }
 
-        function highlightCodeBlocks(html) {
-            return html.replace(/<pre><code([^>]*)>(.*?)<\/code><\/pre>/gs, (match, lang, code) => {
-                // 解码 HTML 实体
-                const decodedCode = decodeHtmlEntities(code);
+        ggwaveModule = await window.ggwave_factory();
+        await new Promise(function(r) { setTimeout(r, 500); });
 
-                // 提取语言标识符，去除 "language-" 前缀
-                const language = (lang || '').match(/class="([^"]+)"/)?.[1]?.replace('hljs', '').replace('language-', '').trim() || 'plaintext';
+        ggwaveInstance = null;
+        const parameters = ggwaveModule.getDefaultParameters();
+        parameters.sampleRateInp = audioContext.sampleRate;
+        parameters.sampleRateOut = audioContext.sampleRate;
+        parameters.soundMarkerThreshold = 4;
 
-                // 使用 Highlight.js 高亮代码
-                const highlightedCode = hljs.highlight(decodedCode, { language }).value;
-
-                return `<pre><code class="hljs ${language}">${highlightedCode}</code></pre>`;
-            });
+        for (let i = 0; i < 5; i++) {
+            ggwaveInstance = ggwaveModule.init(parameters);
+            if (ggwaveInstance) break;
+            await new Promise(function(r) { setTimeout(r, 200); });
         }
 
-        window.onload = function () {
-            const codeBlocks = document.querySelectorAll('pre code');
-            codeBlocks.forEach(codeBlock => {
-                const originalCode = codeBlock.textContent;
+        if (!ggwaveInstance) {
+            return false;
+        }
 
-                // 解码 HTML 实体
-                const decodedCode = decodeHtmlEntities(originalCode);
+        console.log('Audio ready, sample rate:', audioContext.sampleRate);
+        updateStatus(false, true);
+        return true;
+    } catch (error) {
+        console.error('Init error:', error);
+        return false;
+    }
+}
 
-                // 使用 Highlight.js 高亮代码
-                if (typeof hljs !== 'undefined') {
-                    const highlightedCode = hljs.highlightAuto(decodedCode).value;
-                    codeBlock.innerHTML = highlightedCode;
-                }
-            });
+async function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text) {
+        return;
+    }
+
+    if (!await initAudio()) return;
+
+    try {
+        if (isListening) {
+            stopListening();
+        }
+
+        // Use fast mode settings if enabled
+        const chunkSize = MAX_CHUNK_SIZE;
+        const protocol = ggwaveModule.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST;
+        const outputVolume = 10;
+
+        // Split text into chunks
+        const chunks = [];
+        const totalChunks = Math.ceil(text.length / chunkSize);
+        console.log('Sending message with ' + totalChunks + ' chunks (fastMode=' + fastModeEnabled + ')');
+
+        for (let i = 0; i < text.length; i += chunkSize) {
+            chunks.push(text.substring(i, i + chunkSize));
+        }
+
+        // Add header chunk with bundle info (optional for sender display)
+        // For audio transmission, we send chunks with position markers in the text itself
+        for (let i = 0; i < chunks.length; i++) {
+            // Format: [seq/total]content
+            const seqPrefix = '[' + formatSeqNumber(i) + '/' + totalChunks + ']';
+            const chunkWithSeq = seqPrefix + chunks[i];
+            console.log('=== SENDING CHUNK ' + (i + 1) + '/' + totalChunks + ' ===');
+            console.log('  Chunk content: "' + chunks[i] + '"');
+            console.log('  Full text: "' + chunkWithSeq + '"');
+            console.log('  Text length: ' + chunkWithSeq.length);
+
+            const waveform = ggwaveModule.encode(
+                ggwaveInstance,
+                chunkWithSeq,
+                protocol,
+                outputVolume
+            );
+            console.log('  Waveform length: ' + waveform.length);
+
+            const floatData = convertTypedArray(waveform, Float32Array);
+            const buffer = audioContext.createBuffer(1, floatData.length, audioContext.sampleRate);
+            buffer.getChannelData(0).set(floatData);
+
+            const source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audioContext.destination);
+
+            source.start(0);
+            console.log('  Playing chunk...');
+
+            await new Promise(function(resolve) { source.onended = resolve; });
+            console.log('  Chunk finished');
+
+            if (i < chunks.length - 1) {
+                console.log('  Waiting 50ms before next chunk...');
+                await new Promise(function(r) { setTimeout(r, 50); });
+            }
+        }
+
+        // Display as sent message (only show as merged if multiple chunks)
+        addChatMessage('sent', text, { current: 1, total: totalChunks }, totalChunks > 1);
+        messageInput.value = '';
+
+    } catch (error) {
+        console.error('Send error:', error);
+    }
+}
+
+function parseChunk(chunkText) {
+    // Parse format like [1/10]content or [20/100]content
+    const match = chunkText.match(/^\[(\d+)\/(\d+)\](.*)$/s);
+    if (match) {
+        console.log('  -> parseChunk success: seq=' + match[1] + ', total=' + match[2] + ', content=' + match[3].substring(0, 20) + '...');
+        return {
+            seq: parseInt(match[1], 10),
+            total: parseInt(match[2], 10),
+            content: match[3]
+        };
+    }
+    console.log('  -> parseChunk FAILED for: ' + chunkText.substring(0, 30) + '...');
+    return null;
+}
+
+function resetBundleState() {
+    console.log('resetBundleState');
+    currentBundleId = '';
+    currentChunks = {};
+    currentTotalChunks = 0;
+    currentReceivedCount = 0;
+    if (bundleTimeout) {
+        clearTimeout(bundleTimeout);
+        bundleTimeout = null;
+    }
+}
+
+function finalizeBundle() {
+    console.log('finalizeBundle: total=' + currentTotalChunks + ', received=' + currentReceivedCount);
+    if (currentTotalChunks === 0 || currentReceivedCount === 0) {
+        resetBundleState();
+        return;
+    }
+
+    // Merge chunks in order
+    let mergedText = '';
+    for (let i = 0; i < currentTotalChunks; i++) {
+        if (currentChunks[i]) {
+            mergedText += currentChunks[i];
+        }
+    }
+
+    if (mergedText.length > 0) {
+        console.log('  -> Merged text length: ' + mergedText.length);
+        addChatMessage('received', mergedText, { current: 1, total: currentTotalChunks }, true);
+    }
+
+    resetBundleState();
+}
+
+async function startListening() {
+    if (isListening) {
+        stopListening();
+        return;
+    }
+
+    if (!await initAudio()) return;
+
+    try {
+        const constraints = {
+            audio: { echoCancellation: false, autoGainControl: false, noiseSuppression: false, }
         };
 
-        // 搜索条目
-        function searchEntries() {
-            const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
-            const filteredEntries = entries.filter(entry => {
-                return entry.title.toLowerCase().includes(keyword) || entry.content.toLowerCase().includes(keyword);
-            });
-            const list = document.getElementById('entryShow');
-            list.innerHTML = generateEntryListHTML(filteredEntries);
+        captureStream = await navigator.mediaDevices.getUserMedia(constraints);
 
-            // 手动触发代码高亮
-            if (typeof hljs !== 'undefined') {
-                hljs.highlightAll();
-            }
-        }
+        sourceNode = audioContext.createMediaStreamSource(captureStream);
+        scriptProcessor = audioContext.createScriptProcessor(1024, 1, 1);
 
-        // 编辑指定id的条目
-        function editEntry(id) {
-            const entry = entries.find(e => e.id === id);
-            if (entry) {
-                document.getElementById('title').value = entry.title;
-                document.getElementById('author').value = entry.author;
-                document.getElementById('content').value = entry.content;
-                document.getElementById('entryDate').value = entry.date;
-                document.getElementById('tags').value = entry.tags.join(', ');
+        scriptProcessor.onaudioprocess = function(e) {
+            const inputData = e.inputBuffer.getChannelData(0);
 
-                document.getElementById('editor').style.display = 'block';
-                document.getElementById('entryShow').style.display = 'none';
+            const result = ggwaveModule.decode(
+                ggwaveInstance,
+                convertTypedArray(new Float32Array(inputData), Int8Array)
+            );
 
-                editingId = id;
-                initCalendar();
-            }
-        }
+            if (result && result.length > 0) {
+                console.log('=== AUDIO DECODED === result length: ' + result.length);
+                try {
+                    let text = new TextDecoder('utf-8').decode(result);
+                    console.log('Raw decoded text: "' + text + '"');
 
-
-        // 保存条目（新增或编辑）
-        function saveEntry() {
-            const title = document.getElementById('title').value.trim();
-            const author = document.getElementById('author').value.trim();
-            const content = document.getElementById('content').value.trim();
-            const tags = document.getElementById('tags').value.split(',').map(t => t.trim()).filter(t => t);
-            const date = document.getElementById('entryDate').value;
-
-            if (!title || !content) {
-                return alert('标题和内容不能为空');
-            }
-
-            let entry;
-            if (editingId) {
-                // 编辑已有条目
-                const existingEntry = entries.find(e => e.id === editingId);
-                entry = {
-                    ...existingEntry,
-                    title,
-                    content,
-                    tags,
-                    date,
-                    edittimestamp: formatDateTime(new Date())
-                };
-                const index = entries.findIndex(e => e.id === editingId);
-                entries[index] = entry;
-            } else {
-                // 新增条目
-                const newId = Math.random().toString(36).substr(2, 15);
-                entry = {
-                    id: newId,
-                    author: author,
-                    title,
-                    content,
-                    tags,
-                    date,
-                    creattimestamp: formatDateTime(new Date()),
-                    edittimestamp: formatDateTime(new Date()),
-                    isFavorite: false,
-                    comments: []
-                };
-                entries.push(entry);
-            }
-
-            // 调试：输出更新后的 entries 数组
-            clearForm();
-            editingId = null; // 保存后重置 editingId
-            initCalendar();
-            showEntry(entry.id);
-
-            showNewestEntriesToNavList();
-        }
-
-
-        // 删除指定id的条目
-        function deleteEntry(id, event) {
-            event.stopPropagation();
-            if (!confirm('确定要删除这篇日志吗？')) return;
-            entries = entries.filter(e => e.id !== id);
-            initCalendar();
-            showNewestEntries();
-        }
-
-
-        // 显示所有条目
-        function showAllEntries() {
-            const sortedEntries = sortEntriesDesc(entries);
-            const list = document.getElementById('entryShow');
-            list.innerHTML = generateEntryListHTML(sortedEntries);
-
-        }
-
-        //此处函数功能：标签云
-        function countTags(entriesArray) {
-            const tagCount = {};
-            entriesArray.forEach(entry => {
-                entry.tags.forEach(tag => {
-                    if (tagCount[tag]) {
-                        tagCount[tag]++;
-                    } else {
-                        tagCount[tag] = 1;
+                    // Check if text starts with sequence pattern
+                    if (!text.startsWith('[')) {
+                        // Try to remove prefix if it doesn't start with expected pattern
+                        console.log('Text does not start with [, trying to find pattern...');
+                        const bracketPos = text.indexOf('[');
+                        if (bracketPos > 0 && bracketPos <= text.length / 2) {
+                            console.log('Found [ at position ' + bracketPos + ', removing prefix');
+                            text = text.substring(bracketPos);
+                        }
                     }
-                });
-            });
-            return tagCount;
-        }
 
-        // 函数：去除标签、换行符、markdown语法标签
-        function removeTags(str) {
-            // 去除标签
-            str = str.replace(/<\/?[^>]+(>|$)/g, "");
-            // 去除换行符
-            str = str.replace(/\n/g, "");
-            // 去除markdown语法标签
-            str = str.replace(/^#+\s+/g, "");
-            str = str.replace(/^>+\s+/g, "");
-            str = str.replace(/^[*\-+]+\s+/g, "");
-            str = str.replace(/^\d+\.\s+/g, "");
-            str = str.replace(/^---+$/g, "");
-            str = str.replace(/^\s+$/g, "");
-            str = str.replace(/\`/g, "");
-            str = str.replace(/\\/g, "");
-            //去除![]()和[]()和[[]]语法标签 
-            str = str.replace(/\[.*\]\(.*\)/g, "");
-            str = str.replace(/\!\[.*\]\(.*\)/g, "");
-            str = str.replace(/\[.*\]/g, "");
-            return str;
-        }
+                    console.log('Processed text: "' + text + '"');
 
-        function creatEntriesList(entriesArray) {
-            const list = document.getElementById('entryList');
-            list.innerHTML = entriesArray.sort((a, b) => {
-                const dateA = new Date(a.creattimestamp || a.edittimestamp);
-                const dateB = new Date(b.creattimestamp || b.edittimestamp);
-                if (isNaN(dateA) || isNaN(dateB)) {
-                    console.error('Invalid timestamp:', a.creattimestamp, b.creattimestamp);
-                    return 0;
-                }
-                return dateB - dateA;
-            }).map(entry => {
-                // 截取正文的前100个字符作为摘要,要求截取后，不能有标签，不能有换行符，不能有markdown语法标签
-                const summary = removeTags(entry.content).slice(0, 100);
-                return `
-            <div class="entry-list-item" onclick="showEntry('${entry.id}', event)" >
-                <article class="entry-article" >
-                    <div class="entry-title">
-                        <div class="entry-title">${entry.title}</div>
-                    </div>
-                    <header class="entry-header">
-                        <div class="entry-meta">
-                            <div class="entry-author">${entry.author}</div>
-                            <div class="entry-date">${entry.creattimestamp}</div>
-                        </div>
-                         <div class="entry-actions">
-                            <div class="action-btndiv">
-                                    <button class="entry-actions-btn" onclick="toggleFavorite('${entry.id}')">${entry.isFavorite ? '取消收藏' : '收藏'}</button>
-                                    <button class="entry-actions-btn" onclick="copyEntryLink('${entry.id}')">复制链接</button>
-                                    <button class="entry-actions-btn" onclick="shareEntry('${entry.id}')">分享</button>
-                                    <button class="entry-actions-btn" onclick="deleteEntry('${entry.id}', event)">删除</button>
-                                    <button class="entry-actions-btn" onclick="editEntry('${entry.id}')">编辑</button>
-                            </div>
-                        </div>
-                    </header>
-                    <div class="entry-content">
-                        <p class="entry-summary">${summary}${entry.content.length > 100 ? '...' : ''}</p>
-                    </div>
-                        ${entry.tags.length ? `<div class="tag-container">${entry.tags.map(t => `<span class="tag" onclick="filterEntriesByTag('${t}')">${t}</span>`).join('')}</div>` : ''}
-                </article>
-            </div>
-        `;
-            }).join(''); // 添加 join('') 方法将数组转换为字符串
+                    if (text && text.length > 0) {
+                        // Try to parse as chunk
+                        const chunkInfo = parseChunk(text);
 
-            displayTagCloud(countTags(entriesArray));
+                        if (chunkInfo) {
+                            console.log('  -> Chunked message: seq=' + chunkInfo.seq + '/' + chunkInfo.total);
+                            clearTimeout(incomingTimeout);
 
-            document.getElementById('editor').style.display = 'none';
-            document.getElementById('entryList').style.display = 'block';
-            document.getElementById('entryShow').style.display = 'none';
-        }
+                            // Single chunk - display directly without prefix
+                            if (chunkInfo.total === 1) {
+                                console.log('  -> Single chunk, displaying directly');
+                                addChatMessage('received', chunkInfo.content,
+                                    { current: 1, total: 1 }, false);
+                                return;
+                            }
 
-        // ... existing code ...
+                            // This is a chunked message (2+ chunks)
+                            // Reset bundle if new sequence detected (only when receiving chunk 1)
+                            // OR if no active bundle and receiving any chunk (may have missed earlier chunks)
+                            const isNewBundle = (chunkInfo.seq === 1 && currentBundleId === '') || (currentBundleId === '' && chunkInfo.seq > 1);
+                            console.log('  -> isNewBundle: ' + isNewBundle + ' (chunkSeq=' + chunkInfo.seq + ', currentBundleId=' + currentBundleId + ', currentReceivedCount=' + currentReceivedCount + ')');
 
+                            if (isNewBundle) {
+                                finalizeBundle();
+                                currentBundleId = generateBundleId();
+                                currentTotalChunks = chunkInfo.total;
+                                currentReceivedCount = 0;
+                                currentChunks = {};
+                                console.log('  -> Started new bundle, total chunks: ' + currentTotalChunks);
 
+                                // If we missed earlier chunks, start collecting from current one
+                                if (chunkInfo.seq > 1) {
+                                    console.log('  -> Note: Started from chunk ' + chunkInfo.seq + ', may have missed earlier chunks');
+                                }
+                            }
 
-        //此函数功能：显示所有条目列表，以链接为形式
-        function showAllEntriesList() {
-            const sortedEntries = sortEntriesDesc(entries);
-            creatEntriesList(sortedEntries);
-        }
+                            if (currentTotalChunks > 0 && chunkInfo.seq <= currentTotalChunks) {
+                                // Store chunk (convert 1-based to 0-based index)
+                                const chunkIndex = chunkInfo.seq - 1;
 
-        function showEntry(id, event) {
-            if (event) {
-                event.preventDefault(); // 阻止默认的 href 跳转行为
-            }
-            const list = document.getElementById('entryShow');
-            const filteredEntries = entries.filter(e => e.id === id);
-            if (filteredEntries.length > 0) {
-                list.innerHTML = generateEntryListHTML(filteredEntries);
+                                if (!currentChunks[chunkIndex]) {
+                                    currentChunks[chunkIndex] = chunkInfo.content;
+                                    currentReceivedCount++;
+                                    console.log('  -> Stored chunk ' + chunkInfo.seq + ', received ' + currentReceivedCount + '/' + currentTotalChunks);
 
-                document.getElementById('editor').style.display = 'none';
-                document.getElementById('entryList').style.display = 'none';
-                document.getElementById('entryShow').style.display = 'block';
+                                    // Display individual chunk with sequence number
+                                    addChatMessage('received', chunkInfo.content,
+                                        { current: chunkInfo.seq, total: chunkInfo.total }, false);
 
-            } else {
-                console.log('No entry found with id:', id);
-            }
-        }
-
-        // 新的函数，用于显示单个条目并添加动画效果
-        function showEntryWithAnimation(id) {
-            const list = document.getElementById('entryShow');
-            list.style.opacity = 0;
-            list.innerHTML = generateEntryListHTML(entries.filter(e => e.id === id));
-            setTimeout(() => {
-                list.style.opacity = 1;
-            }, 300);
-        }
-
-        // ... existing code ...
-
-
-        function createTagElement(tag, count) {
-            const span = document.createElement('span');
-            span.className = 'tag';
-            span.textContent = `${tag} (${count})`;
-            span.onclick = () => filterEntriesByTag(tag);
-            return span;
-        }
-
-        function displayTagCloud(tagCount) {
-            const tagCloud = document.getElementById('tagCloud');
-            tagCloud.innerHTML = ''; // 清空标签云容器
-
-            // 将标签按数量从多到少排序
-            const sortedTags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
-            sortedTags.forEach(([tag, count]) => {
-                const tagElement = createTagElement(tag, count);
-                tagCloud.appendChild(tagElement);
-            });
-        }
-
-
-        // 通过标签云过滤条目
-        function filterEntriesByTag(tag) {
-            const filteredEntries = entries.filter(entry => entry.tags.includes(tag));
-            const list = document.getElementById('entryList');
-            creatEntriesList(filteredEntries);
-
-            initCalendar();
-
-        }
-
-        // 清空表单
-        function clearForm() {
-            document.getElementById('title').value = '';
-            document.getElementById('author').value = '';
-            document.getElementById('content').value = '';
-            document.getElementById('tags').value = '';
-            editingId = null;
-        }
-
-        // 导出 JSON
-        function exportJSON() {
-            const data = `let entries = ` + JSON.stringify(entries, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'data.js';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-
-        // 添加评论
-        function addComment(entryId, commentAuthor, commentText) {
-            const entry = entries.find(e => e.id === entryId);
-            if (!entry || !commentText.trim()) {
-                return;
-            }
-
-            // 修改为通过 entryId 获取对应的评论输入框
-            const commentArea = document.querySelector(`textarea[data-entry-id="${entryId}"]`);
-            if (!commentArea) {
-                return;
-            }
-            const commentTime = commentArea.dataset.commentTime;
-
-            let targetTime;
-            if (commentTime) {
-                const commentToEdit = entry.comments.find(comment => comment.time === commentTime);
-                if (commentToEdit) {
-                    commentToEdit.commentauthor = commentAuthor.trim();
-                    commentToEdit.text = commentText.trim();
-                    commentToEdit.time = formatDateTime(new Date());
-                    targetTime = commentToEdit.time;
-                }
-                commentArea.value = "";
-                commentArea.removeAttribute('data-comment-time');
-            } else {
-                if (!entry.comments) entry.comments = [];
-                const timestamp = formatDateTime(new Date());
-                entry.comments.push({
-                    id: Math.random().toString(36).substr(2, 15),
-                    commentauthor: commentAuthor.trim(),
-                    time: timestamp,
-                    text: commentText.trim(),
-                });
-                targetTime = timestamp;
-                commentArea.value = "";
-            }
-
-            initCalendar();
-            showEntry(entryId);
-
-            // 等待页面更新后再查找评论元素
-            setTimeout(() => {
-                const commentElement = findCommentElement(entryId, targetTime);
-                if (commentElement) {
-                    // 设置背景色为黄色
-                    commentElement.style.backgroundColor = '#f7e769';
-                    // 3秒后恢复背景色
-                    setTimeout(() => {
-                        commentElement.style.backgroundColor = '';
-                    }, 1000);
-                }
-            }, 100); // 等待100毫秒确保页面更新
-        }
-
-        // 提交评论
-        function handleCommentSubmit(entryId, button) {
-            const commentAuthorInputBox = button.closest('.comment-section').querySelector('.comment-author');
-            commentAuthor = commentAuthorInputBox.value;
-            const commentTextInputBox = button.closest('.comment-section').querySelector('.comment-input');
-            commentText = commentTextInputBox.value;
-            addComment(entryId, commentAuthor, commentText);
-            commentAuthorInputBox.value = '';
-            commentTextInputBox.value = '';
-        }
-
-        // 新增辅助函数：查找评论元素
-        function findCommentElement(entryId, time) {
-            const commentsContainer = document.getElementById(`comments-${entryId}`);
-            if (commentsContainer) {
-                return Array.from(commentsContainer.querySelectorAll('.comment-item')).find(comment => {
-                    const commentTime = comment.querySelector('.comment-time').textContent.trim();
-                    return commentTime === time;
-                });
-            }
-            return null;
-        }
-
-        // 新增辅助函数：高亮评论元素
-        function highlightComment(commentElement) {
-            commentElement.style.backgroundColor = '#f7e769';
-            setTimeout(() => {
-                commentElement.style.backgroundColor = '';
-            }, 1000);
-        }
-
-
-        // 复制日志链接到剪贴板
-        function copyEntryLink(id) {
-            const entry = entries.find(e => e.id === id);
-            if (entry) {
-                const link = `[[${entry.title}|${id}]]`;
-                navigator.clipboard.writeText(link)
-                    .then(() => {
-                        // 修改按钮样式，显示复制成功按钮改为复制成功，显示三秒
-                        const copyButton = document.querySelector(`#entry-${id} .action-btndiv button:nth-child(3)`);
-                        if (copyButton) {
-                            copyButton.innerText = '复制成功';
-                            setTimeout(() => {
-                                copyButton.innerText = '复制链接';
-                            }, 1000);
+                                    // Check if all chunks received
+                                    if (currentReceivedCount >= currentTotalChunks) {
+                                        console.log('  -> All chunks received, will finalize in 200ms');
+                                        clearColorTimeout(bundleTimeout);
+                                        bundleTimeout = setTimeout(finalizeBundle, 200);
+                                    } else {
+                                        // Reset timeout to wait for remaining chunks
+                                        if (bundleTimeout) clearTimeout(bundleTimeout);
+                                        bundleTimeout = setTimeout(finalizeBundle, CHUNK_TIMEOUT);
+                                        console.log('  -> Waiting for more chunks, timeout in ' + CHUNK_TIMEOUT + 'ms');
+                                    }
+                                } else {
+                                    console.log('  -> Chunk ' + chunkInfo.seq + ' already received, skipping');
+                                }
+                            }
                         } else {
-                            console.error('未找到复制按钮元素，id:', id);
+                            // Single chunk or unchunked message
+                            console.log('  -> Single/unchunked message');
+                            clearTimeout(incomingTimeout);
+
+                            incomingBuffer += text;
+                            clearTimeout(incomingTimeout);
+
+                            incomingTimeout = setTimeout(function() {
+                                if (incomingBuffer) {
+                                    finalizeBundle(); // Finalize any pending bundle first
+                                    addChatMessage('received', incomingBuffer, { current: 1, total: 1 }, false);
+                                    incomingBuffer = '';
+                                }
+                            }, 150);
                         }
-                    })
-                    .catch((err) => {
-                        console.error('无法复制链接到剪贴板: ', err);
-                    });
-            }
-        }
-
-
-        //评论删除
-        function deleteComment(entryId, timestamp) {
-            const entry = entries.find(e => e.id === entryId);
-            if (entry) {
-                entry.comments = entry.comments.filter(comment => comment.time !== timestamp);
-                showFavoriteEntries();
-            }
-            initCalendar();
-            showEntry(entryId);
-        }
-
-        // 编辑评论
-        function editComment(entryId, timestamp) {
-            const entry = entries.find(e => e.id === entryId);
-            if (entry) {
-                const commentToEdit = entry.comments.find(comment => comment.time === timestamp);
-                if (commentToEdit) {
-                    // 将评论内容输出到评论输入框中
-                    // 修改选择器为 textarea
-                    const commentArea = document.querySelector(`textarea[data-entry-id="${entryId}"]`);
-                    if (commentArea) {
-                        commentArea.value = commentToEdit.text;
-                        commentArea.dataset.commentTime = timestamp; // 保存当前评论的时间戳
-                        // 滚动到编辑框，设置背景为黄色，3秒后恢复为白色
-                        commentArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        setTimeout(() => {
-                            commentArea.style.backgroundColor = '#f7e769';
-                        }, 10);
-                        setTimeout(() => {
-                            commentArea.style.backgroundColor = '';
-                        }, 1000);
                     }
-                    // 将发表class=".comment-submit-bt按钮文本修改为“保存”
-                    const submitButton = commentArea.closest('.comment-section').querySelector('.comment-submit-btn');
-                    if (submitButton) {
-                        submitButton.textContent = '保存';
-                    }
+                } catch (err) {
+                    console.error('Decode error:', err);
                 }
             }
-            initCalendar();
-        }
-        // 添加收藏功能
-        function toggleFavorite(entryId) {
-            const entry = entries.find(e => e.id === entryId);
-            if (entry) {
-                entry.isFavorite = !entry.isFavorite; // 切换收藏状态
-                updateButtonCount(); // 更新收藏按钮数量
-                const favoriteButton = document.querySelector(`#entry-${entryId} .entry-actions button:nth-child(1)`);
-                if (favoriteButton) {
-                    favoriteButton.textContent = entry.isFavorite ? '取消收藏' : '收藏';
-                }
-                showEntry(entryId);
-            } else {
-                console.log('未找到指定的日志条目');
-            }
-        }
-
-
-        // 显示收藏的条目
-        function showFavoriteEntries() {
-            const favoriteEntries = entries.filter(entry => entry.isFavorite);
-            const sortedEntries = sortEntriesDesc(favoriteEntries);
-
-            creatEntriesList(sortedEntries);
-            initCalendar();
-
-        }
-
-        //shareEntry
-        function shareEntry(entryId) {
-            const entry = entries.find(e => e.id === entryId);
-            if (entry) {
-                const link = `[[${entry.title}|${entry.id}]]`;
-                navigator.clipboard.writeText(link)
-                    .then(() => {
-                        alert('链接已复制到剪贴板');
-                    })
-                    .catch((err) => {
-                        console.error('无法复制链接到剪贴板: ', err);
-                    });
-            } else { }
-        }
-
-        //常用链接
-        function showCommonLinks() {
-            showEntry("commonLinksId");
-        }
-
-        // 搜索条目
-        function searchEntries() {
-            const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
-            const filteredEntries = entries.filter(entry => {
-                return entry.title.toLowerCase().includes(keyword) || entry.content.toLowerCase().includes(keyword);
-            });
-            const list = document.getElementById('entryShow');
-            list.innerHTML = generateEntryListHTML(filteredEntries);
-
-        }
-
-        // 切换月份
-        function changeMonth(offset) {
-            currentDate.setMonth(currentDate.getMonth() + offset);
-            initCalendar();
-        }
-
-        //清空所有表单
-        function clearBtn() {
-            document.getElementById('title').value = '';
-            document.getElementById('author').value = '';
-            document.getElementById('content').value = '';
-            document.getElementById('tags').value = '';
-            document.getElementById('local-images-input').value = '';
-        }
-
-
-
-        //新建输入日志，插入本地图片
-        function insertLocalImagesToEntry(button) {
-            const localImagesInput = document.createElement('input');
-            localImagesInput.type = 'file';
-            localImagesInput.accept = 'image/*,.jpg,.jpeg,.png,.gif,.bmp,.tiff';
-            localImagesInput.multiple = true;
-            localImagesInput.style.display = 'none';
-
-            const targetTextarea = document.getElementById('content');
-
-            localImagesInput.addEventListener('change', function () {
-                const files = localImagesInput.files;
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    processFile(file, targetTextarea);
-                }
-                localImagesInput.value = '';
-            });
-
-            localImagesInput.click();
-        }
-
-        //评论插入本地图片
-        function insertLocalImagesToComment(button) {
-            const localImagesInput = document.createElement('input');
-            localImagesInput.type = 'file';
-            localImagesInput.accept = 'image/*,.jpg,.jpeg,.png,.gif,.bmp,.tiff';
-            localImagesInput.multiple = true;
-            localImagesInput.style.display = 'none';
-
-            const targetTextarea = button.parentElement.previousElementSibling; //
-
-            localImagesInput.addEventListener('change', function () {
-                const files = localImagesInput.files;
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    processFile(file, targetTextarea);
-                }
-                localImagesInput.value = '';
-            });
-
-            localImagesInput.click();
-        }
-
-
-        // 处理单个文件的函数
-        function processFile(file, targetTextarea) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const img = new Image();
-                img.onload = function () {
-                    if (file.size > 1024 * 1024) {
-                        compressImage(img, (compressedImg) => {
-                            insertBase64ToTextarea(compressedImg, targetTextarea);
-                        });
-                    } else {
-                        insertBase64ToTextarea(img, targetTextarea);
-                    }
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // 压缩图片函数
-        function compressImage(img, callback) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            // 简单的压缩比例设置，可根据需求调整
-            const maxWidth = 800;
-            const maxHeight = 600;
-            let width = img.width;
-            let height = img.height;
-
-            if (width > maxWidth) {
-                height = height * (maxWidth / width);
-                width = maxWidth;
-            }
-
-            if (height > maxHeight) {
-                width = width * (maxHeight / height);
-                height = maxHeight;
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-            ctx.drawImage(img, 0, 0, width, height);
-
-            canvas.toBlob(function (blob) {
-                const reader = new FileReader();
-                reader.onloadend = function () {
-                    const compressedImg = new Image();
-                    compressedImg.src = reader.result;
-                    callback(compressedImg);
-                };
-                reader.onerror = function () {
-                    console.error('压缩后文件读取失败');
-                };
-                reader.readAsDataURL(blob);
-            }, 'image/jpeg', 0.8);
-        }
-
-        // 将图片转换为 Base64 并插入到文本框
-        function insertBase64ToTextarea(img, targetTextarea) {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            canvas.toBlob(function (blob) {
-                if (blob) {
-                    const reader = new FileReader();
-                    reader.onloadend = function () {
-                        const base64 = reader.result;
-                        if (targetTextarea) {
-                            targetTextarea.value += `![图片](${base64})\n`;
-                        } else {
-                            console.error('未找到文本框元素');
-                        }
-                    };
-                    reader.onerror = function () {
-                        console.error('插入图片时文件读取失败');
-                    };
-                    reader.readAsDataURL(blob);
-                } else {
-                    console.error('图片转换为 Base64 失败');
-                }
-            });
-        }
-
-        // 全部日历按钮和收藏的日历按钮后添加数量
-        function updateButtonCount() {
-            const allEntriesCount = entries.length;
-            const favoriteEntriesCount = entries.filter(entry => entry.isFavorite).length;
-            document.getElementById('allEntriesCount').textContent = '全部日志 (' + allEntriesCount + ')';
-            document.getElementById('allEntriesList').textContent = '日志列表 (' + allEntriesCount + ')';
-            document.getElementById('favoriteEntriesCount').textContent = '日志收藏 (' + favoriteEntriesCount + ')';
-            //更新数据
-        }
-
-        // 按新到旧排序日志的函数
-        function sortEntriesDesc(entries) {
-            return entries.sort((a, b) => {
-                const timestampA = new Date(a.creattimestamp || a.edittimestamp);
-                const timestampB = new Date(b.creattimestamp || b.edittimestamp);
-                return timestampB - timestampA;
-            });
-        }
-
-
-
-        // 显示当天的日志
-
-        function showTodayEntries() {
-            const today = new Date();
-            const todayStr = formatDate(today);
-            const entriesForToday = entries.filter(entry => entry.date === todayStr);
-            if (entriesForToday.length === 0) {
-                creatNewEntry();
-            } else {
-                showEntriesForDate(todayStr);
-            }
-        }
-
-
-
-        //显示最新2篇日志//按时间从新到旧排序
-        function showNewestEntries() {
-            const newestEntries = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 1);
-            const list = document.getElementById('entryShow');
-            list.innerHTML = generateEntryListHTML(newestEntries);
-
-        }
-
-        //新建日志
-        function creatNewEntry() {
-            //将#editor设置为显示，隐藏#entryList。
-            document.getElementById('editor').style.display = 'block';
-            document.getElementById('entryList').style.display = 'none';
-            document.getElementById('entryShow').style.display = 'none';
-
-            // 清空表单
-            clearForm();
-        }
-
-        // 最新5篇日志显示到导航列表项
-        function showNewestEntriesToNavList() {
-            const navList = document.getElementById('newestEntriesList'); // 
-            if (!navList) {
-                return;
-            }
-            navList.innerHTML = ''; // 清空列表
-
-            // 按创建时间降序排序
-            const sortedEntries = entries.slice().sort((a, b) => {
-                const dateA = new Date(a.creattimestamp || a.edittimestamp);
-                const dateB = new Date(b.creattimestamp || b.edittimestamp);
-                return dateB - dateA;
-            });
-
-            // 取最新的 5 条日志和时间戳
-            const newestEntries = sortedEntries.slice(0, 5);
-
-            newestEntries.forEach(entry => {
-                const listItem = document.createElement('li');
-                const link = document.createElement('a');
-                link.href = `#${entry.id}`;
-                link.textContent = entry.title;
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    showEntry(entry.id);
-                });
-                listItem.appendChild(link);
-                navList.appendChild(listItem);
-            });
-        }
-
-
-
-        // Define a function to get the newest comments
-        function getNewestComments() {
-            const allComments = [];
-            entries.forEach(entry => {
-                if (entry.comments) {
-                    allComments.push(...entry.comments.map(comment => ({
-                        ...comment,
-                        entryId: entry.id
-                    })));
-                }
-            });
-            // Sort comments by time in descending order
-            allComments.sort((a, b) => new Date(b.time) - new Date(a.time));
-            return allComments;
-        }
-
-
-        // 首页
-        function initHomePage() {
-            //设置：打开指定id日之后，并设置为首页
-            showEntry("initHomePageId");
-        }
-
-        // 更新 showNewestComments 函数
-        function showNewestCommentsToNavList() {
-            const newestCommentsList = document.getElementById('newestCommentsList');
-            newestCommentsList.innerHTML = '';
-            const newestComments = getNewestComments();
-            for (let i = 0; i < 5 && i < newestComments.length; i++) {
-                const newestComment = newestComments[i];
-                const newestCommentLink = document.createElement('a');
-                // 生成指向条目中评论的链接
-                newestCommentLink.href = `#comments-${newestComment.entryId}`;
-                // 截取前20个字并添加省略号
-                const newestCommentContent = removeTags(newestComment.text); 
-                const commentText = newestCommentContent.length > 22 ? newestCommentContent.substring(0, 20) + '...' : newestCommentContent;
-                // 显示评论前20个字和评论时间戳
-                newestCommentLink.innerHTML = `${commentText}`;
-                // 添加点击事件，确保在点击时滚动到对应位置
-                newestCommentLink.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const targetId = `comments-${newestComment.entryId}`;
-
-                    // 显示对应的日志条目
-                    showEntry(newestComment.entryId);
-
-                    const targetElement = document.getElementById(targetId);
-
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-
-                        // 找到具体的评论元素
-                        const commentElement = Array.from(targetElement.querySelectorAll('.comment-item')).find(comment => {
-                            const commentTime = comment.querySelector('.comment-time').textContent.trim(); // 去除多余空格
-                            return commentTime === newestComment.time;
-
-                        });
-
-
-                        if (commentElement) {
-                            // 设置背景色为黄色
-                            commentElement.style.backgroundColor = '#f7e769';
-
-                            // 3秒后恢复背景色
-                            setTimeout(() => {
-                                commentElement.style.backgroundColor = 'transparent';
-                            }, 1000);
-                        }
-                    } else {
-                        console.log('Element not found:', targetId); // 调试信息
-                    }
-                });
-                const listItem = document.createElement('li');
-                listItem.appendChild(newestCommentLink);
-                newestCommentsList.appendChild(listItem);
-            }
-        }
-
-
-
-        // 初始化图片弹窗功能
-        function initImageModal() {
-            const modal = document.getElementById('imageModal');
-            if (!modal) {
-                return;
-            }
-            const closeBtn = document.querySelector('.close');
-            const modalImg = document.getElementById('modalImg');
-
-            if (!closeBtn) {
-                console.error('Close button not found. Checking all elements in the DOM:');
-                const allElements = document.getElementsByTagName('*');
-                for (let i = 0; i < allElements.length; i++) {
-                    const element = allElements[i];
-                    if (element.classList.contains('close')) {
-                        console.log('Found close button element:', element);
-                    }
-                }
-                return;
-            }
-
-
-            // 为所有日志图片添加点击事件监听器
-            document.addEventListener('click', function (event) {
-                // 修改点击事件条件判断
-                if (event.target.tagName === 'IMG' && event.target.closest('.entry-content')) {
-                    showModal(modal, modalImg, event.target.src);
-                }
-            });
-
-
-            // 为所有评论图片添加点击事件监听器
-            document.addEventListener('click', function (event) {
-                // 修改点击事件条件判断
-                if (event.target.tagName === 'IMG' && event.target.closest('.comment-item')) {
-                    showModal(modal, modalImg, event.target.src);
-                }
-            });
-
-            // 为关闭按钮添加点击事件监听器
-            closeBtn.addEventListener('click', function () {
-                closeModal(modal);
-            });
-
-            // 点击弹窗外部关闭弹窗
-            window.addEventListener('click', function (event) {
-                if (event.target === modal) {
-                    closeModal(modal);
-                }
-            });
-        }
-
-        // 显示弹窗
-        function showModal(modal, modalImg, src) {
-            modal.style.display = 'block';
-            modalImg.src = src;
-        }
-
-        // 关闭弹窗
-        function closeModal(modal) {
-            modal.style.display = 'none';
-        }
-
-        // 确保在 DOM 加载完成后调用 initImageModal
-        document.addEventListener('DOMContentLoaded', function () {
-            initImageModal();
-        });
-
-
-        // 显示弹窗
-        function showModal(modal, modalImg, src) {
-            modal.style.display = 'block';
-            modalImg.src = src;
-        }
-
-        // 关闭弹窗
-        function closeModal(modal) {
-            modal.style.display = 'none';
-        }
-
-        // 确保在 DOM 加载完成后调用 initImageModal
-        document.addEventListener('DOMContentLoaded', function () {
-            initImageModal();
-        });
-
-
-        function renderExistingTags() {
-            const exitTagsDiv = document.getElementById('existingtagsdiv');
-            exitTagsDiv.innerHTML = '';
-
-            const tagInput = document.getElementById('tags');
-            const tagCount = {}; // 用于统计每个标签的数量
-
-            // 统计每个标签的数量
-            for (const entry of entries) {
-                const tags = entry.tags;
-                for (const tag of tags) {
-                    if (tagCount[tag]) {
-                        tagCount[tag]++;
-                    } else {
-                        tagCount[tag] = 1;
-                    }
-                }
-            }
-
-            // 按标签数量从多到少排序
-            const sortedTags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]).map(([tag]) => tag);
-
-            sortedTags.forEach(tag => {
-                const tagButton = document.createElement('button');
-                tagButton.textContent = tag;
-                tagButton.classList.add('existingtag');
-                exitTagsDiv.appendChild(tagButton);
-
-                tagButton.addEventListener('click', () => {
-                    if (tagButton.style.backgroundColor === 'gray') {
-                        // 取消红底色，并删除该tag
-                        tagButton.style.backgroundColor = '';
-                        tagButton.style.color = 'black';
-                        const currentTags = tagInput.value.split(',').filter(t => t.trim() !== '');
-                        const newTags = currentTags.filter(t => t !== tag);
-                        tagInput.value = newTags.join(',');
-                    } else {
-                        // 背景色变红，并将此tag追加到<input id="tag">
-                        tagButton.style.backgroundColor = '#216026';
-                        tagButton.style.color = 'white';
-                        const currentTags = tagInput.value.split(',').filter(t => t.trim() !== '');
-                        if (!currentTags.includes(tag)) {
-                            currentTags.push(tag);
-                        }
-                        tagInput.value = [...new Set(currentTags)].join(',');
-                    }
-                });
-            });
-        }
-
-        // 定义函数，用于设置日期输入框的值为当前日期
-        function setCurrentDateToEntryDateInput() {
-            const entryDateInput = document.getElementById('entryDate');
-            const currentDate = new Date();
-            formattedDate = formatDate(currentDate);
-            entryDateInput.value = formattedDate;
-        }
-
-
-        setCurrentDateToEntryDateInput();
-        initCalendar();
-        renderExistingTags();
-        initHomePage();
-
-    </script>
+        };
+
+        const muteGain = audioContext.createGain();
+        muteGain.gain.value = 0;
+        sourceNode.connect(scriptProcessor);
+        scriptProcessor.connect(muteGain);
+        muteGain.connect(audioContext.destination);
+
+        isListening = true;
+        listenBtn.textContent = '停止';
+        listenBtn.classList.add('active');
+        updateStatus(true, true);
+
+    } catch (error) {
+        console.error('Listen error:', error);
+        isListening = false;
+    }
+}
+
+function stopListening() {
+    if (scriptProcessor) {
+        scriptProcessor.disconnect();
+        scriptProcessor.onaudioprocess = null;
+        scriptProcessor = null;
+    }
+
+    if (sourceNode) {
+        sourceNode.disconnect();
+        sourceNode = null;
+    }
+
+    if (captureStream) {
+        captureStream.getTracks().forEach(function(track) { track.stop(); });
+        captureStream = null;
+    }
+
+    isListening = false;
+    listenBtn.textContent = '监听';
+    listenBtn.classList.remove('active');
+    updateStatus(false, true);
+}
+
+function toggleAutoSave() {
+    autoSaveEnabled = !autoSaveEnabled;
+    autoSaveBtn.classList.toggle('active', autoSaveEnabled);
+    autoSaveBtn.textContent = autoSaveEnabled ? '保存日志: 开' : '保存日志: 关';
+}
+
+pasteBtn.addEventListener('click', async function() {
+    try {
+        const text = await navigator.clipboard.readText();
+        messageInput.value = text;
+    } catch (err) {
+    }
+});
+
+sendBtn.addEventListener('click', sendMessage);
+listenBtn.addEventListener('click', startListening);
+autoSaveBtn.addEventListener('click', toggleAutoSave);
+
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+    if (e.key === 'Escape' && isListening) {
+        stopListening();
+    }
+    if (e.key === 'Escape') {
+        hideModal();
+    }
+});
+
+initAudio();
+
+  </script>
 </body>
-
 </html>
