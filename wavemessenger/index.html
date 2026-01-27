@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#1d232a">
+<script src="ggwave/lame.min.js"></script>
   <title>WaveMessenger</title>
   <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -33,7 +34,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: v
 .icon-btn:hover { background: var(--tg-divider); }
 .icon-btn.active { background: var(--tg-green-bg); color: var(--tg-green); }
 .chat-area { flex: 1; overflow-y: auto; padding: 5px; background: var(--tg-bg-chat); display: flex; flex-direction: column; gap: 12px; }
-.message { display: flex; gap: 8px; max-width: 85%; align-items: flex-start; }
+.message { display: flex; gap: 8px; min-width: 40%; max-width: 85%; align-items: flex-start; }
 .message.sent { flex-direction: row-reverse; align-self: flex-end; }
 .message.received { flex-direction: row; align-self: flex-start; }
 .message-avatar {
@@ -42,11 +43,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: v
 }
 .message-avatar.sent { background: var(--tg-green-bg); color: var(--tg-green); }
 .message-avatar.received { background: var(--tg-blue-bg); color: var(--tg-blue); }
-.message-content { display: flex; flex-direction: column; gap: 4px; }
+.message-content { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
 .message-bubble {
   background: var(--tg-input); border-radius: 5px; padding: 10px 14px;
-  position: relative; word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; max-width: 100%;
+  position: relative; word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; 
+  min-width: 40%; 
+  max-width: 100%;
 }
+
 .message.sent .message-bubble { background: var(--tg-green-bg); color: var(--tg-text); }
 .message.sent .message-bubble::after {
   content: ""; position: absolute; right: -6px; top: 12px;
@@ -91,9 +95,9 @@ textarea {
 }
 textarea::placeholder { color: var(--tg-text-secondary); }
 .action-btn {
-  padding: 6px 10px; background: var(--tg-divider); border: none;
-  border-radius: 5px; color: var(--tg-text-secondary);  cursor: pointer;font-size: 18px;
-}
+  padding: 0px; background: transparent; border: none;
+  border-radius: 5px; color: var(--tg-text-secondary);  cursor: pointer;
+}d
 .action-btn:hover { background: var(--tg-input); color: var(--tg-text); }
 .paste-btn {
   width: 80px; height: 50px; border: none; border-radius: 5px;
@@ -106,6 +110,10 @@ textarea::placeholder { color: var(--tg-text-secondary); }
   display: flex; align-items: center; justify-content: center; font-size: 18px;
 }
 .send-btn:hover { background: #22c55e; }
+.toggle-btn {
+  font-weight: bold;
+  margin-left: auto;
+}
 .empty-state {
   text-align: center; color: var(--tg-text-secondary); padding: 40px 20px;
 }
@@ -328,74 +336,90 @@ modalDownload.addEventListener('click', function() {
     }
 });
 
-function addChatMessage(type, text, seqInfo, isMerged) {
-    console.log('addChatMessage: type=' + type + ', isMerged=' + isMerged + ', text length=' + text.length);
-    if (seqInfo) console.log('  seqInfo: current=' + seqInfo.current + ', total=' + seqInfo.total);
+function addChatMessage(type, text, seqInfo, isMerged, mp3Blob) {
+        console.log('addChatMessage: type=' + type + ', isMerged=' + isMerged + ', text length=' + text.length);
+        if (seqInfo) console.log('  seqInfo: current=' + seqInfo.current + ', total=' + seqInfo.total);
 
-    const avatar = document.createElement('div');
-    avatar.className = 'message-avatar ' + type;
-    avatar.textContent = type === 'sent' ? '发' : '收';
+        const avatar = document.createElement('div');
+        avatar.className = 'message-avatar ' + type;
+        avatar.textContent = type === 'sent' ? '发' : '收';
 
-    const bubble = document.createElement('div');
-    bubble.className = 'message-bubble';
+        const bubble = document.createElement('div');
+        bubble.className = 'message-bubble';
 
-    // Add sequence badge for chunks or merged badge
-    if (isMerged) {
-        const mergedBadge = document.createElement('div');
-        mergedBadge.className = 'message-merged-badge';
-        mergedBadge.textContent = '已合并 ' + seqInfo.total + ' 片段';
-        bubble.appendChild(mergedBadge);
-        console.log('  -> Added merged badge');
-    } else if (seqInfo && seqInfo.total > 1) {
-        const seqBadge = document.createElement('div');
-        seqBadge.className = 'message-seq-badge';
-        seqBadge.textContent = seqInfo.current + '/' + seqInfo.total;
-        bubble.appendChild(seqBadge);
-        console.log('  -> Added sequence badge');
-    }
-
-
-    const time = document.createElement('div');
-    time.className = 'message-time';
-    time.textContent = new Date().toLocaleTimeString();
-    bubble.appendChild(time);
-
-    const content = document.createElement('div');
-    content.className = 'message-text';
-    content.textContent = text;
-    bubble.appendChild(content);
-
-    // For received single chunks (1/1), hide the sequence badge since it's not really chunked
-    if (type === 'received' && seqInfo && seqInfo.total === 1) {
-        const seqBadge = bubble.querySelector('.message-seq-badge');
-        if (seqBadge) {
-            seqBadge.remove();
+        // 添加序列标记或合并标记
+        if (isMerged) {
+            const mergedBadge = document.createElement('div');
+            mergedBadge.className = 'message-merged-badge';
+            mergedBadge.textContent = '已合并 ' + seqInfo.total + ' 片段';
+            bubble.appendChild(mergedBadge);
+            console.log('  -> Added merged badge');
+        } else if (seqInfo && seqInfo.total > 1) {
+            const seqBadge = document.createElement('div');
+            seqBadge.className = 'message-seq-badge';
+            seqBadge.textContent = seqInfo.current + '/' + seqInfo.total;
+            bubble.appendChild(seqBadge);
+            console.log('  -> Added sequence badge');
         }
-    }
 
-    // Add copy and download buttons for merged messages
-    if (isMerged) {
+        const time = document.createElement('div');
+        time.className = 'message-time';
+        time.textContent = new Date().toLocaleTimeString();
+        bubble.appendChild(time);
+
+        const content = document.createElement('div');
+        content.className = 'message-text';
+        content.textContent = text;
+        bubble.appendChild(content);
+
+        // 对于接收的单个块(1/1)，隐藏序列标记
+        if (type === 'received' && seqInfo && seqInfo.total === 1) {
+            const seqBadge = bubble.querySelector('.message-seq-badge');
+            if (seqBadge) {
+                seqBadge.remove();
+            }
+        }
+
+        // 为所有消息添加按钮容器（默认折叠）
+        const actionContainer = document.createElement('div');
+        actionContainer.style.cssText = 'margin-top: 8px; display: flex; align-items: center; justify-content: flex-start; position: relative;';
+
+        // 添加展开/折叠按钮
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'action-btn toggle-btn';
+        toggleBtn.textContent = '◀ ';
+        toggleBtn.style.cssText = 'padding: 2px 6px; color: var(--tg-green); transition: 0.3s;';
+        toggleBtn.addEventListener('click', function() {
+            const buttons = this.previousElementSibling; // 修改为previousElementSibling，因为按钮现在在toggleBtn前面
+            buttons.style.display = buttons.style.display === 'none' ? 'flex' : 'none';
+            this.textContent = buttons.style.display === 'none' ? '◀ ' : '▶ ';
+        });
+
+        // 创建按钮容器
         const actionButtons = document.createElement('div');
-        actionButtons.style.cssText = 'display: flex; gap: 6px;margin-top: 8px;';
-
+        actionButtons.style.cssText = 'display: flex; gap: 6px;'; // 为toggleBtn留出空间
+        actionButtons.style.display = 'none'; // 默认折叠
+        
+        // 创建复制按钮
         const inlineCopyBtn = document.createElement('button');
         inlineCopyBtn.className = 'action-btn';
         inlineCopyBtn.textContent = '复制';
-        inlineCopyBtn.style.cssText = 'padding: 4px 8px; font-size: 11px; background: var(--tg-green); color: white;';
+        inlineCopyBtn.style.cssText = 'color: var(--tg-blue);';
         inlineCopyBtn.addEventListener('click', function() {
             navigator.clipboard.writeText(text).then(function() {
-                inlineCopyBtn.textContent = '已复制';
+                inlineCopyBtn.textContent = '已复';
                 setTimeout(function() {
                     inlineCopyBtn.textContent = '复制';
                 }, 1000);
             }).catch(function() {});
         });
-
-        const inlineDownloadBtn = document.createElement('button');
-        inlineDownloadBtn.className = 'action-btn';
-        inlineDownloadBtn.textContent = '下载';
-        inlineDownloadBtn.style.cssText = 'padding: 4px 8px; font-size: 11px; background: var(--tg-blue-bg); color: var(--tg-blue);';
-        inlineDownloadBtn.addEventListener('click', function() {
+        
+        // 创建文本下载按钮
+        const inlineDownloadTxtBtn = document.createElement('button');
+        inlineDownloadTxtBtn.className = 'action-btn';
+        inlineDownloadTxtBtn.textContent = '下载txt';
+        inlineDownloadTxtBtn.style.cssText = 'color: var(--tg-blue);';
+        inlineDownloadTxtBtn.addEventListener('click', function() {
             try {
                 const timestamp = formatTimestamp(new Date()) + '.txt';
                 const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
@@ -411,41 +435,69 @@ function addChatMessage(type, text, seqInfo, isMerged) {
                 console.error('Download error:', e);
             }
         });
-
+        
+        // 创建MP3下载按钮
+        const inlineDownloadMp3Btn = document.createElement('button');
+        inlineDownloadMp3Btn.className = 'action-btn';
+        inlineDownloadMp3Btn.textContent = '下载mp3';
+        inlineDownloadMp3Btn.style.cssText = 'color: var(--tg-blue);';
+        inlineDownloadMp3Btn.addEventListener('click', function() {
+            try {
+                const timestamp = formatTimestamp(new Date()) + '.mp3';
+                const url = URL.createObjectURL(mp3Blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = timestamp;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (e) {
+                console.error('MP3 Download error:', e);
+            }
+        });
+        
+        // 添加按钮到容器
         actionButtons.appendChild(inlineCopyBtn);
-        actionButtons.appendChild(inlineDownloadBtn);
-        bubble.appendChild(actionButtons);
-        console.log('  -> Added copy and download buttons');
-    }
-
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
-    contentDiv.appendChild(bubble);
-
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'message ' + type;
-    msgDiv.appendChild(avatar);
-    msgDiv.appendChild(contentDiv);
-
-    const emptyState = chatArea.querySelector('.empty-state');
-    if (emptyState) {
-        emptyState.style.display = 'none';
-    }
-
-    chatArea.appendChild(msgDiv);
-    chatArea.scrollTop = chatArea.scrollHeight;
-
-    saveMessageToFile(type, text);
-
-    while (chatArea.children.length > 101) {
-        if (chatArea.children[0] && chatArea.children[0].classList.contains('empty-state')) {
-            break;
+        actionButtons.appendChild(inlineDownloadTxtBtn);
+        if (type === 'sent' && mp3Blob) {
+            actionButtons.appendChild(inlineDownloadMp3Btn);
         }
-        chatArea.removeChild(chatArea.children[0]);
+
+        // 先添加actionButtons，再添加toggleBtn，确保按钮在右侧
+        actionContainer.appendChild(actionButtons);
+        actionContainer.appendChild(toggleBtn);
+        bubble.appendChild(actionContainer);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.appendChild(bubble);
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message ' + type;
+        msgDiv.appendChild(avatar);
+        msgDiv.appendChild(contentDiv);
+
+        const emptyState = chatArea.querySelector('.empty-state');
+        if (emptyState) {
+            emptyState.style.display = 'none';
+        }
+
+        chatArea.appendChild(msgDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+
+        saveMessageToFile(type, text);
+
+        while (chatArea.children.length > 101) {
+            if (chatArea.children[0] && chatArea.children[0].classList.contains('empty-state')) {
+                break;
+            }
+            chatArea.removeChild(chatArea.children[0]);
+        }
+
+        console.log('  -> Message added, scroll to bottom');
     }
 
-    console.log('  -> Message added, scroll to bottom');
-}
 
 function convertTypedArray(src, type) {
     const buffer = new ArrayBuffer(src.byteLength);
@@ -510,80 +562,123 @@ async function initAudio() {
     }
 }
 
+
 async function sendMessage() {
-    const text = messageInput.value.trim();
-    if (!text) {
-        return;
-    }
-
-    if (!await initAudio()) return;
-
-    try {
-        if (isListening) {
-            stopListening();
+        const text = messageInput.value.trim();
+        if (!text) {
+            return;
         }
 
-        // Use fast mode settings if enabled
-        const chunkSize = MAX_CHUNK_SIZE;
-        const protocol = ggwaveModule.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST;
-        const outputVolume = 10;
+        if (!await initAudio()) return;
 
-        // Split text into chunks
-        const chunks = [];
-        const totalChunks = Math.ceil(text.length / chunkSize);
-        console.log('Sending message with ' + totalChunks + ' chunks (fastMode=' + fastModeEnabled + ')');
-
-        for (let i = 0; i < text.length; i += chunkSize) {
-            chunks.push(text.substring(i, i + chunkSize));
-        }
-
-        // Add header chunk with bundle info (optional for sender display)
-        // For audio transmission, we send chunks with position markers in the text itself
-        for (let i = 0; i < chunks.length; i++) {
-            // Format: [seq/total]content
-            const seqPrefix = '[' + formatSeqNumber(i) + '/' + totalChunks + ']';
-            const chunkWithSeq = seqPrefix + chunks[i];
-            console.log('=== SENDING CHUNK ' + (i + 1) + '/' + totalChunks + ' ===');
-            console.log('  Chunk content: "' + chunks[i] + '"');
-            console.log('  Full text: "' + chunkWithSeq + '"');
-            console.log('  Text length: ' + chunkWithSeq.length);
-
-            const waveform = ggwaveModule.encode(
-                ggwaveInstance,
-                chunkWithSeq,
-                protocol,
-                outputVolume
-            );
-            console.log('  Waveform length: ' + waveform.length);
-
-            const floatData = convertTypedArray(waveform, Float32Array);
-            const buffer = audioContext.createBuffer(1, floatData.length, audioContext.sampleRate);
-            buffer.getChannelData(0).set(floatData);
-
-            const source = audioContext.createBufferSource();
-            source.buffer = buffer;
-            source.connect(audioContext.destination);
-
-            source.start(0);
-            console.log('  Playing chunk...');
-
-            await new Promise(function(resolve) { source.onended = resolve; });
-            console.log('  Chunk finished');
-
-            if (i < chunks.length - 1) {
-                console.log('  Waiting 50ms before next chunk...');
-                await new Promise(function(r) { setTimeout(r, 50); });
+        try {
+            if (isListening) {
+                stopListening();
             }
+
+            // 使用快速模式设置
+            const chunkSize = MAX_CHUNK_SIZE;
+            const protocol = ggwaveModule.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST;
+            const outputVolume = 10;
+
+            // 分割文本为多个块
+            const chunks = [];
+            const totalChunks = Math.ceil(text.length / chunkSize);
+            console.log('Sending message with ' + totalChunks + ' chunks (fastMode=' + fastModeEnabled + ')');
+
+            for (let i = 0; i < text.length; i += chunkSize) {
+                chunks.push(text.substring(i, i + chunkSize));
+            }
+
+            // 存储所有音频数据用于合并
+            const allAudioData = [];
+            const sampleRate = audioContext.sampleRate;
+
+            // 发送带有序列标记的文本块
+            for (let i = 0; i < chunks.length; i++) {
+                const seqPrefix = '[' + formatSeqNumber(i) + '/' + totalChunks + ']';
+                const chunkWithSeq = seqPrefix + chunks[i];
+                console.log('=== SENDING CHUNK ' + (i + 1) + '/' + totalChunks + ' ===');
+
+                const waveform = ggwaveModule.encode(
+                    ggwaveInstance,
+                    chunkWithSeq,
+                    protocol,
+                    outputVolume
+                );
+
+                const floatData = convertTypedArray(waveform, Float32Array);
+                
+                // 存储音频数据用于合并
+                allAudioData.push(floatData);
+                
+                const buffer = audioContext.createBuffer(1, floatData.length, audioContext.sampleRate);
+                buffer.getChannelData(0).set(floatData);
+
+                const source = audioContext.createBufferSource();
+                source.buffer = buffer;
+                source.connect(audioContext.destination);
+
+                source.start(0);
+                console.log('  Playing chunk...');
+
+                await new Promise(function(resolve) { source.onended = resolve; });
+                console.log('  Chunk finished');
+
+                if (i < chunks.length - 1) {
+                    console.log('  Waiting 50ms before next chunk...');
+                    // 添加50ms的静音延迟
+                    const silenceBuffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.05, audioContext.sampleRate);
+                    allAudioData.push(new Float32Array(silenceBuffer.length));
+                    await new Promise(function(r) { setTimeout(r, 50); });
+                }
+            }
+
+            // 合并所有音频数据
+            const totalLength = allAudioData.reduce((sum, chunk) => sum + chunk.length, 0);
+            const mergedAudioData = new Float32Array(totalLength);
+            let offset = 0;
+            for (const chunk of allAudioData) {
+                mergedAudioData.set(chunk, offset);
+                offset += chunk.length;
+            }
+
+            // 转换为Int16Array用于LameJS
+            const int16Array = new Int16Array(totalLength);
+            for (let i = 0; i < totalLength; i++) {
+                const sample = mergedAudioData[i] * 32767;
+                int16Array[i] = sample < -32768 ? -32768 : (sample > 32767 ? 32767 : sample);
+            }
+
+            // 使用LameJS编码为MP3
+            const mp3encoder = new lamejs.Mp3Encoder(1, sampleRate, 128); // 1 channel, sample rate, bitrate
+            const mp3Data = [];
+            // const chunkSize = 1152;
+
+            for (let i = 0; i < int16Array.length; i += chunkSize) {
+                const chunk = int16Array.subarray(i, i + chunkSize);
+                const mp3buf = mp3encoder.encodeBuffer(chunk);
+                if (mp3buf.length > 0) {
+                    mp3Data.push(new Int8Array(mp3buf));
+                }
+            }
+
+            const mp3buf = mp3encoder.flush();
+            if (mp3buf.length > 0) {
+                mp3Data.push(new Int8Array(mp3buf));
+            }
+
+            // 创建MP3 Blob对象
+            const mp3Blob = new Blob(mp3Data, { type: 'audio/mp3' });
+
+            // 显示发送状态
+            addChatMessage('sent', text, { current: 1, total: totalChunks }, totalChunks > 1, mp3Blob);
+            messageInput.value = '';
+
+        } catch (error) {
+            console.error('Send error:', error);
         }
-
-        // Display as sent message (only show as merged if multiple chunks)
-        addChatMessage('sent', text, { current: 1, total: totalChunks }, totalChunks > 1);
-        messageInput.value = '';
-
-    } catch (error) {
-        console.error('Send error:', error);
     }
-}
 
 function parseChunk(chunkText) {
     // Parse format like [1/10]content or [20/100]content
